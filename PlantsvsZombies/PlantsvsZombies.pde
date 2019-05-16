@@ -49,9 +49,12 @@ abstract class Zombie implements Damageable{
 }
 void setup(){
   size(1024,600);
-  PImage background;
+  PImage background,peashooter;
   background = loadImage("background.jpg");
   image(background,0,0);
   fill(255);
-  rect(70,80,70,70);
+  rect(70,80,70,70); //size 70x70
+  rect(70,80+100,70,70);//space between plots is 20
+  peashooter = loadImage("peashooter.png");
+  image(peashooter,70,80);
 }
