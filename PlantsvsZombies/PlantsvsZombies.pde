@@ -10,6 +10,18 @@ abstract class Plant implements Damageable{
     damage = dam;
     HP= startHP;
   }
+  float getX(){
+    return x;
+  }
+  float getY(){
+    return y;
+  }
+  float getHP(){
+    return HP;
+  }
+  float getDamage(){
+    return damage;
+  }
 }
 abstract class Zombie implements Damageable{
   float HP,x,y,speed, damage;
@@ -19,7 +31,27 @@ abstract class Zombie implements Damageable{
     speed = speedNum;
     damage = dam;
   }
+  float getX(){
+    return x;
+  }
+  float getY(){
+    return y;
+  }
+  float getHP(){
+    return HP;
+  }
+  float getSpeed(){
+    return speed;
+  }
+  float getDamage(){
+    return damage;
+  }
 }
 void setup(){
-  
+  size(1024,600);
+  PImage background;
+  background = loadImage("background.jpg");
+  image(background,0,0);
+  fill(255);
+  rect(70,80,70,70);
 }
