@@ -12,17 +12,24 @@ interface Displayable{
   void display();
 }
 
-abstract class Plant implements Damageable{
-  float x,y, damage,HP;
+abstract class Plant implements Damageable, Displayable{
+  float x,y, w,l, damage,HP;
   PImage plant;
   
-  Plant(float xcor, float ycor, float dam, float startHP, PImage plantImage){
+  Plant(float xcor, float ycor, float wid, float len, float dam, float startHP, PImage plantImage){
     x = xcor;
     y = ycor;
+    w = wid;
+    l = len;
     damage = dam;
     HP= startHP;
     plant = plantImage;
   }
+  
+  void display(){
+    image(plant,x,y, w,l);
+  }
+  
   float getX(){
     return x;
   }
@@ -47,15 +54,17 @@ abstract class Plant implements Damageable{
 
 class Peashooter extends Plant{
   float rate;
-  Peashooter(float xcor, float ycor, float dam, float startHP, float rate, PImage peashooter){
-    super(xcor, ycor, dam, startHP, peashooter);
+  Peashooter(float xcor, float ycor, float wid, float len, float dam, float startHP, float rate, PImage peashooter){
+    super(xcor, ycor, wid, len, dam, startHP, peashooter);
     this.rate = rate;
   }
 
   void attack(){
     
   }
-  
+  void display(){
+    super.display();
+  }
   boolean isTouching(){
     return false;
   }
@@ -63,13 +72,17 @@ class Peashooter extends Plant{
 
 class Sunflower extends Plant{
   float rate; 
-  Sunflower(float xcor, float ycor, float dam, float startHP, float rate){
-    super(xcor, ycor, dam, startHP);
+  Sunflower(float xcor, float ycor, float wid, float len, float dam, float startHP, float rate, PImage sunflower){
+    super(xcor, ycor, wid, len, dam, startHP, sunflower);
     this.rate = rate;
   }
   
   // sunflower has no offensive ability 
   void attack(){  
+  }
+  
+  void display(){
+    super.display();
   }
   
   void produce(){
@@ -103,14 +116,18 @@ class Sun implements Moveable{
   
 }
 
-abstract class Zombie implements Damageable{
-  float HP,x,y,speed, damage;
-  Zombie(float xcor, float ycor, float speedNum, float dam, float startHP){
+abstract class Zombie implements Damageable, Displayable{
+  float HP,x,y,w,l,speed, damage;
+  PImage zombie;
+  Zombie(float xcor, float ycor, float wid, float len, float speedNum, float dam, float startHP, PImage zombieImage){
     x = xcor;
     y = ycor;
+    w = wid;
+    l = len;
     speed = speedNum;
     damage = dam;
     HP = startHP;
+    zombie = zombieImage;
   }
   float getX(){
     return x;
@@ -135,11 +152,15 @@ abstract class Zombie implements Damageable{
   }
   
   abstract void attack();
+  
+  void display(){
+    image(zombie, x,y,w,l);
+  }
 }
 
 class BasicZombie extends Zombie implements Moveable{
-  BasicZombie(float xcor, float ycor, float speedNum, float dam, float startHP){
-    super(xcor, ycor, speedNum, dam, startHP);
+  BasicZombie(float xcor, float ycor, float wid, float len, float speedNum, float dam, float startHP, PImage basicZombie){
+    super(xcor, ycor, wid, len, speedNum, dam, startHP, basicZombie);
   }
   
   void attack(){
@@ -147,6 +168,7 @@ class BasicZombie extends Zombie implements Moveable{
   
   void move(){
   }
+
 }
 
 void setup(){
@@ -161,13 +183,18 @@ void setup(){
   
   peashooter = loadImage("peashooter.png");
   image(peashooter,70,80, 80,80);
-  // Peashooter pea = new Peashooter(70.0,80.0,10.0,100.0,5.0); 
+  Peashooter pea = new Peashooter(70.0,280.0, 80, 80, 10.0,100.0,5.0, peashooter); 
+  pea.display();
   
   zombie = loadImage("zombie.png");
   image(zombie,900,80, 80,120);
+  BasicZombie zomb = new BasicZombie(900.0,180.0, 80.0, 120.0, 1, 1, 100, zombie);
+  zomb.display();
   
   sunflower = loadImage("sunflower.png");
   image(sunflower,70,170,85,100);
+  Sunflower sunf = new Sunflower(70.0,360.0, 85, 100, 10.0,100.0,5.0, sunflower);
+  sunf.display();
   
   sun = loadImage("sun.png");
   image(sun,90,170,50,50);
