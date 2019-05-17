@@ -12,7 +12,12 @@ interface Displayable{
   void display();
 }
 
-abstract class Plant implements Damageable, Displayable{
+interface Collideable{
+  boolean isTouching(Plant other);
+  boolean isTouching(Zombie other);
+}
+
+abstract class Plant implements Damageable, Displayable, Collideable{
   float x,y, w,l, damage,HP;
   PImage plant;
   
@@ -28,6 +33,17 @@ abstract class Plant implements Damageable, Displayable{
   
   void display(){
     image(plant,x,y, w,l);
+  }
+  boolean isTouching(Plant other){
+    return false;
+  }
+  
+   boolean isTouching(Zombie other){
+     if (other.x >= getX() && other.x <= getX() + w
+    &&  other.getY() + other.l == getY() + l){
+    return true;
+    }
+    return false;
   }
   
   float getX(){
@@ -50,6 +66,8 @@ abstract class Plant implements Damageable, Displayable{
   }
   
   abstract void attack();
+  
+ 
 }
 
 class Peashooter extends Plant{
@@ -62,6 +80,7 @@ class Peashooter extends Plant{
   void attack(){
     
   }
+  
   void display(){
     super.display();
   }
@@ -116,7 +135,7 @@ class Sun implements Moveable{
   
 }
 
-abstract class Zombie implements Damageable, Displayable{
+abstract class Zombie implements Damageable, Displayable, Collideable{
   float HP,x,y,w,l,speed, damage;
   PImage zombie;
   Zombie(float xcor, float ycor, float wid, float len, float speedNum, float dam, float startHP, PImage zombieImage){
@@ -153,6 +172,17 @@ abstract class Zombie implements Damageable, Displayable{
   
   abstract void attack();
   
+  boolean isTouching(Zombie other){
+    return false;
+    
+  }
+  boolean isTouching(Plant other){
+    if (x >= other.getX() && x <= other.getX() + other.w
+    &&  y + l == other.getY() + other.l){
+    return true;
+    }
+    return false;
+  }
   void display(){
     
     image(zombie, x,y,w,l);
@@ -168,14 +198,29 @@ class BasicZombie extends Zombie implements Moveable{
   }
   
   void move(){
-    x -= speed;
-    System.out.println("x: "+x);
+    if (x > 0){
+      x -= speed;
+      for (Collideable thing : thingsToCollide){
+        
+        if (thing instanceof Plant){
+          Plant p = (Plant)thing;
+           System.out.println("Found a plant in the list");
+          if (this.isTouching(p)){
+            System.out.println("Zombie is touching plant");
+            attack();
+          }
+        }
+      }
+    }
+    // System.out.println("x: "+x);
   }
 
 }
 
 ArrayList<Moveable> thingsToMove = new ArrayList<Moveable>();
 ArrayList<Displayable> thingsToDisplay = new ArrayList<Displayable>();
+ArrayList<Collideable> thingsToCollide = new ArrayList<Collideable>();
+
 PImage background,peashooter,zombie,sunflower,sun;
 
 void setup(){
@@ -190,11 +235,12 @@ void setup(){
   image(peashooter,70,80, 80,80);
   Peashooter pea = new Peashooter(70.0,280.0, 80, 80, 10.0,100.0,5.0, peashooter);
   thingsToDisplay.add(pea);
+  thingsToCollide.add(pea);
   pea.display();
   
   zombie = loadImage("zombie.png");
   image(zombie,900,80, 80,120);
-  BasicZombie zomb = new BasicZombie(900.0,180.0, 80.0, 120.0, 1.0, 1.0, 100, zombie);
+  BasicZombie zomb = new BasicZombie(900.0,240.0, 80.0, 120.0, 1.0, 1.0, 100, zombie);
   thingsToMove.add(zomb);
   thingsToDisplay.add(zomb);
   zomb.display();
