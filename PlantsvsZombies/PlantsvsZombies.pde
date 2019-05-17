@@ -59,7 +59,8 @@ abstract class Plant implements Damageable, Displayable, Collideable{
     return damage;
   }
   
-  void takeHit(float HP){
+  void takeHit(float dam){
+    this.HP -= dam;
   }
   
   void die(){
@@ -196,6 +197,11 @@ class BasicZombie extends Zombie implements Moveable{
   
   void attack(){
   }
+  void attack(Plant p){
+    p.takeHit(damage);
+   System.out.println(p.getHP());
+  
+  }
   
   void move(){
     if (x > 0){
@@ -204,10 +210,10 @@ class BasicZombie extends Zombie implements Moveable{
         
         if (thing instanceof Plant){
           Plant p = (Plant)thing;
-           System.out.println("Found a plant in the list");
+           
           if (this.isTouching(p)){
             System.out.println("Zombie is touching plant");
-            attack();
+            attack(p);
           }
         }
       }
