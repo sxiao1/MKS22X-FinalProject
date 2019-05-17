@@ -154,6 +154,7 @@ abstract class Zombie implements Damageable, Displayable{
   abstract void attack();
   
   void display(){
+    
     image(zombie, x,y,w,l);
   }
 }
@@ -167,35 +168,55 @@ class BasicZombie extends Zombie implements Moveable{
   }
   
   void move(){
+    x -= speed;
+    System.out.println("x: "+x);
   }
 
 }
 
+ArrayList<Moveable> thingsToMove = new ArrayList<Moveable>();
+ArrayList<Displayable> thingsToDisplay = new ArrayList<Displayable>();
+PImage background,peashooter,zombie,sunflower,sun;
+
 void setup(){
   size(1024,600);
-  
-  PImage background,peashooter,zombie,sunflower,sun;
   background = loadImage("background.jpg");
-  image(background,0,0);
+  
   fill(255);
   rect(70,80,70,70); //size 70x70
   rect(70,80+100,70,70);//space between plots is 20
   
   peashooter = loadImage("peashooter.png");
   image(peashooter,70,80, 80,80);
-  Peashooter pea = new Peashooter(70.0,280.0, 80, 80, 10.0,100.0,5.0, peashooter); 
+  Peashooter pea = new Peashooter(70.0,280.0, 80, 80, 10.0,100.0,5.0, peashooter);
+  thingsToDisplay.add(pea);
   pea.display();
   
   zombie = loadImage("zombie.png");
   image(zombie,900,80, 80,120);
-  BasicZombie zomb = new BasicZombie(900.0,180.0, 80.0, 120.0, 1, 1, 100, zombie);
+  BasicZombie zomb = new BasicZombie(900.0,180.0, 80.0, 120.0, 1.0, 1.0, 100, zombie);
+  thingsToMove.add(zomb);
+  thingsToDisplay.add(zomb);
   zomb.display();
   
   sunflower = loadImage("sunflower.png");
   image(sunflower,70,170,85,100);
   Sunflower sunf = new Sunflower(70.0,360.0, 85, 100, 10.0,100.0,5.0, sunflower);
+  thingsToDisplay.add(sunf);
   sunf.display();
   
   sun = loadImage("sun.png");
   image(sun,90,170,50,50);
+  
+  draw();
+}
+
+void draw(){
+    image(background,0,0);
+  for (Displayable thing: thingsToDisplay){
+    thing.display();
+  }
+  for (Moveable thing : thingsToMove){
+    thing.move();
+  }
 }
