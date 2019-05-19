@@ -205,18 +205,21 @@ class BasicZombie extends Zombie implements Moveable{
   
   void move(){
     if (x > 0){
-      x -= speed;
       for (Collideable thing : thingsToCollide){
-        
         if (thing instanceof Plant){
           Plant p = (Plant)thing;
-           
           if (this.isTouching(p)){
             System.out.println("Zombie is touching plant");
             attack(p);
           }
+          if(!(this.isTouching(p)) || p.getHP()<0){
+            
+            x-=speed;
+          }
         }
       }
+          
+     // x -= speed;
     }
     // System.out.println("x: "+x);
   }
