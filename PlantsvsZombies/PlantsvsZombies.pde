@@ -213,7 +213,8 @@ class BasicZombie extends Zombie implements Moveable{
             attack(p);
           }
           if(!(this.isTouching(p)) || p.getHP()<0){
-            
+            thingsToDisplay.remove(peashooter);
+            thingsToMove.remove(peashooter);
             x-=speed;
           }
         }
