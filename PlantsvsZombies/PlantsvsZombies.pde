@@ -205,19 +205,24 @@ class BasicZombie extends Zombie implements Moveable{
   
   void move(){
     if (x > 0){
+      int i = 0;
       for (Collideable thing : thingsToCollide){
         if (thing instanceof Plant){
-          Plant p = (Plant)thing;
+          Plant p = (Plant)thingsToCollide.get(i);
           if (this.isTouching(p)){
             System.out.println("Zombie is touching plant");
             attack(p);
+            if(p.getHP()<0){
+            System.out.println("remove peashooter!");
+            thingsToDisplay.remove(i);
+            System.out.println(thingsToDisplay.size());
+            }
           }
-          if(!(this.isTouching(p)) || p.getHP()<0){
-            thingsToDisplay.remove(peashooter);
-            thingsToMove.remove(peashooter);
+          else{
             x-=speed;
           }
         }
+        i++;
       }
           
      // x -= speed;
@@ -268,7 +273,7 @@ void setup(){
 }
 
 void draw(){
-    image(background,0,0);
+  image(background,0,0);
   for (Displayable thing: thingsToDisplay){
     thing.display();
   }
