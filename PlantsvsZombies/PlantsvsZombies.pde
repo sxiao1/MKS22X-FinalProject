@@ -1,5 +1,5 @@
 interface Damageable{
-  void takeHit(float HP);
+  void takeHit(float damage);
   void die();
 }
 
@@ -66,7 +66,7 @@ abstract class Plant implements Damageable, Displayable, Collideable{
   void die(){
   }
   
-  abstract void attack();
+  abstract void attack(Zombie z);
   
  
 }
@@ -78,16 +78,16 @@ class Peashooter extends Plant{
     this.rate = rate;
   }
 
-  void attack(){
-    
+  void attack(Zombie zombie){
+      zombie.takeHit(super.damage);
+      System.out.println(zombie.getHP());
   }
   
   void display(){
     super.display();
+    
   }
-  boolean isTouching(){
-    return false;
-  }
+ 
 }
 
 class Sunflower extends Plant{
@@ -98,7 +98,7 @@ class Sunflower extends Plant{
   }
   
   // sunflower has no offensive ability 
-  void attack(){  
+  void attack(Zombie z){  
   }
   
   void display(){
@@ -165,7 +165,8 @@ abstract class Zombie implements Damageable, Displayable, Collideable{
     return damage;
   }
   
-  void takeHit(float HP){
+  void takeHit(float dam){
+    HP -= dam;
   }
   
   void die(){
@@ -208,16 +209,27 @@ class BasicZombie extends Zombie implements Moveable{
       int i = 0;
       for (Collideable thing : thingsToCollide){
         if (thing instanceof Plant){
+        
           Plant p = (Plant)thingsToCollide.get(i);
-          if (this.isTouching(p)){
+          
+          if (this.isTouching(p) && p.getHP() > 0 && z.getHP() > 0){
             System.out.println("Zombie is touching plant");
             attack(p);
-            if(p.getHP()<0){
+            p.attack(this);
+            if(p.getHP()==0){
             System.out.println("remove peashooter!");
             thingsToDisplay.remove(i);
             System.out.println(thingsToDisplay.size());
             }
-          }
+            if (this.getHP() == 0){
+              System.out.println("remove zombie!");
+              thingsToDisplay.remove(this);
+              thingsToMove.remove(this);
+              System.out.println("display:"+thingsToDisplay.size());
+              System.out.println("move:"+thingsToMove.size());
+            }
+            }
+          
           else{
             x-=speed;
           }
@@ -255,9 +267,10 @@ void setup(){
   
   zombie = loadImage("zombie.png");
   image(zombie,900,80, 80,120);
-  BasicZombie zomb = new BasicZombie(900.0,240.0, 80.0, 120.0, 1.0, 1.0, 100, zombie);
+  BasicZombie zomb = new BasicZombie(100.0,240.0, 80.0, 120.0, 0.0, 0.0, 100, zombie);
   thingsToMove.add(zomb);
   thingsToDisplay.add(zomb);
+  thingsToCollide.add(zomb);
   zomb.display();
   
   sunflower = loadImage("sunflower.png");
@@ -274,10 +287,10 @@ void setup(){
 
 void draw(){
   image(background,0,0);
-  for (Displayable thing: thingsToDisplay){
-    thing.display();
-  }
   for (Moveable thing : thingsToMove){
     thing.move();
+  }
+    for (Displayable thing: thingsToDisplay){
+    thing.display();
   }
 }
