@@ -90,6 +90,8 @@ class Peashooter extends Plant{
 
   // make zombie take hit by damage points
   void attack(Zombie zombie){
+      fill(6,214,21);
+      ellipse(super.getX(), super.getY(), 50,50);
       zombie.takeHit(super.damage);
       System.out.println(zombie.getHP());
   }
@@ -235,7 +237,7 @@ class BasicZombie extends Zombie implements Moveable{
       for (Collideable thing : thingsToCollide){
         // check if collideable is a plant 
         if (thing instanceof Plant){
-        
+          //System.out.println(this.getHP());
           Plant p = (Plant)thingsToCollide.get(i);
           // if zombie is touching plant and both zombie and plant are alive
           if (this.isTouching(p) && p.getHP() > 0 && this.getHP() > 0){
@@ -294,7 +296,7 @@ void setup(){
   
   zombie = loadImage("zombie.png");
   image(zombie,900,80, 80,120);
-  BasicZombie zomb = new BasicZombie(100.0,240.0, 80.0, 120.0, 0.0, 0.0, 100, zombie);
+  BasicZombie zomb = new BasicZombie(900.0,240.0, 80.0, 120.0, 0.0, 0.0, 100, zombie);
   thingsToMove.add(zomb);
   thingsToDisplay.add(zomb);
   thingsToCollide.add(zomb);
@@ -322,4 +324,7 @@ void draw(){
     for (Displayable thing: thingsToDisplay){
     thing.display();
   }
+  Peashooter pea = new Peashooter(70.0,280.0, 80, 80, 10.0,100.0,5.0, peashooter);
+  fill(6,214,21);
+  ellipse(pea.getX() +80, pea.getY()+20, 30,30);
 }
