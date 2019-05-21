@@ -167,11 +167,12 @@ public Pea(float xcor, float ycor, float wid, float len, float speedNum, float d
 // Sunflower subclass of Plant
 class Sunflower extends Plant{
   float rate; // rate of attack 
-  
+  PImage sunImage = loadImage("sun.png");
   // takes in x- and y-coordinates, width, length, damage points, starting HP, rate of attack, and Sunflower image
   Sunflower(float xcor, float ycor, float wid, float len, float dam, float startHP, float rate, PImage sunflower){
     super(xcor, ycor, wid, len, dam, startHP, sunflower);
     this.rate = rate;
+    produce();
   }
   
   // sunflower has no offensive ability 
@@ -184,28 +185,36 @@ class Sunflower extends Plant{
   
   // instantiate a new sun from the sunflower's coordinates
   void produce(){
-    Sun sun = new Sun(this.x, this.y, 1);
-    sun.move();
+    Sun sun = new Sun(this.getX(), this.getY(), 1.0, sunImage);
+    System.out.println("add sun");
+    thingsToDisplay.add(sun);
+    thingsToMove.add(sun);
   }
 }
 
 // Sun class, for the Sunflower class and also randomly generated suns
-class Sun implements Moveable{
+class Sun implements Moveable, Displayable{
   float x,y,speed;
+  PImage sun;
   // takes in x- and y-coordinates and speed of movement 
-  Sun(float xcor, float ycor, float sunSpeed){
+  Sun(float xcor, float ycor, float sunSpeed, PImage sunImage){
     x = xcor;
     y = ycor;
     speed = sunSpeed;
+    sun = sunImage;
   }
-  
+  void display(){
+    image(sun,x,y,50,50);
+  }
   void move(){
-    y += speed; 
+    if (y < height - 100){
+      y += speed;
+    }
   }
   
   // if the user clicks on the sun, then it has been collected 
   boolean collected(){
-    if (mousePressed && mouseX == x && mouseY == y){
+    if (mousePressed && mouseX >= this.x && mouseX <= this.x + 50 && mouseY >= this.y && mouseY <= this.y + 50){
     return true;
     }
     return false;
@@ -383,11 +392,6 @@ void setup(){
   peashooter = loadImage("peashooter.png");
   image(peashooter,70,80, 80,80);
   
- /* Pea pea = new Pea(70.0 + 80, 280.0 + 20, 30.0, 30.0, 5.0, 25.0, true);
-  thingsToDisplay.add(pea);
-  thingsToMove.add(pea);
-  thingsToCollide.add(pea);*/
-  
   Peashooter peashoot = new Peashooter(70.0,280.0, 80, 80, 10.0,25.0,5.0, peashooter);
   thingsToDisplay.add(peashoot);
   thingsToCollide.add(peashoot);
@@ -408,7 +412,7 @@ void setup(){
   sunf.display();
   
   sun = loadImage("sun.png");
-  image(sun,90,170,50,50);
+  image(sun,90,170,50,50); 
   
   draw();
 }
