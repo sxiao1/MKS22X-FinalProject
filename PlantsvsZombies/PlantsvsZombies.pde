@@ -487,10 +487,29 @@ void mouseDragged(){
 }
 
 void mouseReleased(){
+  float xcor = 0;
+  float ycor = 0; 
+  
   if (drag == 1){
     System.out.println("drag release!! " + 70 + 80 * ((int)mouseX/80) +", "+ 100 + 80*((int)mouseY/80));
-  
-  Peashooter peashoot = new Peashooter(70 + 80 * ((int)mouseX/80) , 100 + 80*((int)mouseY/80), 80, 80, 10.0,25.0,5.0, peashooter);
+  xcor = 70 + 80 * ((int)mouseX/80);
+  ycor = 100 * Math.abs(mouseY % 100 - 1) + 80;
+  if (mouseY >= 0 && mouseY < 180){
+    ycor = 80;
+  }
+  else if (mouseY >= 180 && mouseY < 280){
+    ycor = 180;
+  }
+  else if (mouseY >= 280 && mouseY < 380){
+    ycor = 280;
+  }
+  else if (mouseY >= 380 && mouseY < 480){
+    ycor = 380;
+  }
+  else if (mouseY >= 480 && mouseY < 580){
+    ycor = 480;
+  }
+  Peashooter peashoot = new Peashooter(xcor, ycor, 80, 80, 10.0,25.0,5.0, peashooter);
   thingsToDisplay.add(peashoot);
   thingsToCollide.add(peashoot);
   }
