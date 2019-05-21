@@ -102,22 +102,20 @@ class Peashooter extends Plant{
   
   void display(){
     super.display();
-    
-    if (!myPea.isActive()){
-      myPea = new Pea(getX() + super.w, getY() + 20, 30.0, 30.0, 3.0, 25.0, true);
-      System.out.println("make new pea");
-    }
   }
  
 }
 
 class Pea implements Displayable, Moveable, Collideable{
+  float origX, origY; 
   float x,y,w,l,speed,damage;
   boolean active; 
   
 public Pea(float xcor, float ycor, float wid, float len, float speedNum, float dam, boolean active){
     x = xcor;
+    origX = xcor;
     y = ycor;
+    origY = ycor;
     w = wid;
     l = len;
     speed = speedNum;
@@ -130,15 +128,19 @@ public Pea(float xcor, float ycor, float wid, float len, float speedNum, float d
     ellipse(x, y, w, l); // create the ellipse shape of the pea
   }
   
+  // move 
   public void move(){
     x += 3;
   }
-  
+  // attack zombie
   public void attack(Zombie z){
     z.takeHit(25.0);
     System.out.println("pea attacked: " + z.getHP());
   }
-  
+  public void reset(){
+    x = origX; 
+    y = origY;
+  }
   // not used
   public boolean isTouching(Plant other){
     return false;
@@ -311,15 +313,13 @@ class BasicZombie extends Zombie implements Moveable{
            
            if (this.isTouching(pea) && pea.isActive() && this.getHP() > 0){
             super.speed = 0; 
-            // pea attacks then disappears from screen
+            // pea attacks and "new" pea is created
             pea.attack(this);
+            pea.reset();
             System.out.println("zombie hp:" + getHP());
-            pea.setActive(false);
+  
             System.out.println("remove pea");
-            thingsToDisplay.remove((Collideable)pea);
-            thingsToMove.remove((Collideable)pea); 
-            System.out.println("things to display:"+thingsToDisplay.size());   
-            System.out.println("things to move:"+thingsToMove.size());  
+            
            }
            else{
              super.speed = 3;
