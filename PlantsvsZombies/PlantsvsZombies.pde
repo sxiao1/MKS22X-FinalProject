@@ -413,11 +413,14 @@ ArrayList<Displayable> thingsToDisplay = new ArrayList<Displayable>();
 ArrayList<Collideable> thingsToCollide = new ArrayList<Collideable>();
 
 PImage background,peashooter,zombie,sunflower,sun;
-
+  
 void setup(){
   // load background, plants, zombies, and suns
   size(1024,600);
   background = loadImage("background.jpg");
+  
+  SeedPacket seed = new SeedPacket(100, 20, 75, 100);
+  thingsToDisplay.add(seed);
   
   fill(255);
   rect(70,80,70,70); //size 70x70
@@ -448,8 +451,6 @@ void setup(){
   sun = loadImage("sun.png");
   image(sun,90,170,50,50); 
   
-  SeedPacket seed = new SeedPacket(100, 20, 75, 100);
-  thingsToDisplay.add(seed);
   
   draw();
   mouseDragged();
@@ -469,7 +470,23 @@ void draw(){
  
 }
 
+int drag = 0; 
+boolean inRange;
+
 void mouseDragged(){
   fill(255);
   rect(mouseX, mouseY, 50,50);
+  //100, 20, 75, 100
+  if (mouseX >= 100 && mouseX <=100 + 50 && mouseY >= 20 && mouseY <= 20 + 50){
+      drag = 1;
+    }
+}
+
+void mouseReleased(){
+  if (drag == 1){
+  Peashooter peashoot = new Peashooter(mouseX,mouseY, 80, 80, 10.0,25.0,5.0, peashooter);
+  thingsToDisplay.add(peashoot);
+  thingsToCollide.add(peashoot);
+  }
+  drag = 0;
 }
