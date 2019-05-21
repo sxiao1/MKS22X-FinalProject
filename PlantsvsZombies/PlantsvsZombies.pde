@@ -411,6 +411,7 @@ class SeedPacket implements Displayable{
 ArrayList<Moveable> thingsToMove = new ArrayList<Moveable>();
 ArrayList<Displayable> thingsToDisplay = new ArrayList<Displayable>();
 ArrayList<Collideable> thingsToCollide = new ArrayList<Collideable>();
+boolean[][] plots = new boolean[5][9];
 
 PImage background,peashooter,zombie,sunflower,sun;
   
@@ -454,6 +455,8 @@ void setup(){
   
   draw();
   mouseDragged();
+  mouseReleased();
+  
 }
 
 void draw(){
@@ -471,22 +474,25 @@ void draw(){
 }
 
 int drag = 0; 
-boolean inRange;
 
 void mouseDragged(){
   fill(255);
   rect(mouseX, mouseY, 50,50);
   //100, 20, 75, 100
+  // if in seed packet 
   if (mouseX >= 100 && mouseX <=100 + 50 && mouseY >= 20 && mouseY <= 20 + 50){
       drag = 1;
+      System.out.println("drag on!!");
     }
 }
 
 void mouseReleased(){
   if (drag == 1){
-  Peashooter peashoot = new Peashooter(mouseX,mouseY, 80, 80, 10.0,25.0,5.0, peashooter);
+    System.out.println("drag release!! " + 70 + 80 * ((int)mouseX/80) +", "+ 100 + 80*((int)mouseY/80));
+  
+  Peashooter peashoot = new Peashooter(70 + 80 * ((int)mouseX/80) , 100 + 80*((int)mouseY/80), 80, 80, 10.0,25.0,5.0, peashooter);
   thingsToDisplay.add(peashoot);
   thingsToCollide.add(peashoot);
   }
-  drag = 0;
+   drag = 0;
 }
