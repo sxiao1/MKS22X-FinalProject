@@ -81,25 +81,83 @@ abstract class Plant implements Damageable, Displayable, Collideable{
 // Peashooter subclass of Plant
 class Peashooter extends Plant{
   float rate; // rate of attack 
-  
+
   // takes in x- and y-coordinates, width, length, damage points, starting HP, rate of attack, and Peashooter image
   Peashooter(float xcor, float ycor, float wid, float len, float dam, float startHP, float rate, PImage peashooter){
     super(xcor, ycor, wid, len, dam, startHP, peashooter);
     this.rate = rate;
+
   }
 
   // make zombie take hit by damage points
   void attack(Zombie zombie){
-      fill(6,214,21);
-      ellipse(super.getX(), super.getY(), 50,50);
+      /*fill(6,214,21);
+      pea_x = super.getX() + super.w;
+      pea_y = super.getY();
+      ellipse(pea_x, pea_y, 50,50);*/
       zombie.takeHit(super.damage);
       System.out.println(zombie.getHP());
   }
   
   void display(){
     super.display();
+   
+    
   }
  
+}
+
+class Pea implements Displayable, Moveable, Collideable{
+  float x,y,w,l,speed,damage;
+  boolean active; 
+  
+  public Pea(float xcor, float ycor, float wid, float len, float speedNum, float dam, boolean active){
+    x = xcor;
+    y = ycor;
+    w = wid;
+    l = len;
+    speed = speedNum;
+    damage = dam; 
+    this.active = active;
+  }
+  
+  public void display(){
+    fill(6,214,21); // green color
+    ellipse(x, y, w, l); // create the ellipse shape of the pea
+  }
+  
+  public void move(){
+    if (active){
+      x += speed; 
+    }
+  }
+  
+  public void attack(Zombie z){
+    z.takeHit(damage);
+    System.out.println(z.getHP());
+  }
+  
+  // not used
+  public boolean isTouching(Plant other){
+    return false;
+  }
+  
+  public boolean isTouching(Zombie other){
+    if (x >= other.getX() && x <= other.getX() + other.w
+     && y >= other.getY() && y <= other.getY() + l){
+       System.out.println("pea is touching zombie");
+    return true;
+    }
+    return false;
+  }
+  
+  public boolean isActive(){
+    return active;
+  }
+  
+  public void setActive(boolean status){
+    active = status;
+  }
 }
 
 // Sunflower subclass of Plant
@@ -208,6 +266,15 @@ abstract class Zombie implements Damageable, Displayable, Collideable{
     return false;
   }
   
+  boolean isTouching(Pea other){
+    if (other.x >= getX() && other.x <= getX() + w
+     && other.y >= getY() && other.y <= getY() + l){
+       System.out.println("zombie is touching pea");
+    return true;
+    }
+    return false;
+  }
+  
   void display(){
     
     image(zombie, x,y,w,l);
@@ -230,28 +297,14 @@ class BasicZombie extends Zombie implements Moveable{
   }
   
   void move(){
+       
     // while still on screen 
     if (x > 0){
       // loop through list of collideables
       int i = 0;
       for (Collideable thing : thingsToCollide){
-        // check if collideable is a plant 
-        if (thing instanceof Plant){
-          //System.out.println(this.getHP());
-          Plant p = (Plant)thingsToCollide.get(i);
-          // if zombie is touching plant and both zombie and plant are alive
-          if (this.isTouching(p) && p.getHP() > 0 && this.getHP() > 0){
-            // both plant and zombie attack each other 
-            System.out.println("Zombie is touching plant");
-            attack(p);
-            p.attack(this);
-            // remove plant from list of displayables if it is dead
-            if(p.getHP()==0){
-            System.out.println("remove peashooter!");
-            thingsToDisplay.remove(i);
-            System.out.println(thingsToDisplay.size());
-            }
-            // remove this zombie from list of displayables and moveables if it is dead
+        
+        // remove this zombie from list of displayables and moveables if it is dead
             if (this.getHP() == 0){
               System.out.println("remove zombie!");
               thingsToDisplay.remove(this);
@@ -259,14 +312,46 @@ class BasicZombie extends Zombie implements Moveable{
               System.out.println("display:"+thingsToDisplay.size());
               System.out.println("move:"+thingsToMove.size());
             }
+         if (thing instanceof Pea){
+           Pea pea = (Pea)thingsToCollide.get(i);
+           
+           if (this.isTouching(pea) && pea.isActive() && this.getHP() > 0){
+            super.speed = 0; 
+            // pea attacks then disappears from screen
+            pea.attack(this);
+            pea.setActive(false);
+            thingsToDisplay.remove(i);
+            System.out.println(thingsToDisplay.size());   
+           }
+           else{
+             super.speed = 3;
+           }
+         }
+        // check if collideable is a plant 
+         if (thing instanceof Plant){
+    
+          Plant p = (Plant)thingsToCollide.get(i);
+          // if zombie is touching plant and both zombie and plant are alive
+          if (this.isTouching(p) && p.getHP() > 0 && this.getHP() > 0){
+            super.speed = 0; 
+            // zombie attacks
+            System.out.println("Zombie is touching plant");
+            attack(p);
+            // remove plant from list of displayables if it is dead
+            if(p.getHP()==0){
+            System.out.println("remove peashooter!");
+            thingsToDisplay.remove(i);
+            System.out.println(thingsToDisplay.size());
             }
-          
-          else{
-            x-=speed;
-          }
+            
+           }
+           else{
+             super.speed = 3;
+           }
         }
         i++;
       }
+      x -= speed;
     }
   }
 
@@ -289,7 +374,12 @@ void setup(){
   
   peashooter = loadImage("peashooter.png");
   image(peashooter,70,80, 80,80);
-  Peashooter pea = new Peashooter(70.0,280.0, 80, 80, 10.0,100.0,5.0, peashooter);
+  Peashooter peashoot = new Peashooter(70.0,280.0, 80, 80, 10.0,100.0,5.0, peashooter);
+  thingsToDisplay.add(peashoot);
+  thingsToCollide.add(peashoot);
+  peashoot.display();
+  
+  Pea pea = new Pea(70.0 + 80, 280.0 + 20, 30.0, 30.0, 5.0, 25.0, true);
   thingsToDisplay.add(pea);
   thingsToCollide.add(pea);
   pea.display();
@@ -324,7 +414,5 @@ void draw(){
     for (Displayable thing: thingsToDisplay){
     thing.display();
   }
-  Peashooter pea = new Peashooter(70.0,280.0, 80, 80, 10.0,100.0,5.0, peashooter);
-  fill(6,214,21);
-  ellipse(pea.getX() +80, pea.getY()+20, 30,30);
+ 
 }
