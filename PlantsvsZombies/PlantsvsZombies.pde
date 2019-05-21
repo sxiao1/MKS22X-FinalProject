@@ -451,7 +451,7 @@ void setup(){
   
   sun = loadImage("sun.png");
   image(sun,90,170,50,50); 
-  
+ 
   
   draw();
   mouseDragged();
@@ -460,6 +460,7 @@ void setup(){
 }
 
 void draw(){
+  
   // draw background, display displayables, and move moveables
   image(background,0,0);
 
@@ -471,6 +472,20 @@ void draw(){
     thingsToDisplay.get(d).display();
   }
  
+ // testing grids
+  fill(255);
+  rect(70,100,80,80);
+  
+  rect(65,280,80,80);
+  rect(65 + 75,280,80,80);
+  rect(65 + 75 + 80,280,80,80);
+  rect(65 + 75 + 80+ 86,280,80,80);
+  rect(65 + 75 + 80+ 86 + 80,280,80,80);
+  rect(65 + 75 + 80+ 86 + 80 + 80,280,80,80);
+  rect(65 + 75 + 80+ 86 + 80 + 80 + 80,280,80,80);
+  rect(65 + 75 + 80+ 86 + 80 + 80 + 80 + 80,280,80,80);
+  rect(65 + 75 + 80+ 86 + 80 + 80 + 80 + 80 + 83,280,80,80);
+  
 }
 
 int drag = 0; 
@@ -492,8 +507,8 @@ void mouseReleased(){
   
   if (drag == 1){
     System.out.println("drag release!! " + 70 + 80 * ((int)mouseX/80) +", "+ 100 + 80*((int)mouseY/80));
-  xcor = 70 + 80 * ((int)mouseX/80);
-  ycor = 100 * Math.abs(mouseY % 100 - 1) + 80;
+  xcor = 65 + 80 * ((int)mouseX/80);
+  ycor = 80;
   if (mouseY >= 0 && mouseY < 180){
     ycor = 80;
   }
