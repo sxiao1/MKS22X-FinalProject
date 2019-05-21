@@ -81,28 +81,32 @@ abstract class Plant implements Damageable, Displayable, Collideable{
 // Peashooter subclass of Plant
 class Peashooter extends Plant{
   float rate; // rate of attack 
+  Pea myPea;
 
   // takes in x- and y-coordinates, width, length, damage points, starting HP, rate of attack, and Peashooter image
   Peashooter(float xcor, float ycor, float wid, float len, float dam, float startHP, float rate, PImage peashooter){
     super(xcor, ycor, wid, len, dam, startHP, peashooter);
     this.rate = rate;
-
+    myPea = new Pea(xcor + wid, ycor + 20, 30.0, 30.0, 3.0, 25.0, true);
+    thingsToDisplay.add(myPea);
+    thingsToMove.add(myPea);
+    thingsToCollide.add(myPea);
+    
   }
 
   // make zombie take hit by damage points
   void attack(Zombie zombie){
-      /*fill(6,214,21);
-      pea_x = super.getX() + super.w;
-      pea_y = super.getY();
-      ellipse(pea_x, pea_y, 50,50);*/
       zombie.takeHit(super.damage);
       System.out.println(zombie.getHP());
   }
   
   void display(){
     super.display();
-   
     
+    if (!myPea.isActive()){
+      myPea = new Pea(getX() + super.w, getY() + 20, 30.0, 30.0, 3.0, 25.0, true);
+      System.out.println("make new pea");
+    }
   }
  
 }
@@ -111,7 +115,7 @@ class Pea implements Displayable, Moveable, Collideable{
   float x,y,w,l,speed,damage;
   boolean active; 
   
-  public Pea(float xcor, float ycor, float wid, float len, float speedNum, float dam, boolean active){
+public Pea(float xcor, float ycor, float wid, float len, float speedNum, float dam, boolean active){
     x = xcor;
     y = ycor;
     w = wid;
@@ -127,14 +131,12 @@ class Pea implements Displayable, Moveable, Collideable{
   }
   
   public void move(){
-    if (active){
-      x += speed; 
-    }
+    x += 3;
   }
   
   public void attack(Zombie z){
-    z.takeHit(damage);
-    System.out.println(z.getHP());
+    z.takeHit(25.0);
+    System.out.println("pea attacked: " + z.getHP());
   }
   
   // not used
@@ -303,15 +305,7 @@ class BasicZombie extends Zombie implements Moveable{
       // loop through list of collideables
       int i = 0;
       for (Collideable thing : thingsToCollide){
-        
-        // remove this zombie from list of displayables and moveables if it is dead
-            if (this.getHP() == 0){
-              System.out.println("remove zombie!");
-              thingsToDisplay.remove(this);
-              thingsToMove.remove(this);
-              System.out.println("display:"+thingsToDisplay.size());
-              System.out.println("move:"+thingsToMove.size());
-            }
+       
          if (thing instanceof Pea){
            Pea pea = (Pea)thingsToCollide.get(i);
            
@@ -319,16 +313,20 @@ class BasicZombie extends Zombie implements Moveable{
             super.speed = 0; 
             // pea attacks then disappears from screen
             pea.attack(this);
+            System.out.println("zombie hp:" + getHP());
             pea.setActive(false);
-            thingsToDisplay.remove(i);
-            System.out.println(thingsToDisplay.size());   
+            System.out.println("remove pea");
+            thingsToDisplay.remove((Collideable)pea);
+            thingsToMove.remove((Collideable)pea); 
+            System.out.println("things to display:"+thingsToDisplay.size());   
+            System.out.println("things to move:"+thingsToMove.size());  
            }
            else{
              super.speed = 3;
            }
          }
         // check if collideable is a plant 
-         if (thing instanceof Plant){
+         else if (thing instanceof Plant){
     
           Plant p = (Plant)thingsToCollide.get(i);
           // if zombie is touching plant and both zombie and plant are alive
@@ -340,7 +338,7 @@ class BasicZombie extends Zombie implements Moveable{
             // remove plant from list of displayables if it is dead
             if(p.getHP()==0){
             System.out.println("remove peashooter!");
-            thingsToDisplay.remove(i);
+            thingsToDisplay.remove((Collideable)p);
             System.out.println(thingsToDisplay.size());
             }
             
@@ -351,6 +349,16 @@ class BasicZombie extends Zombie implements Moveable{
         }
         i++;
       }
+       
+        // remove this zombie from list of displayables and moveables if it is dead
+            if (this.getHP() == 0){
+              System.out.println("remove zombie!");
+              thingsToDisplay.remove(this);
+              thingsToMove.remove(this);
+              System.out.println("display:"+thingsToDisplay.size());
+              System.out.println("move:"+thingsToMove.size());
+            }
+            
       x -= speed;
     }
   }
@@ -374,19 +382,20 @@ void setup(){
   
   peashooter = loadImage("peashooter.png");
   image(peashooter,70,80, 80,80);
-  Peashooter peashoot = new Peashooter(70.0,280.0, 80, 80, 10.0,100.0,5.0, peashooter);
+  
+ /* Pea pea = new Pea(70.0 + 80, 280.0 + 20, 30.0, 30.0, 5.0, 25.0, true);
+  thingsToDisplay.add(pea);
+  thingsToMove.add(pea);
+  thingsToCollide.add(pea);*/
+  
+  Peashooter peashoot = new Peashooter(70.0,280.0, 80, 80, 10.0,25.0,5.0, peashooter);
   thingsToDisplay.add(peashoot);
   thingsToCollide.add(peashoot);
   peashoot.display();
   
-  Pea pea = new Pea(70.0 + 80, 280.0 + 20, 30.0, 30.0, 5.0, 25.0, true);
-  thingsToDisplay.add(pea);
-  thingsToCollide.add(pea);
-  pea.display();
-  
   zombie = loadImage("zombie.png");
   image(zombie,900,80, 80,120);
-  BasicZombie zomb = new BasicZombie(900.0,240.0, 80.0, 120.0, 0.0, 0.0, 100, zombie);
+  BasicZombie zomb = new BasicZombie(900.0,240.0, 80.0, 120.0, 0.0, 1.0, 100, zombie);
   thingsToMove.add(zomb);
   thingsToDisplay.add(zomb);
   thingsToCollide.add(zomb);
@@ -411,8 +420,9 @@ void draw(){
   for (int m = 0; m < thingsToMove.size(); m++){
     thingsToMove.get(m).move();
   }
-    for (Displayable thing: thingsToDisplay){
-    thing.display();
+
+  for (int d = 0; d < thingsToDisplay.size(); d++){
+    thingsToDisplay.get(d).display();
   }
  
 }
