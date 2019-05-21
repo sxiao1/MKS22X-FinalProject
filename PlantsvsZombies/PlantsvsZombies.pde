@@ -196,6 +196,7 @@ class Sunflower extends Plant{
 // Sun class, for the Sunflower class and also randomly generated suns
 class Sun implements Moveable, Displayable{
   float x,y,speed;
+  int sunCount;
   PImage sun;
   // takes in x- and y-coordinates and speed of movement 
   Sun(float xcor, float ycor, float sunSpeed, PImage sunImage){
@@ -212,6 +213,7 @@ class Sun implements Moveable, Displayable{
       y += speed;
     }
     if (collected() ){
+      sunCount++;
       System.out.println("sun has been clicked");
       thingsToDisplay.remove(this);
       thingsToMove.remove(this);
@@ -224,6 +226,9 @@ class Sun implements Moveable, Displayable{
     return true;
     }
     return false;
+  }
+  int getSun(){
+    return sunCount;
   }
   
 }
@@ -379,7 +384,24 @@ class BasicZombie extends Zombie implements Moveable{
   }
 
 }
-
+class SunCount implements Displayable{
+  float x,y,w,l;
+  int count;
+  PImage sun;
+  SunCount(float xcor,float ycor,float wid,float len, int counter, PImage sunImg){
+    x = xcor;
+    y = ycor;
+    wid = w;
+    len = l;
+    count = counter;
+    sun = sunImg;
+  }
+  void display(){
+    fill(121,83,45);
+    rect(x,y,w,l);
+    image(sun,x,y,50,50);
+  }
+}
 class SeedPacket implements Displayable{
   float x,y,w,l;
   SeedPacket(float xcor, float ycor, float wid, float len){
@@ -448,7 +470,7 @@ void setup(){
   sun = loadImage("sun.png");
   image(sun,90,170,50,50); 
   
-  SeedPacket seed = new SeedPacket(100, 20, 75, 100);
+  SeedPacket seed = new SeedPacket(100, 10, 75, 100);
   thingsToDisplay.add(seed);
   
   draw();
