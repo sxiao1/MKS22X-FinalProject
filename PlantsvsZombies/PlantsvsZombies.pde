@@ -141,6 +141,7 @@ public Pea(float xcor, float ycor, float wid, float len, float speedNum, float d
     x = origX; 
     y = origY;
   }
+  
   // not used
   public boolean isTouching(Plant other){
     return false;
@@ -209,6 +210,11 @@ class Sun implements Moveable, Displayable{
   void move(){
     if (y < height - 100){
       y += speed;
+    }
+    if (collected() ){
+      System.out.println("sun has been clicked");
+      thingsToDisplay.remove(this);
+      thingsToMove.remove(this);
     }
   }
   
@@ -374,6 +380,34 @@ class BasicZombie extends Zombie implements Moveable{
 
 }
 
+class SeedPacket implements Displayable{
+  float x,y,w,l;
+  SeedPacket(float xcor, float ycor, float wid, float len){
+    x = xcor;
+    y = ycor;
+    w = wid;
+    l = len; 
+  }
+  
+  void display(){
+    fill(121,83,45);
+    rect(x,y,w,l);
+    if (isClicked() ){
+      System.out.println("seed clicked");
+    }
+  }
+  
+  boolean isClicked(){
+    if (mousePressed && mouseX >= this.x && mouseX <= this.x + this.w && mouseY >= this.y && mouseY <= this.y + this.l){
+      fill(255);
+      rect(mouseX, mouseY, 50,50);
+      return true;
+    }
+    return false;
+  }
+  
+}
+
 ArrayList<Moveable> thingsToMove = new ArrayList<Moveable>();
 ArrayList<Displayable> thingsToDisplay = new ArrayList<Displayable>();
 ArrayList<Collideable> thingsToCollide = new ArrayList<Collideable>();
@@ -414,7 +448,11 @@ void setup(){
   sun = loadImage("sun.png");
   image(sun,90,170,50,50); 
   
+  SeedPacket seed = new SeedPacket(100, 20, 75, 100);
+  thingsToDisplay.add(seed);
+  
   draw();
+  mouseDragged();
 }
 
 void draw(){
@@ -429,4 +467,9 @@ void draw(){
     thingsToDisplay.get(d).display();
   }
  
+}
+
+void mouseDragged(){
+  fill(255);
+  rect(mouseX, mouseY, 50,50);
 }
