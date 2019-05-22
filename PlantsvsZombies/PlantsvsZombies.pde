@@ -90,8 +90,7 @@ class Peashooter extends Plant{
     myPea = new Pea(xcor + wid, ycor + 20, 30.0, 30.0, 3.0, 25.0, true);
     thingsToDisplay.add(myPea);
     thingsToMove.add(myPea);
-    thingsToCollide.add(myPea);
-    
+    thingsToCollide.add(myPea); 
   }
 
   // make zombie take hit by damage points
@@ -438,13 +437,20 @@ class SeedPacket implements Displayable{
 ArrayList<Moveable> thingsToMove = new ArrayList<Moveable>();
 ArrayList<Displayable> thingsToDisplay = new ArrayList<Displayable>();
 ArrayList<Collideable> thingsToCollide = new ArrayList<Collideable>();
+boolean[][] plots = new boolean[5][9];
 
 PImage background,peashooter,zombie,sunflower,sun;
-
+PImage ps_seed;
+  
 void setup(){
   // load background, plants, zombies, and suns
   size(1024,600);
   background = loadImage("background.jpg");
+  
+  ps_seed = loadImage("peashooter-seed.jpg");
+
+  SeedPacket seed = new SeedPacket(100, 20, 75, 100);
+  thingsToDisplay.add(seed);
   
   fill(255);
   rect(70,80,70,70); //size 70x70
@@ -482,12 +488,15 @@ void setup(){
   
   SeedPacket seed = new SeedPacket(200, 10, 75, 100);
   thingsToDisplay.add(seed);
-  
+
   draw();
   mouseDragged();
+  mouseReleased();
+  
 }
 
 void draw(){
+  
   // draw background, display displayables, and move moveables
   image(background,0,0);
 
@@ -498,10 +507,48 @@ void draw(){
   for (int d = 0; d < thingsToDisplay.size(); d++){
     thingsToDisplay.get(d).display();
   }
+ // pea shooter seed
+ 
+   image(ps_seed, 100,20,75,100);
+   
+ // testing grids
+  fill(255);
+  rect(70,100,80,80);
  
 }
+
+int drag = 0; // check if mouse is being dragged
 
 void mouseDragged(){
   fill(255);
   rect(mouseX, mouseY, 50,50);
+  //100, 20, 75, 100
+  // if in seed packet 
+  if (mouseX >= 100 && mouseX <=100 + 75 && mouseY >= 20 && mouseY <= 20 + 100){
+      drag = 1;
+      System.out.println("drag on!!");
+    }
+}
+
+void mouseReleased(){
+  // top left-most plot coordinates
+  float xcor = 78;
+  float ycor = 80; 
+  
+  if (drag == 1){
+    System.out.println("drag release!! ");
+   if (mouseX >= 78){
+     xcor = 78*( (int)mouseX / 78);
+   }
+    if (mouseY >= 80){
+      System.out.println(mouseY);
+      ycor = 80 + 100*( (mouseY - 80 )/100);
+
+    }
+
+  Peashooter peashoot = new Peashooter(xcor, ycor, 80, 80, 10.0,25.0,5.0, peashooter);
+  thingsToDisplay.add(peashoot);
+  thingsToCollide.add(peashoot);
+  }
+  drag = 0;
 }
