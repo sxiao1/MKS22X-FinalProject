@@ -449,7 +449,7 @@ void setup(){
   
   ps_seed = loadImage("peashooter-seed.jpg");
 
-  SeedPacket seed = new SeedPacket(100, 20, 75, 100);
+  SeedPacket seed = new SeedPacket(200, 10, 75, 100);
   thingsToDisplay.add(seed);
   
   fill(255);
@@ -485,10 +485,7 @@ void setup(){
   
   SunCount sunc = new SunCount(100, 10, 75,100, newSun.getSun(),sun);
   thingsToDisplay.add(sunc);
-  
-  SeedPacket seed = new SeedPacket(200, 10, 75, 100);
-  thingsToDisplay.add(seed);
-
+ 
   draw();
   mouseDragged();
   mouseReleased();
@@ -509,7 +506,7 @@ void draw(){
   }
  // pea shooter seed
  
-   image(ps_seed, 100,20,75,100);
+   image(ps_seed, 200,10,75,100);
    
  // testing grids
   fill(255);
@@ -524,7 +521,7 @@ void mouseDragged(){
   rect(mouseX, mouseY, 50,50);
   //100, 20, 75, 100
   // if in seed packet 
-  if (mouseX >= 100 && mouseX <=100 + 75 && mouseY >= 20 && mouseY <= 20 + 100){
+  if (mouseX >= 200 && mouseX <=200 + 75 && mouseY >= 10 && mouseY <= 10 + 100){
       drag = 1;
       System.out.println("drag on!!");
     }
