@@ -406,11 +406,11 @@ class SunCount implements Displayable{
     fill(0);
     for(int i =0; i < listOfSuns.size(); i++){
       if(listOfSuns.get(i).collected()){
-        count++;
+        count+=25;
         listOfSuns.remove(i);
       }
     }
-    text(count,x+30,y+80);
+    text(count,x+20,y+80);
   }
   
   void addCount(){
@@ -516,10 +516,6 @@ void draw(){
   }
  // pea shooter seed
    image(ps_seed, 200,10,75,100);
-   
- // testing grids
-  fill(255);
-  rect(70,100,80,80);
  
 }
 
