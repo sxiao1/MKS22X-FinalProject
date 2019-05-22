@@ -391,8 +391,8 @@ class SunCount implements Displayable{
   SunCount(float xcor,float ycor,float wid,float len, int counter, PImage sunImg){
     x = xcor;
     y = ycor;
-    wid = w;
-    len = l;
+    w = wid;
+    l = len;
     count = counter;
     sun = sunImg;
   }
@@ -467,10 +467,15 @@ void setup(){
   thingsToDisplay.add(sunf);
   sunf.display();
   
+  Sun newSun = new Sun(1,1,1,sun);
+  
   sun = loadImage("sun.png");
   image(sun,90,170,50,50); 
   
-  SeedPacket seed = new SeedPacket(100, 10, 75, 100);
+  SunCount sunc = new SunCount(100, 10, 75,100, newSun.getSun(),sun);
+  thingsToDisplay.add(sunc);
+  
+  SeedPacket seed = new SeedPacket(200, 10, 75, 100);
   thingsToDisplay.add(seed);
   
   draw();
