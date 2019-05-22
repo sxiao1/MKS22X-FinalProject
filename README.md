@@ -1,8 +1,14 @@
 # MKS22X-FinalProject
 
-## Description 
+## Description
 
 ## Development Log
+
+### 2019-05-21
+We added a seed packet at the top left corner of the screen and tried to implement a mouse drag function so that the player can plant a Peashooter in the desired plot of land. We had trouble getting the snap-coordinates of the plants right, and we also had trouble with the mouse drag only being recognized sometimes. We experimented with the y- and x- coordinate intervals of the snap grid, and discovered that the mouse drag was not being registered due to improper range specification of the size of the seed packet.
+
+### 2019-05-20
+We added a pea and positioned it based on the Peashooter coordinates, and we were planning to move the pea to shoot the Zombie. In order to do this, we created a Pea class for the shooting peas, and managed to make the pea displayable, moveable, and collideable. The pea disappears after hitting a zombie and its coordinates reset, so the peashooter can attack again after a target has been hit. We also added a moveable sun to the sunflower, and coded the collected() method so that the sun disappears when it is clicked, or collected by the player.
 
 ### 2019-05-19
 We modified the movement code so that the zombie stops when it touches a plant that is still alive, then attacks. We had trouble getting rid of the Plant when the HP reaches 0, but we resolved the issue by adding an integer index while looping through Collideables. We succeeded in making the plant disappear after being killed, while the zombie continues on the screen if it is still alive. We also got the peashooter to attack and kill the zombie, but have not yet added the shooting pea balls. We encountered an issue with ConcurrentModificationException, which we resolved by including the plant and zombie attack code in the one traversal of Collideables in BasicZombie move().

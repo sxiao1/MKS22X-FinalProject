@@ -90,8 +90,7 @@ class Peashooter extends Plant{
     myPea = new Pea(xcor + wid, ycor + 20, 30.0, 30.0, 3.0, 25.0, true);
     thingsToDisplay.add(myPea);
     thingsToMove.add(myPea);
-    thingsToCollide.add(myPea);
-    
+    thingsToCollide.add(myPea); 
   }
 
   // make zombie take hit by damage points
@@ -414,12 +413,15 @@ ArrayList<Collideable> thingsToCollide = new ArrayList<Collideable>();
 boolean[][] plots = new boolean[5][9];
 
 PImage background,peashooter,zombie,sunflower,sun;
+PImage ps_seed;
   
 void setup(){
   // load background, plants, zombies, and suns
   size(1024,600);
   background = loadImage("background.jpg");
   
+  ps_seed = loadImage("peashooter-seed.jpg");
+
   SeedPacket seed = new SeedPacket(100, 20, 75, 100);
   thingsToDisplay.add(seed);
   
@@ -471,18 +473,17 @@ void draw(){
   for (int d = 0; d < thingsToDisplay.size(); d++){
     thingsToDisplay.get(d).display();
   }
+ // pea shooter seed
  
+   image(ps_seed, 100,20,75,100);
+   
  // testing grids
   fill(255);
   rect(70,100,80,80);
-  
- /* for (int i = 0; i < 9; i++){
-    rect(78 + 78*i, 480,80,80);
-  }*/
-  
+ 
 }
 
-int drag = 0; 
+int drag = 0; // check if mouse is being dragged
 
 void mouseDragged(){
   fill(255);
@@ -496,6 +497,7 @@ void mouseDragged(){
 }
 
 void mouseReleased(){
+  // top left-most plot coordinates
   float xcor = 78;
   float ycor = 80; 
   
@@ -509,25 +511,10 @@ void mouseReleased(){
       ycor = 80 + 100*( (mouseY - 80 )/100);
 
     }
-   System.out.println(ycor);
- /* if (mouseY >= 0 && mouseY < 180){
-    ycor = 80;
-  }
-  else if (mouseY >= 180 && mouseY < 280){
-    ycor = 180;
-  }
-  else if (mouseY >= 280 && mouseY < 380){
-    ycor = 280;
-  }
-  else if (mouseY >= 380 && mouseY < 480){
-    ycor = 380;
-  }
-  else if (mouseY >= 480 && mouseY < 580){
-    ycor = 480;
-  }*/
+
   Peashooter peashoot = new Peashooter(xcor, ycor, 80, 80, 10.0,25.0,5.0, peashooter);
   thingsToDisplay.add(peashoot);
   thingsToCollide.add(peashoot);
   }
-   drag = 0;
+  drag = 0;
 }
