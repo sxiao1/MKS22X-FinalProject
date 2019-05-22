@@ -388,6 +388,7 @@ class SunCount implements Displayable{
   float x,y,w,l;
   int count;
   PImage sun;
+  PFont f;
   SunCount(float xcor,float ycor,float wid,float len, int counter, PImage sunImg){
     x = xcor;
     y = ycor;
@@ -399,7 +400,11 @@ class SunCount implements Displayable{
   void display(){
     fill(121,83,45);
     rect(x,y,w,l);
-    image(sun,x,y,50,50);
+    image(sun,x+12,y,50,50);
+    f = createFont("Arial",70,true);
+    textFont(f,30);
+    fill(0);
+    text(count,x+30,y+80);
   }
 }
 class SeedPacket implements Displayable{
