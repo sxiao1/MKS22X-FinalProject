@@ -181,15 +181,23 @@ class Sunflower extends Plant{
   Sunflower(float xcor, float ycor, float wid, float len, float dam, float startHP, float rate, PImage sunflower){
     super(xcor, ycor, wid, len, dam, startHP, sunflower);
     this.rate = rate;
-    produce();
   }
   
   // sunflower has no offensive ability 
   void attack(Character c){  
   }
-  
+  int t = 0;
   void display(){
     super.display();
+    float time = millis() % 500;
+    if (time == 40 && t == 0){
+      System.out.println("30 seconds have passed");
+      produce();
+      t = 1;
+    }
+    else if (time != 40){
+      t = 0;
+    }
   }
   
   // instantiate a new sun from the sunflower's coordinates
@@ -487,7 +495,7 @@ void draw(){
   for (int d = 0; d < thingsToDisplay.size(); d++){
     thingsToDisplay.get(d).display();
   }
- // pea shooter seed
+ // seeds
    image(ps_seed, 200,10,75,100);
    image(sf_seed, 300,10,75,100);
  
@@ -532,7 +540,7 @@ void mouseReleased(){
   thingsToDisplay.add(peashoot);
   thingsToCollide.add(peashoot);
   }
-  if(drag ==2){
+  else if(drag ==2){
     Sunflower sun = new Sunflower(xcor,ycor,85,100,10,25,5,sunflower);
     thingsToDisplay.add(sun);
     thingsToCollide.add(sun);
