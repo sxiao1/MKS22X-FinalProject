@@ -18,7 +18,37 @@ interface Collideable{
   boolean isTouching(Plant other);
   boolean isTouching(Zombie other);
 }
-
+abstract class Character implements Damageable, Displayable, Collideable{
+  float x,y,w,l,HP,damage;
+  PImage character;
+  Character(float xcor,float ycor,float wid,float len,float HPnum,float dam){
+    x = xcor;
+    y=ycor;
+    w=wid;
+    l=len;
+    HP=HPnum;
+    damage=dam;
+  }
+   float getX(){
+    return x;
+  }
+  float getY(){
+    return y;
+  }
+  float getHP(){
+    return HP;
+  }
+  float getDamage(){
+    return damage;
+  }
+  void takeHit(float dam){
+    this.HP -= dam;
+  }
+  
+  // attack method to be coded in subclasses
+  abstract void attack(Character c);
+  }
+  
 // parent Plant class
 abstract class Plant implements Damageable, Displayable, Collideable{
   float x,y, w,l, damage,HP;
@@ -403,6 +433,7 @@ class SunCount implements Displayable{
     image(sun,x+12,y,50,50);
     f = createFont("Arial",70,true);
     textFont(f,30);
+    textAlign(CENTER,BOTTOM);
     fill(0);
     for(int i =0; i < listOfSuns.size(); i++){
       if(listOfSuns.get(i).collected()){
@@ -410,7 +441,7 @@ class SunCount implements Displayable{
         listOfSuns.remove(i);
       }
     }
-    text(count,x+20,y+80);
+    text(count,x+30,y+90);
   }
   
   void addCount(){
@@ -453,6 +484,7 @@ ArrayList<Sun> listOfSuns = new ArrayList<Sun>();
 
 PImage background,peashooter,zombie,sunflower,sun;
 PImage ps_seed;
+PImage sf_seed;
   
 void setup(){
   // load background, plants, zombies, and suns
@@ -460,9 +492,14 @@ void setup(){
   background = loadImage("background.jpg");
   
   ps_seed = loadImage("peashooter-seed.jpg");
+  
+  sf_seed = loadImage("sunflower-seed.jpg");
 
   SeedPacket seed = new SeedPacket(200, 10, 75, 100);
   thingsToDisplay.add(seed);
+  
+  SeedPacket seed1 = new SeedPacket(300,10,75,100);
+  thingsToDisplay.add(seed1);
   
   fill(255);
   rect(70,80,70,70); //size 70x70
@@ -493,7 +530,7 @@ void setup(){
   sun = loadImage("sun.png");
   image(sun,90,170,50,50); 
   
-  SunCount sunc = new SunCount(100, 10, 75,100, 0,sun);
+  SunCount sunc = new SunCount(100, 10, 75,100, 50,sun);
   thingsToDisplay.add(sunc);
  
   draw();
@@ -516,6 +553,7 @@ void draw(){
   }
  // pea shooter seed
    image(ps_seed, 200,10,75,100);
+   image(sf_seed, 300,10,75,100);
  
 }
 
@@ -530,6 +568,11 @@ void mouseDragged(){
       drag = 1;
       System.out.println("drag on!!");
     }
+  else if (mouseX >= 300 && mouseX <= 300 + 75 && mouseY >= 10 && mouseY <= 10 + 100){
+      drag = 2;
+      System.out.println("drag on!!");
+    }  
+    
 }
 
 void mouseReleased(){
@@ -538,7 +581,7 @@ void mouseReleased(){
   float xcor = 78;
   float ycor = 80; 
   
-  if (drag == 1){
+  if (drag > 0){
     System.out.println("drag release!! ");
    if (mouseX >= 78){
      xcor = 78*( (int)mouseX / 78);
@@ -548,10 +591,16 @@ void mouseReleased(){
       ycor = 80 + 100*( (mouseY - 80 )/100);
 
     }
-
+  if(drag ==1){
   Peashooter peashoot = new Peashooter(xcor, ycor, 80, 80, 10.0,25.0,5.0, peashooter);
   thingsToDisplay.add(peashoot);
   thingsToCollide.add(peashoot);
+  }
+  if(drag ==2){
+    Sunflower sun = new Sunflower(xcor,ycor,80,80,10,25,5,sunflower);
+    thingsToDisplay.add(sun);
+    thingsToCollide.add(sun);
+  }
   }
   drag = 0;
 }
