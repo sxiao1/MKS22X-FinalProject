@@ -15,25 +15,33 @@ interface Displayable{
 
 // Plant and Zombie implement this
 interface Collideable{
-  boolean isTouching(Plant other);
-  boolean isTouching(Zombie other);
+  boolean isTouching(Character c);
 }
+
 abstract class Character implements Damageable, Displayable, Collideable{
   float x,y,w,l,HP,damage;
   PImage character;
-  Character(float xcor,float ycor,float wid,float len,float HPnum,float dam){
+  Character(float xcor,float ycor,float wid,float len,float dam, float HPnum, PImage image){
     x = xcor;
-    y=ycor;
-    w=wid;
-    l=len;
-    HP=HPnum;
+    y = ycor;
+    w = wid;
+    l = len;
+    HP = HPnum;
     damage=dam;
+    character = image;
   }
+  // accessor methods
    float getX(){
     return x;
   }
   float getY(){
     return y;
+  }
+  float getW(){
+    return w;
+  }
+  float getL(){
+    return l;
   }
   float getHP(){
     return HP;
@@ -41,41 +49,34 @@ abstract class Character implements Damageable, Displayable, Collideable{
   float getDamage(){
     return damage;
   }
+  PImage getImage(){
+    return character;
+  }
+  // when attacked by another character
   void takeHit(float dam){
     this.HP -= dam;
   }
   
   // attack method to be coded in subclasses
   abstract void attack(Character c);
+  
+  void display(){
+    image(character,x,y, w,l);
+  }
+  
+  abstract boolean isTouching(Character other);
+  
   }
   
 // parent Plant class
-abstract class Plant implements Damageable, Displayable, Collideable{
-  float x,y, w,l, damage,HP;
-  PImage plant;
-  
+abstract class Plant extends Character{
   // takes in x - and y-coordinate, width, length, damage points, starting HP, and plant image
   Plant(float xcor, float ycor, float wid, float len, float dam, float startHP, PImage plantImage){
-    x = xcor;
-    y = ycor;
-    w = wid;
-    l = len;
-    damage = dam;
-    HP= startHP;
-    plant = plantImage;
-  }
-  
-  void display(){
-    image(plant,x,y, w,l);
-  }
-  
-  // return false -- not applicable to plants
-  boolean isTouching(Plant other){
-    return false;
+    super(xcor,ycor,wid,len,dam,startHP,plantImage);
   }
   
   // return true if zombie coordinates overlap with current plant, otherwise return false
-   boolean isTouching(Zombie other){
+   boolean isTouching(Character other){
      if (other.x >= getX() && other.x <= getX() + w
     &&  other.getY() + other.l == getY() + l){
     return true;
@@ -83,28 +84,10 @@ abstract class Plant implements Damageable, Displayable, Collideable{
     return false;
   }
   
-  // accessor methods
-  float getX(){
-    return x;
-  }
-  float getY(){
-    return y;
-  }
-  float getHP(){
-    return HP;
-  }
-  float getDamage(){
-    return damage;
-  }
-  
   // if being attacked by a zombie, reduce HP
   void takeHit(float dam){
     this.HP -= dam;
   }
-  
-  // attack method to be coded in subclasses
-  abstract void attack(Zombie z);
-  
  
 }
 
@@ -118,13 +101,14 @@ class Peashooter extends Plant{
     super(xcor, ycor, wid, len, dam, startHP, peashooter);
     this.rate = rate;
     myPea = new Pea(xcor + wid, ycor + 20, 30.0, 30.0, 3.0, 25.0, true);
+    
     thingsToDisplay.add(myPea);
     thingsToMove.add(myPea);
     thingsToCollide.add(myPea); 
   }
 
   // make zombie take hit by damage points
-  void attack(Zombie zombie){
+  void attack(Character zombie){
       zombie.takeHit(super.damage);
       System.out.println(zombie.getHP());
   }
@@ -171,12 +155,7 @@ public Pea(float xcor, float ycor, float wid, float len, float speedNum, float d
     y = origY;
   }
   
-  // not used
-  public boolean isTouching(Plant other){
-    return false;
-  }
-  
-  public boolean isTouching(Zombie other){
+  public boolean isTouching(Character other){
     if (x >= other.getX() && x <= other.getX() + other.w
      && y >= other.getY() && y <= other.getY() + l){
        System.out.println("pea is touching zombie");
@@ -206,7 +185,7 @@ class Sunflower extends Plant{
   }
   
   // sunflower has no offensive ability 
-  void attack(Zombie z){  
+  void attack(Character c){  
   }
   
   void display(){
@@ -264,55 +243,21 @@ class Sun implements Moveable, Displayable{
 }
 
 // parent class Zombie
-abstract class Zombie implements Damageable, Displayable, Collideable{
-  float HP,x,y,w,l,speed, damage;
-  PImage zombie;
+abstract class Zombie extends Character implements Damageable, Displayable, Collideable{
+  float speed;
   
   // takes in x- and y-coordinates, width, length, speed, damage points, starting HP, and zombie image
   Zombie(float xcor, float ycor, float wid, float len, float speedNum, float dam, float startHP, PImage zombieImage){
-    x = xcor;
-    y = ycor;
-    w = wid;
-    l = len;
+    super(xcor, ycor, wid, len, dam, startHP, zombieImage);
     speed = speedNum;
-    damage = dam;
-    HP = startHP;
-    zombie = zombieImage;
   }
-  
-  // accessor methods
-  float getX(){
-    return x;
-  }
-  float getY(){
-    return y;
-  }
-  float getHP(){
-    return HP;
-  }
+
   float getSpeed(){
     return speed;
   }
-  float getDamage(){
-    return damage;
-  }
-  
-  // reduce HP by damage points if attacked
-  void takeHit(float dam){
-    HP -= dam;
-  }
-  
-  // to be completed in subclasses
-  abstract void attack(Plant p);
-  
-  // check if touching Zombie
-  boolean isTouching(Zombie other){
-    return false;
-    
-  }
-  
+ 
   // if Zombie is touching plant, return true; otherwise return false 
-  boolean isTouching(Plant other){
+  boolean isTouching(Character other){
     if (x >= other.getX() && x <= other.getX() + other.w
     &&  y + l == other.getY() + other.l){
     return true;
@@ -328,11 +273,6 @@ abstract class Zombie implements Damageable, Displayable, Collideable{
     }
     return false;
   }
-  
-  void display(){
-    
-    image(zombie, x,y,w,l);
-  }
 }
 
 // BasicZombie subclass of Zombie, can move
@@ -344,10 +284,9 @@ class BasicZombie extends Zombie implements Moveable{
   }
   
   // attack plant if touching 
-  void attack(Plant p){
+  void attack(Character p){
     p.takeHit(damage);
    System.out.println(p.getHP());
-  
   }
   
   void move(){
@@ -366,9 +305,6 @@ class BasicZombie extends Zombie implements Moveable{
             // pea attacks and "new" pea is created
             pea.attack(this);
             pea.reset();
-            System.out.println("zombie hp:" + getHP());
-  
-            System.out.println("remove pea");
             
            }
            else{
@@ -597,7 +533,7 @@ void mouseReleased(){
   thingsToCollide.add(peashoot);
   }
   if(drag ==2){
-    Sunflower sun = new Sunflower(xcor,ycor,80,80,10,25,5,sunflower);
+    Sunflower sun = new Sunflower(xcor,ycor,85,100,10,25,5,sunflower);
     thingsToDisplay.add(sun);
     thingsToCollide.add(sun);
   }
