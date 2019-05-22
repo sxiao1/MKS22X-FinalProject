@@ -189,6 +189,7 @@ class Sunflower extends Plant{
     System.out.println("add sun");
     thingsToDisplay.add(sun);
     thingsToMove.add(sun);
+    listOfSuns.add(sun);
   }
 }
 
@@ -403,7 +404,17 @@ class SunCount implements Displayable{
     f = createFont("Arial",70,true);
     textFont(f,30);
     fill(0);
+    for(int i =0; i < listOfSuns.size(); i++){
+      if(listOfSuns.get(i).collected()){
+        count++;
+        listOfSuns.remove(i);
+      }
+    }
     text(count,x+30,y+80);
+  }
+  
+  void addCount(){
+    count++;
   }
 }
 class SeedPacket implements Displayable{
@@ -438,6 +449,7 @@ ArrayList<Moveable> thingsToMove = new ArrayList<Moveable>();
 ArrayList<Displayable> thingsToDisplay = new ArrayList<Displayable>();
 ArrayList<Collideable> thingsToCollide = new ArrayList<Collideable>();
 boolean[][] plots = new boolean[5][9];
+ArrayList<Sun> listOfSuns = new ArrayList<Sun>();
 
 PImage background,peashooter,zombie,sunflower,sun;
 PImage ps_seed;
@@ -478,12 +490,10 @@ void setup(){
   thingsToDisplay.add(sunf);
   sunf.display();
   
-  Sun newSun = new Sun(1,1,1,sun);
-  
   sun = loadImage("sun.png");
   image(sun,90,170,50,50); 
   
-  SunCount sunc = new SunCount(100, 10, 75,100, newSun.getSun(),sun);
+  SunCount sunc = new SunCount(100, 10, 75,100, 0,sun);
   thingsToDisplay.add(sunc);
  
   draw();
@@ -491,7 +501,7 @@ void setup(){
   mouseReleased();
   
 }
-
+int sunCount = 0;
 void draw(){
   
   // draw background, display displayables, and move moveables
@@ -505,7 +515,6 @@ void draw(){
     thingsToDisplay.get(d).display();
   }
  // pea shooter seed
- 
    image(ps_seed, 200,10,75,100);
    
  // testing grids
@@ -528,6 +537,7 @@ void mouseDragged(){
 }
 
 void mouseReleased(){
+  
   // top left-most plot coordinates
   float xcor = 78;
   float ycor = 80; 
