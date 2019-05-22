@@ -476,15 +476,9 @@ void draw(){
   fill(255);
   rect(70,100,80,80);
   
-  rect(65,280,80,80);
-  rect(65 + 75,280,80,80);
-  rect(65 + 75 + 80,280,80,80);
-  rect(65 + 75 + 80+ 86,280,80,80);
-  rect(65 + 75 + 80+ 86 + 80,280,80,80);
-  rect(65 + 75 + 80+ 86 + 80 + 80,280,80,80);
-  rect(65 + 75 + 80+ 86 + 80 + 80 + 80,280,80,80);
-  rect(65 + 75 + 80+ 86 + 80 + 80 + 80 + 80,280,80,80);
-  rect(65 + 75 + 80+ 86 + 80 + 80 + 80 + 80 + 83,280,80,80);
+ /* for (int i = 0; i < 9; i++){
+    rect(78 + 78*i, 480,80,80);
+  }*/
   
 }
 
@@ -495,21 +489,28 @@ void mouseDragged(){
   rect(mouseX, mouseY, 50,50);
   //100, 20, 75, 100
   // if in seed packet 
-  if (mouseX >= 100 && mouseX <=100 + 50 && mouseY >= 20 && mouseY <= 20 + 50){
+  if (mouseX >= 100 && mouseX <=100 + 75 && mouseY >= 20 && mouseY <= 20 + 100){
       drag = 1;
       System.out.println("drag on!!");
     }
 }
 
 void mouseReleased(){
-  float xcor = 0;
-  float ycor = 0; 
+  float xcor = 78;
+  float ycor = 80; 
   
   if (drag == 1){
-    System.out.println("drag release!! " + 70 + 80 * ((int)mouseX/80) +", "+ 100 + 80*((int)mouseY/80));
-  xcor = 65 + 80 * ((int)mouseX/80);
-  ycor = 80;
-  if (mouseY >= 0 && mouseY < 180){
+    System.out.println("drag release!! ");
+   if (mouseX >= 78){
+     xcor = 78*( (int)mouseX / 78);
+   }
+    if (mouseY >= 80){
+      System.out.println(mouseY);
+      ycor = 80 + 100*( (mouseY - 80 )/100);
+
+    }
+   System.out.println(ycor);
+ /* if (mouseY >= 0 && mouseY < 180){
     ycor = 80;
   }
   else if (mouseY >= 180 && mouseY < 280){
@@ -523,7 +524,7 @@ void mouseReleased(){
   }
   else if (mouseY >= 480 && mouseY < 580){
     ycor = 480;
-  }
+  }*/
   Peashooter peashoot = new Peashooter(xcor, ycor, 80, 80, 10.0,25.0,5.0, peashooter);
   thingsToDisplay.add(peashoot);
   thingsToCollide.add(peashoot);
