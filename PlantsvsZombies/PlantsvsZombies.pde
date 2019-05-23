@@ -288,7 +288,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
     // while still on screen 
     if (x > 0){
       // loop through list of collideables
-      int i = 0;
+
       speed = 3;
       for (int c = thingsToCollide.size() - 1; c >= 0; c--){
          Collideable thing = thingsToCollide.get(c);
@@ -325,7 +325,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
             speed = 3;
             }
         }
-        i++;
+  
       }
        
         // remove this zombie from list of displayables and moveables if it is dead
@@ -557,7 +557,7 @@ void mouseReleased(){
   }
   else if(drag ==2 && count >= 50){
     sunc.setCount( sunc.getCount() - 50);
-    Sunflower sun = new Sunflower(xcor,ycor,85,100,10,25,5,sunflower);
+    Sunflower sun = new Sunflower(xcor-5,ycor - 25,85,105,10,25,5,sunflower);
     thingsToDisplay.add(sun);
     thingsToCollide.add(sun);
   }
