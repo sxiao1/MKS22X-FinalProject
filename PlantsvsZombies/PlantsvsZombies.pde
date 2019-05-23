@@ -378,7 +378,7 @@ class SunCount implements Displayable{
     rect(x,y,w,l);
     image(sun,x+12,y,50,50);
     f = createFont("Arial",70,true);
-    textFont(f,30);
+    textFont(f,25);
     textAlign(CENTER,BOTTOM);
     fill(0);
     for(int i =0; i < listOfSuns.size(); i++){
@@ -387,11 +387,15 @@ class SunCount implements Displayable{
         listOfSuns.remove(i);
       }
     }
-    text(count,x+30,y+90);
+    text(count,x + w/2, y + l);
   }
   
   int getCount(){
     return count;
+  }
+  
+  void setCount(int sunNum){
+    count = sunNum;
   }
 }
 class SeedPacket implements Displayable{
@@ -432,12 +436,18 @@ ArrayList<Pea> listOfPeas = new ArrayList<Pea>();
 PImage background,peashooter,zombie,sunflower,sun;
 PImage ps_seed;
 PImage sf_seed;
+
+SunCount sunc;
   
 void setup(){
   // load background, plants, zombies, and suns
   size(1024,600);
   background = loadImage("background.jpg");
   
+  sun = loadImage("sun.png");
+  image(sun,90,170,50,50); 
+  sunc = new SunCount(100, 10, 75,100, 50,sun);
+
   ps_seed = loadImage("peashooter-seed.jpg");
   
   sf_seed = loadImage("sunflower-seed.jpg");
@@ -473,11 +483,7 @@ void setup(){
   Sunflower sunf = new Sunflower(70.0,360.0, 85, 100, 10.0,100.0,5.0, sunflower);
   thingsToDisplay.add(sunf);
   sunf.display();
-  
-  sun = loadImage("sun.png");
-  image(sun,90,170,50,50); 
-  
-  SunCount sunc = new SunCount(100, 10, 75,100, 50,sun);
+
   thingsToDisplay.add(sunc);
  
   draw();
@@ -523,7 +529,8 @@ void mouseDragged(){
 }
 
 void mouseReleased(){
-  
+  int count = sunc.getCount(); // number of suns collected
+
   // top left-most plot coordinates
   float xcor = 78;
   float ycor = 80; 
@@ -538,12 +545,14 @@ void mouseReleased(){
       ycor = 80 + 100*( (mouseY - 80 )/100);
 
     }
-  if(drag ==1){
+  if(drag == 1 && count >= 100){
+  sunc.setCount( sunc.getCount() - 100);
   Peashooter peashoot = new Peashooter(xcor, ycor, 80, 80, 10.0,25.0,5.0, peashooter);
   thingsToDisplay.add(peashoot);
   thingsToCollide.add(peashoot);
   }
-  else if(drag ==2){
+  else if(drag ==2 && count >= 50){
+      sunc.setCount( sunc.getCount() - 50);
     Sunflower sun = new Sunflower(xcor,ycor,85,100,10,25,5,sunflower);
     thingsToDisplay.add(sun);
     thingsToCollide.add(sun);
