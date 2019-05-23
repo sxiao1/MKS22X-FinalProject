@@ -419,8 +419,8 @@ class SeedPacket implements Displayable{
   
   boolean isClicked(){
     if (mousePressed && mouseX >= this.x && mouseX <= this.x + this.w && mouseY >= this.y && mouseY <= this.y + this.l){
-      fill(255);
-      rect(mouseX, mouseY, 50,50);
+      //fill(255);
+      //rect(mouseX, mouseY, 50,50);
       return true;
     }
     return false;
@@ -515,25 +515,30 @@ void draw(){
 }
 
 int drag = 0; // check if mouse is being dragged
-
+int plant = 0;
 void mouseDragged(){
   //fill(255);
   //rect(mouseX, mouseY, 50,50);
   //100, 20, 75, 100
   // if in seed packet 
-  PImage plant=peashooter;
+  System.out.println("update plant");
+  //PImage plant = sunflower;
   if (mouseX >= 200 && mouseX <=200 + 75 && mouseY >= 10 && mouseY <= 10 + 100){
       drag = 1;
       System.out.println("drag on!!");
-      plant = peashooter;
+      plant = 0;
     }
   else if (mouseX >= 300 && mouseX <= 300 + 75 && mouseY >= 10 && mouseY <= 10 + 100){
       drag = 2;
       System.out.println("drag on!!");
-      plant = sunflower;
+      plant = 1;
     }
-  
-  image(plant,mouseX,mouseY,80,80);
+  if(plant ==0){
+  image(peashooter,mouseX,mouseY,80,80);
+  }
+  else{
+    image(sunflower,mouseX,mouseY,80,80);
+  }
     
 }
 
