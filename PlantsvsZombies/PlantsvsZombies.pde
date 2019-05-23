@@ -464,13 +464,13 @@ void setup(){
   rect(70,80,70,70); //size 70x70
   rect(70,80+100,70,70);//space between plots is 20
   
-  peashooter = loadImage("peashooter.png");
+ peashooter = loadImage("peashooter.png");
   image(peashooter,70,80, 80,80);
-  //Peashooter(float xcor, float ycor, float wid, float len, float dam, float startHP, float rate, PImage peashooter){
+  /*Peashooter(float xcor, float ycor, float wid, float len, float dam, float startHP, float rate, PImage peashooter){
   Peashooter peashoot = new Peashooter(70.0,280.0, 80, 80, 25.0,1000,5.0, peashooter);
   thingsToDisplay.add(peashoot);
   thingsToCollide.add(peashoot);
-  peashoot.display();
+  peashoot.display();*/
   
   zombie = loadImage("zombie.png");
   image(zombie,900,80, 80,120);
@@ -493,12 +493,18 @@ void setup(){
   sunflower = loadImage("sunflower.png");
   image(sunflower,70,170,85,100);
   //  Sunflower(float xcor, float ycor, float wid, float len, float dam, float startHP, float rate, PImage sunflower){
-  Sunflower sunf = new Sunflower(70.0,360.0, 85, 100, 10.0,100.0,5.0, sunflower);
+  /*nflower sunf = new Sunflower(70.0,360.0, 85, 100, 10.0,100.0,5.0, sunflower);
   thingsToDisplay.add(sunf);
   thingsToCollide.add(sunf);
-  sunf.display();
+  sunf.display(); */
 
   thingsToDisplay.add(sunc);
+  
+  for(int r = 0; r< plots.length; r++){
+    for(int c = 0; c < plots[0].length; c++){
+      plots[r][c] = false;
+    }
+  }
  
   draw();
   mouseDragged();
@@ -558,18 +564,21 @@ void mouseReleased(){
   // top left-most plot coordinates
   float xcor = 78;
   float ycor = 80; 
-  
+  int plotR = 0;
+  int plotC = 0;
   if (drag > 0){
     System.out.println("drag release!! ");
    if (mouseX >= 78){
      xcor = 78*( (int)mouseX / 78);
+     plotR = (int)mouseX / 78;
    }
     if (mouseY >= 80){
       System.out.println(mouseY);
       ycor = 80 + 100*( (mouseY - 80 )/100);
-
+      plotC = (mouseY - 80 )/100;
     }
-  if(drag == 1 && count >= 100){
+  if(drag == 1 && count >= 100 && plots[plotR][plotC] == false){
+    plots[plotR][plotC] = true;
   sunc.setCount( sunc.getCount() - 100);
   Peashooter peashoot = new Peashooter(xcor, ycor, 80, 80, 25.0,100, 5,peashooter);
   thingsToDisplay.add(peashoot);
