@@ -94,19 +94,19 @@ abstract class Plant extends Character{
 // Peashooter subclass of Plant
 class Peashooter extends Plant{
   float rate; // rate of attack 
-  Pea myPea;
 
   // takes in x- and y-coordinates, width, length, damage points, starting HP, rate of attack, and Peashooter image
   Peashooter(float xcor, float ycor, float wid, float len, float dam, float startHP, float rate, PImage peashooter){
     super(xcor, ycor, wid, len, dam, startHP, peashooter);
     this.rate = rate;
-    myPea = new Pea(xcor + wid, ycor + 20, 30.0, 30.0, 3.0, 25.0, true);
-    
+  }
+  void produce(){
+    Pea myPea = new Pea(super.getX() + super.getW(), super.getY() + 20, 30.0, 30.0, 3.0, 25.0, true);
     thingsToDisplay.add(myPea);
     thingsToMove.add(myPea);
-    thingsToCollide.add(myPea); 
+    thingsToCollide.add(myPea);
+    listOfPeas.add(myPea); 
   }
-
   // make zombie take hit by damage points
   void attack(Character zombie){
       zombie.takeHit(super.damage);
@@ -115,6 +115,12 @@ class Peashooter extends Plant{
   
   void display(){
     super.display();
+    
+    if (millis() > 1000 && frameCount % 180 == 0){
+      System.out.println(frameCount);
+      System.out.println("shoot pea");
+      produce();
+    }
   }
  
 }
@@ -189,14 +195,9 @@ class Sunflower extends Plant{
   int t = 0;
   void display(){
     super.display();
-    float time = millis() % 500;
-    if (time == 40 && t == 0){
-      System.out.println("30 seconds have passed");
+    if (millis() > 1000 && frameCount % 300 == 0){
+      System.out.println("5 seconds have passed");
       produce();
-      t = 1;
-    }
-    else if (time != 40){
-      t = 0;
     }
   }
   
@@ -251,7 +252,7 @@ class Sun implements Moveable, Displayable{
 }
 
 // parent class Zombie
-abstract class Zombie extends Character implements Damageable, Displayable, Collideable{
+abstract class Zombie extends Character implements Damageable, Displayable, Collideable, Moveable{
   float speed;
   
   // takes in x- and y-coordinates, width, length, speed, damage points, starting HP, and zombie image
@@ -281,21 +282,6 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
     }
     return false;
   }
-}
-
-// BasicZombie subclass of Zombie, can move
-class BasicZombie extends Zombie implements Moveable{
-  
-  // takes in x- and y-coordinates, width, length, speed, damage points, starting HP, and basicZombie image
-  BasicZombie(float xcor, float ycor, float wid, float len, float speedNum, float dam, float startHP, PImage basicZombie){
-    super(xcor, ycor, wid, len, speedNum, dam, startHP, basicZombie);
-  }
-  
-  // attack plant if touching 
-  void attack(Character p){
-    p.takeHit(damage);
-   System.out.println(p.getHP());
-  }
   
   void move(){
        
@@ -309,14 +295,14 @@ class BasicZombie extends Zombie implements Moveable{
            Pea pea = (Pea)thingsToCollide.get(i);
            
            if (this.isTouching(pea) && pea.isActive() && this.getHP() > 0){
-            super.speed = 0; 
+            speed = 0; 
             // pea attacks and "new" pea is created
             pea.attack(this);
             pea.reset();
             
            }
            else{
-             super.speed = 3;
+             speed = 3;
            }
          }
         // check if collideable is a plant 
@@ -325,7 +311,7 @@ class BasicZombie extends Zombie implements Moveable{
           Plant p = (Plant)thingsToCollide.get(i);
           // if zombie is touching plant and both zombie and plant are alive
           if (this.isTouching(p) && p.getHP() > 0 && this.getHP() > 0){
-            super.speed = 0; 
+            speed = 0; 
             // zombie attacks
             System.out.println("Zombie is touching plant");
             attack(p);
@@ -338,7 +324,7 @@ class BasicZombie extends Zombie implements Moveable{
             
            }
            else{
-             super.speed = 3;
+             speed = 3;
            }
         }
         i++;
@@ -356,6 +342,21 @@ class BasicZombie extends Zombie implements Moveable{
       x -= speed;
     }
   }
+}
+
+// BasicZombie subclass of Zombie, can move
+class BasicZombie extends Zombie{
+  
+  // takes in x- and y-coordinates, width, length, speed, damage points, starting HP, and basicZombie image
+  BasicZombie(float xcor, float ycor, float wid, float len, float speedNum, float dam, float startHP, PImage basicZombie){
+    super(xcor, ycor, wid, len, speedNum, dam, startHP, basicZombie);
+  }
+  
+  // attack plant if touching 
+  void attack(Character p){
+    p.takeHit(damage);
+   System.out.println(p.getHP());
+  }
 
 }
 class SunCount implements Displayable{
@@ -371,6 +372,7 @@ class SunCount implements Displayable{
     count = counter;
     sun = sunImg;
   }
+  
   void display(){
     fill(121,83,45);
     rect(x,y,w,l);
@@ -388,8 +390,8 @@ class SunCount implements Displayable{
     text(count,x+30,y+90);
   }
   
-  void addCount(){
-    count++;
+  int getCount(){
+    return count;
   }
 }
 class SeedPacket implements Displayable{
@@ -425,6 +427,7 @@ ArrayList<Displayable> thingsToDisplay = new ArrayList<Displayable>();
 ArrayList<Collideable> thingsToCollide = new ArrayList<Collideable>();
 boolean[][] plots = new boolean[5][9];
 ArrayList<Sun> listOfSuns = new ArrayList<Sun>();
+ArrayList<Pea> listOfPeas = new ArrayList<Pea>();
 
 PImage background,peashooter,zombie,sunflower,sun;
 PImage ps_seed;
