@@ -289,7 +289,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
     if (x > 0){
       // loop through list of collideables
 
-      speed = 3;
+      speed = 1;
       for (int c = thingsToCollide.size() - 1; c >= 0; c--){
          Collideable thing = thingsToCollide.get(c);
          if (thing instanceof Pea){
@@ -303,7 +303,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
             pea.setActive(false);
             thingsToDisplay.remove(pea);
             thingsToMove.remove(pea);
-            speed = 3;
+            speed = 1;
            }
          }
         // check if collideable is a plant 
@@ -322,7 +322,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
             System.out.println("remove peashooter!");
             thingsToDisplay.remove((Collideable)p);
             System.out.println(thingsToDisplay.size());
-            speed = 3;
+            speed = 1;
             }
         }
   
@@ -474,11 +474,21 @@ void setup(){
   
   zombie = loadImage("zombie.png");
   image(zombie,900,80, 80,120);
-  BasicZombie zomb = new BasicZombie(900.0,240.0, 80.0, 120.0, 0.0, 1.0, 100, zombie);
+  BasicZombie zomb = new BasicZombie(900.0,240.0, 80.0, 120.0, 0.0, 1, 100, zombie);
   thingsToMove.add(zomb);
   thingsToDisplay.add(zomb);
   thingsToCollide.add(zomb);
   zomb.display();
+  int[] zombiex = {800,900,1000,1100,1200};
+  int[] zombiey = {40,140,240,340,440};
+  for(int i = 10; i >= 0; i--){
+    int randNum = (int)(Math.random()*5);
+    int randNum2 = (int)(Math.random()*5);
+    BasicZombie zomb1 = new BasicZombie(zombiex[randNum2],zombiey[randNum], 80.0, 120.0, 0.0, 1, 100, zombie);
+    thingsToMove.add(zomb1);
+    thingsToDisplay.add(zomb1);
+    thingsToCollide.add(zomb1);
+  }
   
   sunflower = loadImage("sunflower.png");
   image(sunflower,70,170,85,100);
