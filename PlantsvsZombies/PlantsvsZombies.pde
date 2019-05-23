@@ -517,18 +517,23 @@ void draw(){
 int drag = 0; // check if mouse is being dragged
 
 void mouseDragged(){
-  fill(255);
-  rect(mouseX, mouseY, 50,50);
+  //fill(255);
+  //rect(mouseX, mouseY, 50,50);
   //100, 20, 75, 100
   // if in seed packet 
+  PImage plant=peashooter;
   if (mouseX >= 200 && mouseX <=200 + 75 && mouseY >= 10 && mouseY <= 10 + 100){
       drag = 1;
       System.out.println("drag on!!");
+      plant = peashooter;
     }
   else if (mouseX >= 300 && mouseX <= 300 + 75 && mouseY >= 10 && mouseY <= 10 + 100){
       drag = 2;
       System.out.println("drag on!!");
-    }  
+      plant = sunflower;
+    }
+  
+  image(plant,mouseX,mouseY,80,80);
     
 }
 
