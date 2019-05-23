@@ -479,14 +479,14 @@ void setup(){
   
   zombie = loadImage("zombie.png");
   image(zombie,900,80, 80,120);
-  BasicZombie zomb = new BasicZombie(900.0,240.0, 80.0, 120.0, 0.0, 1, 100, zombie);
+/*  BasicZombie zomb = new BasicZombie(900.0,240.0, 80.0, 120.0, 0.0, 1, 100, zombie);
   thingsToMove.add(zomb);
   thingsToDisplay.add(zomb);
   thingsToCollide.add(zomb);
-  zomb.display();
+  zomb.display();*/
   int[] zombiex = {800,900,1000,1100,1200};
   int[] zombiey = {40,140,240,340,440};
-  for(int i = 10; i >= 0; i--){
+  for(int i = -1; i >= 0; i--){
     int randNum = (int)(Math.random()*5);
     int randNum2 = (int)(Math.random()*5);
     BasicZombie zomb1 = new BasicZombie(zombiex[randNum2],zombiey[randNum], 80.0, 120.0, 0.0, 1, 100, zombie);
@@ -519,9 +519,9 @@ void setup(){
 int sunCount = 0;
 void draw(){
     
-  for (int i = 0; i < plots.length; i++){
+ /* for (int i = 0; i < plots.length; i++){
   System.out.println(i+" "+Arrays.toString(plots[i]));
-  }
+  }*/
   // draw background, display displayables, and move moveables
   image(background,0,0);
 
@@ -577,22 +577,25 @@ void mouseReleased(){
   if (drag > 0){
     System.out.println("drag release!! ");
    if (mouseX >= 78){
-     xcor = 78*( (int)mouseX / 78);
-     plotC = (int)mouseX / 78;
+     xcor = 78*( (int)(mouseX / 78));
+     System.out.println("change plot column");
+     plotC = (int)(mouseX / 78) - 1;
    }
     if (mouseY >= 80){
       System.out.println(mouseY);
       ycor = 80 + 100*( (mouseY - 80 )/100);
-      plotR = (mouseY - 80 )/100;
+      plotR = ((int)mouseY - 80 )/100;
     }
+  System.out.println("plotR,C: "+plotR+", "+plotC);
   if(drag == 1 && count >= 100 && plots[plotR][plotC] == false){
     plots[plotR][plotC] = true;
-  sunc.setCount( sunc.getCount() - 100);
-  Peashooter peashoot = new Peashooter(xcor, ycor, 80, 80, 25.0,100, 5,peashooter);
-  thingsToDisplay.add(peashoot);
-  thingsToCollide.add(peashoot);
+    sunc.setCount( sunc.getCount() - 100);
+    Peashooter peashoot = new Peashooter(xcor, ycor, 80, 80, 25.0,100, 5,peashooter);
+    thingsToDisplay.add(peashoot);
+    thingsToCollide.add(peashoot);
   }
-  else if(drag ==2 && count >= 50){
+  else if(drag == 2 && count >= 50  && plots[plotR][plotC] == false){
+    plots[plotR][plotC] = true;
     sunc.setCount( sunc.getCount() - 50);
     Sunflower sun = new Sunflower(xcor-5,ycor - 25,85,105,10,25,5,sunflower);
     thingsToDisplay.add(sun);
