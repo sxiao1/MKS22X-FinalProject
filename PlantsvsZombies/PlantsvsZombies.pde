@@ -1,3 +1,4 @@
+import java.util.*;
 // Plant, Zombie implement this 
 interface Damageable{
   void takeHit(float damage); // reduce HP by damage amount 
@@ -320,6 +321,10 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
            }
             if(p.getHP()==0){
             System.out.println("remove peashooter!");
+   
+            int plotR = (int)((p.getY() - 80) / 100);
+            int plotC = (int)(p.getX() / 78);
+            plots[plotR][plotC] = false;
             thingsToDisplay.remove((Collideable)p);
             System.out.println(thingsToDisplay.size());
             speed = 1;
@@ -513,7 +518,10 @@ void setup(){
 }
 int sunCount = 0;
 void draw(){
-  
+    
+  for (int i = 0; i < plots.length; i++){
+  System.out.println(i+" "+Arrays.toString(plots[i]));
+  }
   // draw background, display displayables, and move moveables
   image(background,0,0);
 
@@ -570,12 +578,12 @@ void mouseReleased(){
     System.out.println("drag release!! ");
    if (mouseX >= 78){
      xcor = 78*( (int)mouseX / 78);
-     plotR = (int)mouseX / 78;
+     plotC = (int)mouseX / 78;
    }
     if (mouseY >= 80){
       System.out.println(mouseY);
       ycor = 80 + 100*( (mouseY - 80 )/100);
-      plotC = (mouseY - 80 )/100;
+      plotR = (mouseY - 80 )/100;
     }
   if(drag == 1 && count >= 100 && plots[plotR][plotC] == false){
     plots[plotR][plotC] = true;
