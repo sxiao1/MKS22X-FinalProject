@@ -162,8 +162,8 @@ public Pea(float xcor, float ycor, float wid, float len, float speedNum, float d
   }
   
   public boolean isTouching(Character other){
-    if (x >= other.getX() && x <= other.getX() + other.w
-     && y >= other.getY() && y <= other.getY() + l){
+    if (x >= other.getX() && x <= other.getX() + other.getW()
+     && y >= other.getY() && y <= other.getY() + other.getL()){
        System.out.println("pea is touching zombie");
     return true;
     }
@@ -267,8 +267,8 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
  
   // if Zombie is touching plant, return true; otherwise return false 
   boolean isTouching(Character other){
-    if (x >= other.getX() && x <= other.getX() + other.w
-    &&  y + l == other.getY() + other.l){
+    if (x >= other.getX() && x <= other.getX() + other.getW()
+    &&  y + l == other.getY() + other.getL()){
     return true;
     }
     return false;
@@ -289,10 +289,11 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
     if (x > 0){
       // loop through list of collideables
       int i = 0;
-      for (Collideable thing : thingsToCollide){
-       
+      speed = 3;
+      for (int c = thingsToCollide.size() - 1; c >= 0; c--){
+         Collideable thing = thingsToCollide.get(c);
          if (thing instanceof Pea){
-           Pea pea = (Pea)thingsToCollide.get(i);
+           Pea pea = (Pea)thing;
            
            if (this.isTouching(pea) && pea.isActive() && this.getHP() > 0){
             speed = 0; 
@@ -308,22 +309,21 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
         // check if collideable is a plant 
          else if (thing instanceof Plant){
     
-          Plant p = (Plant)thingsToCollide.get(i);
+          Plant p = (Plant)thing;
+          System.out.println("Zombie is touching plant");
           // if zombie is touching plant and both zombie and plant are alive
           if (this.isTouching(p) && p.getHP() > 0 && this.getHP() > 0){
             speed = 0; 
             // zombie attacks
-            System.out.println("Zombie is touching plant");
             attack(p);
             // remove plant from list of displayables if it is dead
+           }
             if(p.getHP()==0){
             System.out.println("remove peashooter!");
             thingsToDisplay.remove((Collideable)p);
             System.out.println(thingsToDisplay.size());
             speed = 3;
             }
-            
-           }
         }
         i++;
       }
@@ -448,7 +448,7 @@ void setup(){
   
   sun = loadImage("sun.png");
   image(sun,90,170,50,50); 
-  sunc = new SunCount(100, 10, 75,100, 50,sun);
+  sunc = new SunCount(100, 10, 75,100, 300,sun);
 
   ps_seed = loadImage("peashooter-seed.jpg");
   
@@ -482,8 +482,10 @@ void setup(){
   
   sunflower = loadImage("sunflower.png");
   image(sunflower,70,170,85,100);
+  //  Sunflower(float xcor, float ycor, float wid, float len, float dam, float startHP, float rate, PImage sunflower){
   Sunflower sunf = new Sunflower(70.0,360.0, 85, 100, 10.0,100.0,5.0, sunflower);
   thingsToDisplay.add(sunf);
+  thingsToCollide.add(sunf);
   sunf.display();
 
   thingsToDisplay.add(sunc);
@@ -549,12 +551,12 @@ void mouseReleased(){
     }
   if(drag == 1 && count >= 100){
   sunc.setCount( sunc.getCount() - 100);
-  Peashooter peashoot = new Peashooter(xcor, ycor, 80, 80, 25.0,10000.0, 5,peashooter);
+  Peashooter peashoot = new Peashooter(xcor, ycor, 80, 80, 25.0,100, 5,peashooter);
   thingsToDisplay.add(peashoot);
   thingsToCollide.add(peashoot);
   }
   else if(drag ==2 && count >= 50){
-      sunc.setCount( sunc.getCount() - 50);
+    sunc.setCount( sunc.getCount() - 50);
     Sunflower sun = new Sunflower(xcor,ycor,85,100,10,25,5,sunflower);
     thingsToDisplay.add(sun);
     thingsToCollide.add(sun);
