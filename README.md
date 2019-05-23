@@ -4,8 +4,8 @@
 
 ## Development Log
 
-###2019-05-22
-We fixed the sun counter so that it will update itself when a sun is clicked on and it is displayed at the top next to the seeds that a user can pick from. We also included a seed packet for the sunflower so that the player can drag the sunflower over the the field. We also created a Character parent class to encapsulate the overlaying methods that were utilized in both the plant and the zombie classes. We changed the time of the production of peas and suns from the plants so that it is synced with the frames per second. Also, the user cannot purchase a plant if they don't have enough suns. 
+### 2019-05-22
+We fixed the sun counter so that it will update itself when a sun is clicked on and it is displayed at the top next to the seeds that a user can pick from. We also included a seed packet for the sunflower so that the player can drag the sunflower over the the field. We also created a Character parent class to encapsulate the overlaying methods that were utilized in both the plant and the zombie classes. We changed the time of the production of peas and suns from the plants so that it is synced with the frames per second. Also, the user cannot purchase a plant if they don't have enough suns.
 
 ### 2019-05-21
 We added a seed packet at the top left corner of the screen and tried to implement a mouse drag function so that the player can plant a Peashooter in the desired plot of land. We had trouble getting the snap-coordinates of the plants right, and we also had trouble with the mouse drag only being recognized sometimes. We experimented with the y- and x- coordinate intervals of the snap grid, and discovered that the mouse drag was not being registered due to improper range specification of the size of the seed packet.
