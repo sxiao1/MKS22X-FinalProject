@@ -296,13 +296,13 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
            
            if (this.isTouching(pea) && pea.isActive() && this.getHP() > 0){
             speed = 0; 
+            System.out.println("zombie speed:"+speed);
             // pea attacks and "new" pea is created
             pea.attack(this);
-            pea.reset();
-            
-           }
-           else{
-             speed = 3;
+            pea.setActive(false);
+            thingsToDisplay.remove(pea);
+            thingsToMove.remove(pea);
+            speed = 3;
            }
          }
         // check if collideable is a plant 
@@ -320,11 +320,9 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
             System.out.println("remove peashooter!");
             thingsToDisplay.remove((Collideable)p);
             System.out.println(thingsToDisplay.size());
+            speed = 3;
             }
             
-           }
-           else{
-             speed = 3;
            }
         }
         i++;
@@ -337,8 +335,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
               thingsToMove.remove(this);
               System.out.println("display:"+thingsToDisplay.size());
               System.out.println("move:"+thingsToMove.size());
-            }
-            
+            }          
       x -= speed;
     }
   }
@@ -359,6 +356,7 @@ class BasicZombie extends Zombie{
   }
 
 }
+
 class SunCount implements Displayable{
   float x,y,w,l;
   int count;
@@ -374,8 +372,11 @@ class SunCount implements Displayable{
   }
   
   void display(){
+    noStroke();
     fill(121,83,45);
     rect(x,y,w,l);
+    fill(212,190,145);
+    rect(x + x/10, y + (2*l/3), w - x/5, l - 70);
     image(sun,x+12,y,50,50);
     f = createFont("Arial",70,true);
     textFont(f,25);
@@ -388,6 +389,7 @@ class SunCount implements Displayable{
       }
     }
     text(count,x + w/2, y + l);
+    stroke(0);
   }
   
   int getCount(){
@@ -464,8 +466,8 @@ void setup(){
   
   peashooter = loadImage("peashooter.png");
   image(peashooter,70,80, 80,80);
-  
-  Peashooter peashoot = new Peashooter(70.0,280.0, 80, 80, 10.0,25.0,5.0, peashooter);
+  //Peashooter(float xcor, float ycor, float wid, float len, float dam, float startHP, float rate, PImage peashooter){
+  Peashooter peashoot = new Peashooter(70.0,280.0, 80, 80, 25.0,1000,5.0, peashooter);
   thingsToDisplay.add(peashoot);
   thingsToCollide.add(peashoot);
   peashoot.display();
@@ -547,7 +549,7 @@ void mouseReleased(){
     }
   if(drag == 1 && count >= 100){
   sunc.setCount( sunc.getCount() - 100);
-  Peashooter peashoot = new Peashooter(xcor, ycor, 80, 80, 10.0,25.0,5.0, peashooter);
+  Peashooter peashoot = new Peashooter(xcor, ycor, 80, 80, 25.0,10000.0, 5,peashooter);
   thingsToDisplay.add(peashoot);
   thingsToCollide.add(peashoot);
   }
