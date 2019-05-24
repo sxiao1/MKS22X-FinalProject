@@ -513,6 +513,7 @@ void setup(){
 }
 int sunCount = 0;
 void draw(){
+  int count = sunc.getCount();
   
   // draw background, display displayables, and move moveables
   image(background,0,0);
@@ -526,9 +527,19 @@ void draw(){
   }
  // seeds
    image(ps_seed, 200,10,75,100);
+   if(count<100){
+     tintPic(ps_seed,200);
+   }
    image(sf_seed, 300,10,75,100);
+   if(count <50){
+     tintPic(sf_seed,300);
+   }
  
 }
+ void tintPic(PImage img, int xcor){
+   tint(255, 126);
+   image(img, xcor, 10,75,100);
+ }
 
 int drag = 0; // check if mouse is being dragged
 int plant = 0;
@@ -550,7 +561,7 @@ void mouseDragged(){
       plant = 1;
     }
   if(plant ==0){
-  image(peashooter,mouseX,mouseY,80,80);
+    image(peashooter,mouseX,mouseY,80,80);
   }
   else{
     image(sunflower,mouseX,mouseY,80,80);
@@ -584,7 +595,8 @@ void mouseReleased(){
   thingsToDisplay.add(peashoot);
   thingsToCollide.add(peashoot);
   }
-  else if(drag ==2 && count >= 50){
+  else if(drag ==2 && count >= 50&& plots[plotR][plotC] == false){
+    plots[plotR][plotC] = true;
     sunc.setCount( sunc.getCount() - 50);
     Sunflower sun = new Sunflower(xcor-5,ycor - 25,85,105,10,25,5,sunflower);
     thingsToDisplay.add(sun);
