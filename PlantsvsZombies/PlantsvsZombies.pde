@@ -527,13 +527,7 @@ void draw(){
   }
  // seeds
    image(ps_seed, 200,10,75,100);
-   if(count<100){
-     tintPic(ps_seed,200);
-   }
    image(sf_seed, 300,10,75,100);
-   if(count <50){
-     tintPic(sf_seed,300);
-   }
  
 }
  void tintPic(PImage img, int xcor){
@@ -602,6 +596,32 @@ void mouseReleased(){
     thingsToDisplay.add(sun);
     thingsToCollide.add(sun);
   }
+  else if(drag == 1 && count < 100){
+    PFont f;
+    f = createFont("Arial",70,true);
+    textFont(f,25);
+    textAlign(CENTER,BOTTOM);
+    fill(0);
+    String newstr = "You need" + (100 - count) + "suns to purchase";
+    int s = (millis() % 5000) / 5000;
+    if(s == 0 || s == 1|| s==2|| s==3){
+      text(newstr, width/2, height/2);
+      stroke(0);
+    }
+  }
+    else if(drag == 2 && count < 50){
+    PFont f;
+    f = createFont("Arial",70,true);
+    textFont(f,25);
+    textAlign(CENTER,BOTTOM);
+    fill(0);
+    String newstr = "You need" + (100 - count) + "suns to purchase";
+    int s = (millis() % 5000) / 5000;
+    if(s == 0 || s == 1|| s==2|| s==3){
+      text(newstr, width/2, height/2);
+      stroke(0);
+    }
   }
   drag = 0;
+  }
 }
