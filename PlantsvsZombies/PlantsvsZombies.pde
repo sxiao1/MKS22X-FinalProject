@@ -428,6 +428,25 @@ class SeedPacket implements Displayable{
   
 }
 
+class notEnoughSuns implements Displayable{
+  float count, neededSuns;
+  PFont f;
+  notEnoughSuns(float count1, float neededSuns1){
+    count = count1;
+    neededSuns = neededSuns1;
+  }
+  void display(){
+    if(count < neededSuns){
+      f = createFont("Arial",70,true);
+      textFont(f,25);
+      textAlign(CENTER,BOTTOM);
+      fill(0);
+      String newstr = "You need" + (int)(neededSuns - count) + " more suns";
+      text(newstr, width/2, height/2);
+    }
+  }
+}
+
 ArrayList<Moveable> thingsToMove = new ArrayList<Moveable>();
 ArrayList<Displayable> thingsToDisplay = new ArrayList<Displayable>();
 ArrayList<Collideable> thingsToCollide = new ArrayList<Collideable>();
@@ -440,7 +459,6 @@ PImage ps_seed;
 PImage sf_seed;
 
 SunCount sunc;
-  
 void setup(){
   // load background, plants, zombies, and suns
   size(1024,600);
@@ -596,32 +614,20 @@ void mouseReleased(){
     thingsToDisplay.add(sun);
     thingsToCollide.add(sun);
   }
-  else if(drag == 1 && count < 100){
-    PFont f;
-    f = createFont("Arial",70,true);
-    textFont(f,25);
-    textAlign(CENTER,BOTTOM);
-    fill(0);
-    String newstr = "You need" + (100 - count) + "suns to purchase";
-    int s = (millis() % 5000) / 5000;
-    if(s == 0 || s == 1|| s==2|| s==3){
-      text(newstr, width/2, height/2);
-      stroke(0);
+  else if(drag == 1 && count <100){
+    notEnoughSuns n = new notEnoughSuns(count,100);
+    thingsToDisplay.add(n);
+    if (millis() > 1000 && frameCount % 300 == 0){
+      thingsToDisplay.remove(n);
     }
   }
-    else if(drag == 2 && count < 50){
-    PFont f;
-    f = createFont("Arial",70,true);
-    textFont(f,25);
-    textAlign(CENTER,BOTTOM);
-    fill(0);
-    String newstr = "You need" + (100 - count) + "suns to purchase";
-    int s = (millis() % 5000) / 5000;
-    if(s == 0 || s == 1|| s==2|| s==3){
-      text(newstr, width/2, height/2);
-      stroke(0);
+  else if(drag ==2 && count < 50){
+    notEnoughSuns n = new notEnoughSuns(count,50);
+    thingsToDisplay.add(n);
+    if (millis() > 1000 && frameCount % 300 == 0){
+      thingsToDisplay.remove(n);
     }
+  }
   }
   drag = 0;
-  }
 }
