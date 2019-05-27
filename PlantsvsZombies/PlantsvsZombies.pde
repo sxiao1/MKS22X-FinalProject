@@ -277,7 +277,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
   boolean isTouching(Pea other){
     if (other.x >= getX() && other.x <= getX() + w
      && other.y >= getY() && other.y <= getY() + l){
-       System.out.println("zombie is touching pea");
+       //System.out.println("zombie is touching pea");
     return true;
     }
     return false;
@@ -310,7 +310,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
          else if (thing instanceof Plant){
     
           Plant p = (Plant)thing;
-          System.out.println("Zombie is touching plant");
+          //System.out.println("Zombie is touching plant");
           // if zombie is touching plant and both zombie and plant are alive
           if (this.isTouching(p) && p.getHP() > 0 && this.getHP() > 0){
             speed = 0; 
@@ -336,7 +336,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
               System.out.println("display:"+thingsToDisplay.size());
               System.out.println("move:"+thingsToMove.size());
             }          
-      x -= speed;
+      //x -= speed;
     }
   }
 }
@@ -457,12 +457,14 @@ ArrayList<Pea> listOfPeas = new ArrayList<Pea>();
 PImage background,peashooter,zombie,sunflower,sun;
 PImage ps_seed;
 PImage sf_seed;
-
+int time;
 SunCount sunc;
 void setup(){
   // load background, plants, zombies, and suns
   size(1024,600);
   background = loadImage("background.jpg");
+  
+  time = millis();
   
   sun = loadImage("sun.png");
   image(sun,90,170,50,50); 
@@ -581,6 +583,9 @@ void mouseDragged(){
     
 }
 
+int duration = 5000;
+int track = 0;
+int start = 0;
 void mouseReleased(){
   int count = sunc.getCount(); // number of suns collected
 
@@ -617,15 +622,25 @@ void mouseReleased(){
   else if(drag == 1 && count <100){
     notEnoughSuns n = new notEnoughSuns(count,100);
     thingsToDisplay.add(n);
-    if (millis() > 1000 && frameCount % 300 == 0){
+    System.out.println("added to not enough list- 100");
+    track = 1;
+    start = millis();
+    if (millis() - start > duration){
       thingsToDisplay.remove(n);
+      track = 0;
+      System.out.println("removed from list - 100");
     }
   }
   else if(drag ==2 && count < 50){
     notEnoughSuns n = new notEnoughSuns(count,50);
     thingsToDisplay.add(n);
-    if (millis() > 1000 && frameCount % 300 == 0){
+    track = 2;
+    start = millis();
+    System.out.println("added to not enough list- 50");
+    if (millis() - start > duration){
       thingsToDisplay.remove(n);
+      track = 0;
+      System.out.println("removed from list - 50");
     }
   }
   }
