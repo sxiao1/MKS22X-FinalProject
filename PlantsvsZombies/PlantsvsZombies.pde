@@ -1,3 +1,4 @@
+import java.util.*;
 // Plant, Zombie implement this 
 interface Damageable{
   void takeHit(float damage); // reduce HP by damage amount 
@@ -18,6 +19,33 @@ interface Collideable{
   boolean isTouching(Character c);
 }
 
+class GameString implements Displayable{
+  String str;
+  float x,y;
+  boolean display; // whether to display string or not
+  
+  GameString(String string, float xcor, float ycor, boolean disp){
+    str = string;
+    x = xcor;
+    y = ycor; 
+    display = disp;
+  }
+  
+  public void display(){
+    if (display){
+      PFont f;
+      f = createFont("Arial",70,true);
+      textFont(f,25);
+      textAlign(CENTER,BOTTOM);
+      fill(0);
+      text(str, x, y);
+      
+      if (frameCount % 180 == 60){
+        display = false; 
+      }
+    }
+  }
+}
 abstract class Character implements Damageable, Displayable, Collideable{
   float x,y,w,l,HP,damage;
   PImage character;
@@ -320,6 +348,10 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
            }
             if(p.getHP()==0){
             System.out.println("remove peashooter!");
+   
+            int plotR = (int)((p.getY() - 80) / 100);
+            int plotC = (int)(p.getX() / 78);
+            plots[plotR][plotC] = false;
             thingsToDisplay.remove((Collideable)p);
             System.out.println(thingsToDisplay.size());
             speed = 1;
@@ -382,7 +414,7 @@ class SunCount implements Displayable{
     textFont(f,25);
     textAlign(CENTER,BOTTOM);
     fill(0);
-    for(int i =0; i < listOfSuns.size(); i++){
+    for(int i = 0; i < listOfSuns.size(); i++){
       if(listOfSuns.get(i).collected()){
         count+=25;
         listOfSuns.remove(i);
@@ -494,14 +526,14 @@ void setup(){
   
   zombie = loadImage("zombie.png");
   image(zombie,900,80, 80,120);
-  BasicZombie zomb = new BasicZombie(900.0,240.0, 80.0, 120.0, 0.0, 1, 100, zombie);
+/*  BasicZombie zomb = new BasicZombie(900.0,240.0, 80.0, 120.0, 0.0, 1, 100, zombie);
   thingsToMove.add(zomb);
   thingsToDisplay.add(zomb);
   thingsToCollide.add(zomb);
-  zomb.display();
+  zomb.display();*/
   int[] zombiex = {800,900,1000,1100,1200};
   int[] zombiey = {40,140,240,340,440};
-  for(int i = 10; i >= 0; i--){
+  for(int i = -1; i >= 0; i--){
     int randNum = (int)(Math.random()*5);
     int randNum2 = (int)(Math.random()*5);
     BasicZombie zomb1 = new BasicZombie(zombiex[randNum2],zombiey[randNum], 80.0, 120.0, 0.0, 1, 100, zombie);
@@ -533,8 +565,7 @@ void setup(){
 }
 int sunCount = 0;
 void draw(){
-  int count = sunc.getCount();
-  
+
   // draw background, display displayables, and move moveables
   image(background,0,0);
 
@@ -594,55 +625,45 @@ void mouseReleased(){
   float ycor = 80; 
   int plotR = 0;
   int plotC = 0;
+  
+  // if mouse is being dragged
   if (drag > 0){
-    System.out.println("drag release!! ");
+   // find the proper x, y coordinates to "snap" to
    if (mouseX >= 78){
-     xcor = 78*( (int)mouseX / 78);
-     plotR = (int)mouseX / 78;
+     xcor = 78*( (int)(mouseX / 78));
+     System.out.println("change plot column");
+     plotC = (int)(mouseX / 78) - 1;
    }
     if (mouseY >= 80){
       System.out.println(mouseY);
       ycor = 80 + 100*( (mouseY - 80 )/100);
-      plotC = (mouseY - 80 )/100;
+      plotR = ((int)mouseY - 80 )/100;
     }
-  if(drag == 1 && count >= 100 && plots[plotR][plotC] == false){
-    plots[plotR][plotC] = true;
-  sunc.setCount( sunc.getCount() - 100);
-  Peashooter peashoot = new Peashooter(xcor, ycor, 80, 80, 25.0,100, 5,peashooter);
-  thingsToDisplay.add(peashoot);
-  thingsToCollide.add(peashoot);
+
+  System.out.println("plotR,C: "+plotR+", "+plotC);
+  // check if there are enough suns and if the plot is already occupied
+  
+  if (drag == 1 && count < 100){
+    
+    String str = "Need more suns";
+    GameString needSun = new GameString(str, width/2, height/2, true); 
+    thingsToDisplay.add(needSun);
+    
   }
-  else if(drag ==2 && count >= 50&& plots[plotR][plotC] == false){
-    plots[plotR][plotC] = true;
-    sunc.setCount( sunc.getCount() - 50);
-    Sunflower sun = new Sunflower(xcor-5,ycor - 25,85,105,10,25,5,sunflower);
-    thingsToDisplay.add(sun);
-    thingsToCollide.add(sun);
-  }
-  else if(drag == 1 && count <100){
-    notEnoughSuns n = new notEnoughSuns(count,100);
-    thingsToDisplay.add(n);
-    System.out.println("added to not enough list- 100");
-    track = 1;
-    start = millis();
-    if (millis() - start > duration){
-      thingsToDisplay.remove(n);
-      track = 0;
-      System.out.println("removed from list - 100");
+    if(drag == 1 && count >= 100 && plots[plotR][plotC] == false){
+      plots[plotR][plotC] = true;
+      sunc.setCount( sunc.getCount() - 100);
+      Peashooter peashoot = new Peashooter(xcor, ycor, 80, 80, 25.0,100, 5,peashooter);
+      thingsToDisplay.add(peashoot);
+      thingsToCollide.add(peashoot);
     }
-  }
-  else if(drag ==2 && count < 50){
-    notEnoughSuns n = new notEnoughSuns(count,50);
-    thingsToDisplay.add(n);
-    track = 2;
-    start = millis();
-    System.out.println("added to not enough list- 50");
-    if (millis() - start > duration){
-      thingsToDisplay.remove(n);
-      track = 0;
-      System.out.println("removed from list - 50");
+    else if(drag == 2 && count >= 50  && plots[plotR][plotC] == false){
+      plots[plotR][plotC] = true;
+      sunc.setCount( sunc.getCount() - 50);
+      Sunflower sun = new Sunflower(xcor-5,ycor - 25,85,105,10,25,5,sunflower);
+      thingsToDisplay.add(sun);
+      thingsToCollide.add(sun);
     }
-  }
   }
   drag = 0;
 }
