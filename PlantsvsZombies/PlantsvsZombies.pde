@@ -19,6 +19,7 @@ interface Collideable{
   boolean isTouching(Character c);
 }
 
+// to display a string during the game
 class GameString implements Displayable{
   String str;
   float x,y;
@@ -37,27 +38,32 @@ class GameString implements Displayable{
       f = createFont("Arial",70,true);
       textFont(f,25);
       textAlign(CENTER,BOTTOM);
-      fill(0);
+      fill(255,0,0);
       text(str, x, y);
       
+      // time frame for string to stay on the screen 
       if (frameCount % 180 == 60){
         display = false; 
       }
     }
   }
 }
+
+// parent class of plants and zombies 
 abstract class Character implements Damageable, Displayable, Collideable{
   float x,y,w,l,HP,damage;
   PImage character;
+  
   Character(float xcor,float ycor,float wid,float len,float dam, float HPnum, PImage image){
     x = xcor;
     y = ycor;
     w = wid;
     l = len;
     HP = HPnum;
-    damage=dam;
+    damage = dam;
     character = image;
   }
+  
   // accessor methods
    float getX(){
     return x;
@@ -80,6 +86,7 @@ abstract class Character implements Damageable, Displayable, Collideable{
   PImage getImage(){
     return character;
   }
+  
   // when attacked by another character
   void takeHit(float dam){
     this.HP -= dam;
@@ -92,13 +99,15 @@ abstract class Character implements Damageable, Displayable, Collideable{
     image(character,x,y, w,l);
   }
   
+  // to be coded in subclasses
   abstract boolean isTouching(Character other);
   
   }
   
 // parent Plant class
 abstract class Plant extends Character{
-  // takes in x - and y-coordinate, width, length, damage points, starting HP, and plant image
+  
+  // takes in x - and y-coordinates, width, length, damage points, starting HP, and plant image
   Plant(float xcor, float ycor, float wid, float len, float dam, float startHP, PImage plantImage){
     super(xcor,ycor,wid,len,dam,startHP,plantImage);
   }
@@ -128,6 +137,8 @@ class Peashooter extends Plant{
     super(xcor, ycor, wid, len, dam, startHP, peashooter);
     this.rate = rate;
   }
+  
+  // produce a pea to shoot
   void produce(){
     Pea myPea = new Pea(super.getX() + super.getW(), super.getY() + 20, 30.0, 30.0, 3.0, 25.0, true);
     thingsToDisplay.add(myPea);
@@ -135,6 +146,7 @@ class Peashooter extends Plant{
     thingsToCollide.add(myPea);
     listOfPeas.add(myPea); 
   }
+  
   // make zombie take hit by damage points
   void attack(Character zombie){
       zombie.takeHit(super.damage);
@@ -144,6 +156,7 @@ class Peashooter extends Plant{
   void display(){
     super.display();
     
+    // shoot pea every few seconds
     if (millis() > 1000 && frameCount % 180 == 0){
       System.out.println(frameCount);
       System.out.println("shoot pea");
@@ -153,10 +166,11 @@ class Peashooter extends Plant{
  
 }
 
+// pea class, shot by the peashooter
 class Pea implements Displayable, Moveable, Collideable{
   float origX, origY; 
   float x,y,w,l,speed,damage;
-  boolean active; 
+  boolean active; // check if pea is still active (has not hit target) 
   
 public Pea(float xcor, float ycor, float wid, float len, float speedNum, float dam, boolean active){
     x = xcor;
@@ -179,16 +193,19 @@ public Pea(float xcor, float ycor, float wid, float len, float speedNum, float d
   public void move(){
     x += 3;
   }
+  
   // attack zombie
   public void attack(Zombie z){
-    z.takeHit(25.0);
-    System.out.println("pea attacked: " + z.getHP());
+    z.takeHit(damage);
   }
+  
+  // move pea coordinates back to the peashooter
   public void reset(){
     x = origX; 
     y = origY;
   }
   
+  // check if pea and zombie are touching 
   public boolean isTouching(Character other){
     if (x >= other.getX() && x <= other.getX() + other.getW()
      && y >= other.getY() && y <= other.getY() + other.getL()){
@@ -198,10 +215,12 @@ public Pea(float xcor, float ycor, float wid, float len, float speedNum, float d
     return false;
   }
   
+  // check if pea is active
   public boolean isActive(){
     return active;
   }
   
+  // change the status of the pea
   public void setActive(boolean status){
     active = status;
   }
@@ -211,6 +230,7 @@ public Pea(float xcor, float ycor, float wid, float len, float speedNum, float d
 class Sunflower extends Plant{
   float rate; // rate of attack 
   PImage sunImage = loadImage("sun.png");
+  
   // takes in x- and y-coordinates, width, length, damage points, starting HP, rate of attack, and Sunflower image
   Sunflower(float xcor, float ycor, float wid, float len, float dam, float startHP, float rate, PImage sunflower){
     super(xcor, ycor, wid, len, dam, startHP, sunflower);
@@ -220,9 +240,10 @@ class Sunflower extends Plant{
   // sunflower has no offensive ability 
   void attack(Character c){  
   }
-  int t = 0;
+  
   void display(){
     super.display();
+    // produce a new sun every few seconds
     if (millis() > 1000 && frameCount % 300 == 0){
       System.out.println("5 seconds have passed");
       produce();
@@ -231,7 +252,7 @@ class Sunflower extends Plant{
   
   // instantiate a new sun from the sunflower's coordinates
   void produce(){
-    Sun sun = new Sun(this.getX(), this.getY(), 1.0, sunImage);
+    Sun sun = new Sun(this.getX(), this.getY(), this.getL(), 1.0, sunImage);
     System.out.println("add sun");
     thingsToDisplay.add(sun);
     thingsToMove.add(sun);
@@ -241,23 +262,28 @@ class Sunflower extends Plant{
 
 // Sun class, for the Sunflower class and also randomly generated suns
 class Sun implements Moveable, Displayable{
-  float x,y,speed;
+  float x,y,ybound,speed;
   int sunCount;
   PImage sun;
+  
   // takes in x- and y-coordinates and speed of movement 
-  Sun(float xcor, float ycor, float sunSpeed, PImage sunImage){
+  Sun(float xcor, float ycor, float ybound, float sunSpeed, PImage sunImage){
     x = xcor;
     y = ycor;
+    this.ybound = ybound;
     speed = sunSpeed;
     sun = sunImage;
   }
+  
   void display(){
     image(sun,x,y,50,50);
   }
+  
   void move(){
-    if (y < height - 100){
+    if (y < ybound){
       y += speed;
     }
+    
     if (collected() ){
       sunCount++;
       System.out.println("sun has been clicked");
@@ -273,6 +299,8 @@ class Sun implements Moveable, Displayable{
     }
     return false;
   }
+  
+  // return amount of suns
   int getSun(){
     return sunCount;
   }
@@ -368,7 +396,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
               System.out.println("display:"+thingsToDisplay.size());
               System.out.println("move:"+thingsToMove.size());
             }          
-      //x -= speed;
+      x -= speed;
     }
   }
 }
@@ -389,11 +417,13 @@ class BasicZombie extends Zombie{
 
 }
 
+// sun counter 
 class SunCount implements Displayable{
   float x,y,w,l;
   int count;
   PImage sun;
   PFont f;
+  
   SunCount(float xcor,float ycor,float wid,float len, int counter, PImage sunImg){
     x = xcor;
     y = ycor;
@@ -403,6 +433,7 @@ class SunCount implements Displayable{
     sun = sunImg;
   }
   
+  // update the number of suns collected
   void display(){
     noStroke();
     fill(121,83,45);
@@ -424,14 +455,17 @@ class SunCount implements Displayable{
     stroke(0);
   }
   
+  // accessor method to get count 
   int getCount(){
     return count;
   }
-  
+  // change sun count to specified number
   void setCount(int sunNum){
     count = sunNum;
   }
 }
+
+// seed packet for each plant
 class SeedPacket implements Displayable{
   float x,y,w,l;
   SeedPacket(float xcor, float ycor, float wid, float len){
@@ -448,7 +482,9 @@ class SeedPacket implements Displayable{
       System.out.println("seed clicked");
     }
   }
-  
+ 
+ // check if seed packet has been clicked. 
+ // return true if yes, return false otherwise
   boolean isClicked(){
     if (mousePressed && mouseX >= this.x && mouseX <= this.x + this.w && mouseY >= this.y && mouseY <= this.y + this.l){
       //fill(255);
@@ -533,7 +569,7 @@ void setup(){
   zomb.display();*/
   int[] zombiex = {800,900,1000,1100,1200};
   int[] zombiey = {40,140,240,340,440};
-  for(int i = -1; i >= 0; i--){
+  for(int i = 20; i >= 0; i--){
     int randNum = (int)(Math.random()*5);
     int randNum2 = (int)(Math.random()*5);
     BasicZombie zomb1 = new BasicZombie(zombiex[randNum2],zombiey[randNum], 80.0, 120.0, 0.0, 1, 100, zombie);
@@ -544,11 +580,6 @@ void setup(){
   
   sunflower = loadImage("sunflower.png");
   image(sunflower,70,170,85,100);
-  //  Sunflower(float xcor, float ycor, float wid, float len, float dam, float startHP, float rate, PImage sunflower){
-  /*nflower sunf = new Sunflower(70.0,360.0, 85, 100, 10.0,100.0,5.0, sunflower);
-  thingsToDisplay.add(sunf);
-  thingsToCollide.add(sunf);
-  sunf.display(); */
 
   thingsToDisplay.add(sunc);
   
@@ -628,6 +659,7 @@ void mouseReleased(){
   
   // if mouse is being dragged
   if (drag > 0){
+    
    // find the proper x, y coordinates to "snap" to
    if (mouseX >= 78){
      xcor = 78*( (int)(mouseX / 78));
@@ -640,17 +672,16 @@ void mouseReleased(){
       plotR = ((int)mouseY - 80 )/100;
     }
 
-  System.out.println("plotR,C: "+plotR+", "+plotC);
   // check if there are enough suns and if the plot is already occupied
   
-  if (drag == 1 && count < 100){
+  if (drag == 1 && count < 100 || drag == 2 && count < 50){
     
-    String str = "Need more suns";
+    String str = "NEED MORE SUNS";
     GameString needSun = new GameString(str, width/2, height/2, true); 
-    thingsToDisplay.add(needSun);
-    
+    thingsToDisplay.add(needSun); 
   }
-    if(drag == 1 && count >= 100 && plots[plotR][plotC] == false){
+  // only add plant if there are enough suns and plot is not currently occupied 
+   else if(drag == 1 && count >= 100 && plots[plotR][plotC] == false){
       plots[plotR][plotC] = true;
       sunc.setCount( sunc.getCount() - 100);
       Peashooter peashoot = new Peashooter(xcor, ycor, 80, 80, 25.0,100, 5,peashooter);
