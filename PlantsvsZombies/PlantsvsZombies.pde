@@ -103,7 +103,22 @@ abstract class Character implements Damageable, Displayable, Collideable{
   abstract boolean isTouching(Character other);
   
   }
+
+class LawnMower extends Character{
+  LawnMower(float xcor, float ycor, float wid, float len, float dam, float startHP, PImage mowImage){
+    super(xcor, ycor, wid, len, dam, startHP, mowImage);
+  }
   
+  // check if touching another character 
+  boolean isTouching (Character other){
+    if (this.getX() >= other.getX() && this.getX() <= other.getX() + other.getW()
+    &&  this.getY() + this.getL() == other.getY() + other.getL()){
+    return true;
+    }
+    return false;
+  }
+  
+}
 // parent Plant class
 abstract class Plant extends Character{
   
@@ -522,7 +537,7 @@ boolean[][] plots = new boolean[5][9];
 ArrayList<Sun> listOfSuns = new ArrayList<Sun>();
 ArrayList<Pea> listOfPeas = new ArrayList<Pea>();
 
-PImage background,peashooter,zombie,sunflower,sun;
+PImage background,peashooter,zombie,sunflower,sun,lawnmower;
 PImage ps_seed;
 PImage sf_seed;
 int time;
@@ -542,11 +557,13 @@ void setup(){
   
   sf_seed = loadImage("sunflower-seed.jpg");
 
-  SeedPacket seed = new SeedPacket(200, 10, 75, 100);
-  thingsToDisplay.add(seed);
+  SeedPacket seed_pea = new SeedPacket(200, 10, 75, 100);
+  thingsToDisplay.add(seed_pea);
   
-  SeedPacket seed1 = new SeedPacket(300,10,75,100);
-  thingsToDisplay.add(seed1);
+  SeedPacket seed_sunflower = new SeedPacket(300,10,75,100);
+  thingsToDisplay.add(seed_sunflower);
+  
+ 
   
   fill(255);
   rect(70,80,70,70); //size 70x70
@@ -600,6 +617,9 @@ void draw(){
   // draw background, display displayables, and move moveables
   image(background,0,0);
 
+  lawnmower = loadImage("lawnmower.png"); 
+  image(lawnmower, 280, 480, 100, 70);
+  
   for (int m = 0; m < thingsToMove.size(); m++){
     thingsToMove.get(m).move();
   }
