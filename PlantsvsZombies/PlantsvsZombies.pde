@@ -19,6 +19,33 @@ interface Collideable{
   boolean isTouching(Character c);
 }
 
+class GameString implements Displayable{
+  String str;
+  float x,y;
+  boolean display; // whether to display string or not
+  
+  GameString(String string, float xcor, float ycor, boolean disp){
+    str = string;
+    x = xcor;
+    y = ycor; 
+    display = disp;
+  }
+  
+  public void display(){
+    if (display){
+      PFont f;
+      f = createFont("Arial",70,true);
+      textFont(f,25);
+      textAlign(CENTER,BOTTOM);
+      fill(0);
+      text(str, x, y);
+      
+      if (frameCount % 180 == 60){
+        display = false; 
+      }
+    }
+  }
+}
 abstract class Character implements Damageable, Displayable, Collideable{
   float x,y,w,l,HP,damage;
   PImage character;
@@ -387,7 +414,7 @@ class SunCount implements Displayable{
     textFont(f,25);
     textAlign(CENTER,BOTTOM);
     fill(0);
-    for(int i =0; i < listOfSuns.size(); i++){
+    for(int i = 0; i < listOfSuns.size(); i++){
       if(listOfSuns.get(i).collected()){
         count+=25;
         listOfSuns.remove(i);
@@ -574,8 +601,10 @@ void mouseReleased(){
   float ycor = 80; 
   int plotR = 0;
   int plotC = 0;
+  
+  // if mouse is being dragged
   if (drag > 0){
-    System.out.println("drag release!! ");
+   // find the proper x, y coordinates to "snap" to
    if (mouseX >= 78){
      xcor = 78*( (int)(mouseX / 78));
      System.out.println("change plot column");
@@ -587,20 +616,29 @@ void mouseReleased(){
       plotR = ((int)mouseY - 80 )/100;
     }
   System.out.println("plotR,C: "+plotR+", "+plotC);
-  if(drag == 1 && count >= 100 && plots[plotR][plotC] == false){
-    plots[plotR][plotC] = true;
-    sunc.setCount( sunc.getCount() - 100);
-    Peashooter peashoot = new Peashooter(xcor, ycor, 80, 80, 25.0,100, 5,peashooter);
-    thingsToDisplay.add(peashoot);
-    thingsToCollide.add(peashoot);
+  // check if there are enough suns and if the plot is already occupied
+  
+  if (drag == 1 && count < 100){
+    
+    String str = "Need more suns";
+    GameString needSun = new GameString(str, width/2, height/2, true); 
+    thingsToDisplay.add(needSun);
+    
   }
-  else if(drag == 2 && count >= 50  && plots[plotR][plotC] == false){
-    plots[plotR][plotC] = true;
-    sunc.setCount( sunc.getCount() - 50);
-    Sunflower sun = new Sunflower(xcor-5,ycor - 25,85,105,10,25,5,sunflower);
-    thingsToDisplay.add(sun);
-    thingsToCollide.add(sun);
-  }
+    if(drag == 1 && count >= 100 && plots[plotR][plotC] == false){
+      plots[plotR][plotC] = true;
+      sunc.setCount( sunc.getCount() - 100);
+      Peashooter peashoot = new Peashooter(xcor, ycor, 80, 80, 25.0,100, 5,peashooter);
+      thingsToDisplay.add(peashoot);
+      thingsToCollide.add(peashoot);
+    }
+    else if(drag == 2 && count >= 50  && plots[plotR][plotC] == false){
+      plots[plotR][plotC] = true;
+      sunc.setCount( sunc.getCount() - 50);
+      Sunflower sun = new Sunflower(xcor-5,ycor - 25,85,105,10,25,5,sunflower);
+      thingsToDisplay.add(sun);
+      thingsToCollide.add(sun);
+    }
   }
   drag = 0;
 }
