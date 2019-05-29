@@ -104,12 +104,28 @@ abstract class Character implements Damageable, Displayable, Collideable{
   
   }
 
-class LawnMower extends Character{
+class LawnMower extends Character implements Moveable{
+  
+  boolean active;
+  
   LawnMower(float xcor, float ycor, float wid, float len, float dam, float startHP, PImage mowImage){
     super(xcor, ycor, wid, len, dam, startHP, mowImage);
+    active = true;
   }
   
   public void attack(Character other){
+    if (other instanceof Zombie){
+      other.takeHit(100.0);
+      active = false;
+    }
+  }
+  
+  public void move(){
+    x += 4;
+  }
+  
+  public boolean getActive(){
+    return active;
   }
   
   // check if touching another character 
@@ -366,7 +382,23 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
       speed = 1;
       for (int c = thingsToCollide.size() - 1; c >= 0; c--){
          Collideable thing = thingsToCollide.get(c);
-         if (thing instanceof Pea){
+         if (thing instanceof LawnMower){
+           LawnMower lawnm = (LawnMower)thing;
+           if ( this.getX() <= 500 && lawnm.getActive() && this.getHP() > 0){
+             thingsToMove.add(lawnm);
+             System.out.println("add lawn mower to move");
+             thingsToDisplay.remove(lawnm);
+             thingsToMove.remove(lawnm);
+             
+             if (this.isTouching(lawnm)){
+               lawnm.attack(this);
+               thingsToDisplay.remove(lawnm);
+               thingsToMove.remove(lawnm);
+             }
+           }
+           
+         }
+         else if (thing instanceof Pea){
            Pea pea = (Pea)thing;
            
            if (this.isTouching(pea) && pea.isActive() && this.getHP() > 0){
@@ -584,7 +616,7 @@ void setup(){
   }
   
   lawnmower = loadImage("lawnmower.png"); 
-  LawnMower lawnm = new LawnMower(100.0, 110.0, 100.0, 70.0, 1.0, 100.0, lawnmower); 
+  LawnMower lawnm = new LawnMower(50.0, 190.0, 100.0, 70.0, 1.0, 100.0, lawnmower); 
   thingsToDisplay.add(lawnm);
   thingsToCollide.add(lawnm); 
   //thingsToMove.add(lawnm);
