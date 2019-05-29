@@ -109,6 +109,9 @@ class LawnMower extends Character{
     super(xcor, ycor, wid, len, dam, startHP, mowImage);
   }
   
+  public void attack(Character other){
+  }
+  
   // check if touching another character 
   boolean isTouching (Character other){
     if (this.getX() >= other.getX() && this.getX() <= other.getX() + other.getW()
@@ -563,27 +566,12 @@ void setup(){
   SeedPacket seed_sunflower = new SeedPacket(300,10,75,100);
   thingsToDisplay.add(seed_sunflower);
   
- 
-  
-  fill(255);
-  rect(70,80,70,70); //size 70x70
-  rect(70,80+100,70,70);//space between plots is 20
-  
- peashooter = loadImage("peashooter.png");
+  peashooter = loadImage("peashooter.png");
   image(peashooter,70,80, 80,80);
-  /*Peashooter(float xcor, float ycor, float wid, float len, float dam, float startHP, float rate, PImage peashooter){
-  Peashooter peashoot = new Peashooter(70.0,280.0, 80, 80, 25.0,1000,5.0, peashooter);
-  thingsToDisplay.add(peashoot);
-  thingsToCollide.add(peashoot);
-  peashoot.display();*/
-  
+
   zombie = loadImage("zombie.png");
   image(zombie,900,80, 80,120);
-/*  BasicZombie zomb = new BasicZombie(900.0,240.0, 80.0, 120.0, 0.0, 1, 100, zombie);
-  thingsToMove.add(zomb);
-  thingsToDisplay.add(zomb);
-  thingsToCollide.add(zomb);
-  zomb.display();*/
+
   int[] zombiex = {800,900,1000,1100,1200};
   int[] zombiey = {40,140,240,340,440};
   for(int i = 20; i >= 0; i--){
@@ -594,6 +582,12 @@ void setup(){
     thingsToDisplay.add(zomb1);
     thingsToCollide.add(zomb1);
   }
+  
+  lawnmower = loadImage("lawnmower.png"); 
+  LawnMower lawnm = new LawnMower(100.0, 110.0, 100.0, 70.0, 1.0, 100.0, lawnmower); 
+  thingsToDisplay.add(lawnm);
+  thingsToCollide.add(lawnm); 
+  //thingsToMove.add(lawnm);
   
   sunflower = loadImage("sunflower.png");
   image(sunflower,70,170,85,100);
@@ -616,9 +610,6 @@ void draw(){
 
   // draw background, display displayables, and move moveables
   image(background,0,0);
-
-  lawnmower = loadImage("lawnmower.png"); 
-  image(lawnmower, 280, 480, 100, 70);
   
   for (int m = 0; m < thingsToMove.size(); m++){
     thingsToMove.get(m).move();
