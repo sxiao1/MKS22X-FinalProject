@@ -121,19 +121,24 @@ void mouseDragged(){
   //PImage plant = sunflower;
   if (mouseX >= 200 && mouseX <=200 + 75 && mouseY >= 10 && mouseY <= 10 + 100){
       drag = 1;
-      System.out.println("drag on!!");
       plant = 0;
     }
   else if (mouseX >= 300 && mouseX <= 300 + 75 && mouseY >= 10 && mouseY <= 10 + 100){
       drag = 2;
-      System.out.println("drag on!!");
       plant = 1;
     }
-  if(plant ==0){
+  else if (mouseX >= 400 && mouseX <= 400 + 75 && mouseY >= 10 && mouseY <= 10 + 100){
+    drag = 3;
+    plant = 2;
+  }
+  if (drag == 1 && plant == 0){
     image(peashooter,mouseX,mouseY,80,80);
   }
-  else{
-    image(sunflower,mouseX,mouseY,80,80);
+  else if (drag == 2 && plant == 1){
+    image(sunflower,mouseX,mouseY,80,100);
+  }
+  else if (drag == 3 && plant == 2){
+    image(walnut,mouseX,mouseY,80,80);
   }
     
 }
@@ -167,7 +172,7 @@ void mouseReleased(){
 
   // check if there are enough suns and if the plot is already occupied
   
-  if (drag == 1 && count < 100 || drag == 2 && count < 50){
+  if (drag == 1 && count < 100 || drag == 2 && count < 50 || drag == 3 && count < 50){
     
     String str = "NEED MORE SUNS";
     GameString needSun = new GameString(str, width/2, height/2, true); 
@@ -187,6 +192,13 @@ void mouseReleased(){
       Sunflower sun = new Sunflower(xcor-5,ycor - 25,85,105,10,25,5,sunflower);
       thingsToDisplay.add(sun);
       thingsToCollide.add(sun);
+    }
+    else if (drag == 3 && count >= 50  && plots[plotR][plotC] == false){
+      plots[plotR][plotC] = true;
+      sunc.setCount( sunc.getCount() - 50);
+      Walnut wallie = new Walnut(xcor,ycor, 80, 80,10,100,walnut);
+      thingsToDisplay.add(wallie);
+      thingsToCollide.add(wallie);
     }
   }
   drag = 0;
