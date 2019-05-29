@@ -107,10 +107,12 @@ abstract class Character implements Damageable, Displayable, Collideable{
 class LawnMower extends Character implements Moveable{
   
   boolean active;
+  boolean moving;
   
   LawnMower(float xcor, float ycor, float wid, float len, float dam, float startHP, PImage mowImage){
     super(xcor, ycor, wid, len, dam, startHP, mowImage);
     active = true;
+    moving = false; 
   }
   
   public void attack(Character other){
@@ -126,6 +128,18 @@ class LawnMower extends Character implements Moveable{
   
   public boolean getActive(){
     return active;
+  }
+  
+  public void setActive(boolean status){
+    active = status;
+  }
+  
+  public boolean getMoving(){
+    return moving;
+  }
+  
+  public void setMoving(boolean status){
+    moving = status;
   }
   
   // check if touching another character 
@@ -384,14 +398,16 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
          Collideable thing = thingsToCollide.get(c);
          if (thing instanceof LawnMower){
            LawnMower lawnm = (LawnMower)thing;
-           if ( this.getX() <= 500 && lawnm.getActive() && this.getHP() > 0){
-             thingsToMove.add(lawnm);
-             System.out.println("add lawn mower to move");
-             thingsToDisplay.remove(lawnm);
-             thingsToMove.remove(lawnm);
-             
+           if ( this.getX() <= 500 && this.getY() + this.getL() == lawnm.getY() + lawnm.getL() && lawnm.getActive() && this.getHP() > 0){
+             System.out.println("add lawn mower to move");   
+             if (!lawnm.getMoving()){
+               thingsToMove.add(lawnm);
+               lawnm.setMoving(true);
+             }
+                   
              if (this.isTouching(lawnm)){
                lawnm.attack(this);
+               lawnm.setActive(false);
                thingsToDisplay.remove(lawnm);
                thingsToMove.remove(lawnm);
              }
