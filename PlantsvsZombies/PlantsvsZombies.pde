@@ -48,10 +48,10 @@ void setup(){
   thingsToCollide.add(peashoot);
   peashoot.display();*/
   
-  walnut = loadImage("walnut.jpg");
+  walnut = loadImage("walnut.png");
   image(walnut, 70,80,80,80);
   
-  Walnut wallie = new Walnut(70.0,80.0,80.0,80.0,25.0,1000.0,walnut);
+  Walnut wallie = new Walnut(70.0,80.0,80.0,100.0,25.0,1000.0,walnut);
   thingsToDisplay.add(wallie);
   thingsToCollide.add(wallie);
   
@@ -138,7 +138,7 @@ void mouseDragged(){
     image(sunflower,mouseX,mouseY,80,100);
   }
   else if (drag == 3 && plant == 2){
-    image(walnut,mouseX,mouseY,80,80);
+    image(walnut,mouseX,mouseY,80,100);
   }
     
 }
@@ -196,7 +196,7 @@ void mouseReleased(){
     else if (drag == 3 && count >= 50  && plots[plotR][plotC] == false){
       plots[plotR][plotC] = true;
       sunc.setCount( sunc.getCount() - 50);
-      Walnut wallie = new Walnut(xcor,ycor, 80, 80,10,100,walnut);
+      Walnut wallie = new Walnut(xcor-5,ycor-25, 85, 105,10,100,walnut);
       thingsToDisplay.add(wallie);
       thingsToCollide.add(wallie);
     }
