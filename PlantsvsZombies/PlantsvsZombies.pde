@@ -3,12 +3,20 @@ import java.util.*;
 ArrayList<Moveable> thingsToMove = new ArrayList<Moveable>();
 ArrayList<Displayable> thingsToDisplay = new ArrayList<Displayable>();
 ArrayList<Collideable> thingsToCollide = new ArrayList<Collideable>();
-boolean[][] plots = new boolean[5][9];
+
 ArrayList<Sun> listOfSuns = new ArrayList<Sun>();
 ArrayList<Pea> listOfPeas = new ArrayList<Pea>();
 
+
 PImage background,peashooter,zombie,sunflower,sun,walnut;
 PImage ps_seed, sf_seed, wn_seed;
+
+boolean[][] plots = new boolean[5][9];
+
+PImage background,peashooter,zombie,sunflower,sun,lawnmower;
+PImage ps_seed;
+PImage sf_seed;
+
 int time;
 SunCount sunc;
 
@@ -25,16 +33,18 @@ void setup(){
 
   ps_seed = loadImage("peashooter-seed.jpg");
   sf_seed = loadImage("sunflower-seed.jpg");
+
   wn_seed = loadImage("wallnut.png");
+
+
+  SeedPacket seed_pea = new SeedPacket(200, 10, 75, 100);
+  thingsToDisplay.add(seed_pea);
   
-  SeedPacket seed = new SeedPacket(200, 10, 75, 100);
-  thingsToDisplay.add(seed);
+  SeedPacket seed_sunflower = new SeedPacket(300,10,75,100);
+  thingsToDisplay.add(seed_sunflower);
   
-  SeedPacket seed1 = new SeedPacket(300,10,75,100);
-  thingsToDisplay.add(seed1);
-  
-  SeedPacket seed2 = new SeedPacket(400,10,75,100);
-  thingsToDisplay.add(seed2);
+  SeedPacket seed_walnut = new SeedPacket(400,10,75,100);
+  thingsToDisplay.add(seed_walnut);
   
   fill(255);
   rect(70,80,70,70); //size 70x70
@@ -55,9 +65,9 @@ void setup(){
   thingsToDisplay.add(wallie);
   thingsToCollide.add(wallie);
   
-  
+  peashooter = loadImage("peashooter.png");
+
   zombie = loadImage("zombie.png");
-  image(zombie,900,80, 80,120);
 
   int[] zombiex = {800,900,1000,1100,1200};
   int[] zombiey = {40,140,240,340,440};
@@ -68,6 +78,14 @@ void setup(){
     thingsToMove.add(zomb1);
     thingsToDisplay.add(zomb1);
     thingsToCollide.add(zomb1);
+  }
+  
+  lawnmower = loadImage("lawnmower.png"); 
+
+  for (int i = 0; i < 5; i++){
+  LawnMower lawnm = new LawnMower(10.0, 190.0 + 100*i, 100.0, 70.0, 1.0, 100.0, lawnmower); 
+  thingsToDisplay.add(lawnm);
+  thingsToCollide.add(lawnm); 
   }
   
   sunflower = loadImage("sunflower.png");
@@ -86,12 +104,13 @@ void setup(){
   mouseReleased();
   
 }
-int sunCount = 0;
+
+
 void draw(){
 
   // draw background, display displayables, and move moveables
   image(background,0,0);
-
+  
   for (int m = 0; m < thingsToMove.size(); m++){
     thingsToMove.get(m).move();
   }
@@ -111,15 +130,13 @@ void draw(){
  }
 
 int drag = 0; // check if mouse is being dragged
-int plant = 0;
+int plant = 0; // check which plant to use
 void mouseDragged(){
-  //fill(255);
-  //rect(mouseX, mouseY, 50,50);
-  //100, 20, 75, 100
+
   // if in seed packet 
   System.out.println("update plant");
   //PImage plant = sunflower;
-  if (mouseX >= 200 && mouseX <=200 + 75 && mouseY >= 10 && mouseY <= 10 + 100){
+  if (mouseX >= 200 && mouseX <= 200 + 75 && mouseY >= 10 && mouseY <= 10 + 100){
       drag = 1;
       plant = 0;
     }
@@ -127,6 +144,7 @@ void mouseDragged(){
       drag = 2;
       plant = 1;
     }
+    
   else if (mouseX >= 400 && mouseX <= 400 + 75 && mouseY >= 10 && mouseY <= 10 + 100){
     drag = 3;
     plant = 2;
@@ -139,8 +157,7 @@ void mouseDragged(){
   }
   else if (drag == 3 && plant == 2){
     image(walnut,mouseX,mouseY,80,100);
-  }
-    
+}
 }
 
 int duration = 5000;
