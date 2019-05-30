@@ -1,11 +1,13 @@
 // parent class Zombie
 abstract class Zombie extends Character implements Damageable, Displayable, Collideable, Moveable{
   float speed;
+  float currentSpeed;
   
   // takes in x- and y-coordinates, width, length, speed, damage points, starting HP, and zombie image
   Zombie(float xcor, float ycor, float wid, float len, float speedNum, float dam, float startHP, PImage zombieImage){
     super(xcor, ycor, wid, len, dam, startHP, zombieImage);
     speed = speedNum;
+    currentSpeed = speedNum;
   }
 
   float getSpeed(){
@@ -32,32 +34,31 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
   
   void move(){
     if (x <= 10){
-      runGame = false;
-      System.out.println("end game");
+     // runGame = false;
+     // System.out.println("end game");
     }
     // while still on screen 
     else if (x > 10){
       // loop through list of collideables
 
-      speed = 4;
       for (int c = thingsToCollide.size() - 1; c >= 0; c--){
+        
          Collideable thing = thingsToCollide.get(c);
          if (thing instanceof LawnMower){
            LawnMower lawnm = (LawnMower)thing;
            if ( this.getX() <= 200 && this.getY() + this.getL() == lawnm.getY() + lawnm.getL() && lawnm.getActive() && this.getHP() > 0){
- 
+             
              if (!lawnm.getMoving()){
                System.out.println("add lawn mower to move");  
                thingsToMove.add(lawnm);
                lawnm.setMoving(true);
              }
                    
-             if (this.isTouching(lawnm)){
-               System.out.println("Attack");
+             if (lawnm.isTouching(this)){
+               System.out.println("Lawn attack zombie");
                lawnm.attack(this);
-            //   lawnm.setActive(false);
-            //   thingsToDisplay.remove(lawnm);
-             //  thingsToMove.remove(lawnm);
+              thingsToDisplay.remove(this);
+              thingsToMove.remove(this);
              }
            }
            
@@ -66,14 +67,14 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
            Pea pea = (Pea)thing;
            
            if (this.isTouching(pea) && pea.isActive() && this.getHP() > 0){
-            speed = 0; 
+            currentSpeed = 0; 
             System.out.println("zombie speed:"+speed);
             // pea attacks and "new" pea is created
             pea.attack(this);
             pea.setActive(false);
             thingsToDisplay.remove(pea);
             thingsToMove.remove(pea);
-            speed = 4;
+            currentSpeed = 4;
            }
          }
         // check if collideable is a plant 
@@ -83,7 +84,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
           //System.out.println("Zombie is touching plant");
           // if zombie is touching plant and both zombie and plant are alive
           if (this.isTouching(p) && p.getHP() > 0 && this.getHP() > 0){
-            speed = 0; 
+            currentSpeed = 0; 
             // zombie attacks
             attack(p);
             // remove plant from list of displayables if it is dead
@@ -96,7 +97,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
             plots[plotR][plotC] = false;
             thingsToDisplay.remove((Collideable)p);
             System.out.println(thingsToDisplay.size());
-            speed = 4;
+            currentSpeed = speed;
             }
         }
   
@@ -107,10 +108,8 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
               System.out.println("remove zombie!");
               thingsToDisplay.remove(this);
               thingsToMove.remove(this);
-              System.out.println("display:"+thingsToDisplay.size());
-              System.out.println("move:"+thingsToMove.size());
             }          
-      x -= speed;
+      x -= currentSpeed;
     }
   }
 }

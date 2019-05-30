@@ -10,8 +10,9 @@ class LawnMower extends Character implements Moveable{
   }
   
   public void attack(Character other){
+    // run over and kill zombies
     if (other instanceof Zombie){
-      other.takeHit(100.0);
+      other.takeHit( other.getHP() );
     }
   }
   
@@ -37,8 +38,8 @@ class LawnMower extends Character implements Moveable{
   
   // check if touching another character 
   boolean isTouching (Character other){
-    if (this.getX() >= other.getX() && this.getX() <= other.getX() + other.getW()
-    &&  this.getY() + this.getL() == other.getY() + other.getL()){
+    if ( this.getX() >= other.getX() && this.getX() <= other.getX() + other.getW() 
+    &&   this.getY() + this.getL() == other.getY() + other.getL()){
     return true;
     }
     return false;

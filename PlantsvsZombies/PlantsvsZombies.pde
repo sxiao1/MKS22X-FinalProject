@@ -72,7 +72,7 @@ void setup(){
   for(int i = 20; i >= 0; i--){
     int randNum = (int)(Math.random()*5);
     int randNum2 = (int)(Math.random()*5);
-    BasicZombie zomb1 = new BasicZombie(zombiex[randNum2],zombiey[randNum], 80.0, 120.0, 0.0, 1, 100, zombie);
+    BasicZombie zomb1 = new BasicZombie(zombiex[randNum2],zombiey[randNum], 80.0, 120.0, 2.0, 1, 100, zombie);
     thingsToMove.add(zomb1);
     thingsToDisplay.add(zomb1);
     thingsToCollide.add(zomb1);
@@ -80,7 +80,7 @@ void setup(){
   
   lawnmower = loadImage("lawnmower.png"); 
 
-  for (int i = 0; i < 5; i++){
+  for (int i = 0; i < 1; i++){
   LawnMower lawnm = new LawnMower(10.0, 190.0 + 100*i, 100.0, 70.0, 1.0, 100.0, lawnmower); 
   thingsToDisplay.add(lawnm);
   thingsToCollide.add(lawnm); 
