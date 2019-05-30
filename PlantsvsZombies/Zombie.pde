@@ -31,12 +31,15 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
   }
   
   void move(){
-       
+    if (x <= 10){
+      runGame = false;
+      System.out.println("end game");
+    }
     // while still on screen 
-    if (x > 0){
+    else if (x > 10){
       // loop through list of collideables
 
-      speed = 1;
+      speed = 4;
       for (int c = thingsToCollide.size() - 1; c >= 0; c--){
          Collideable thing = thingsToCollide.get(c);
          if (thing instanceof LawnMower){
@@ -70,7 +73,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
             pea.setActive(false);
             thingsToDisplay.remove(pea);
             thingsToMove.remove(pea);
-            speed = 1;
+            speed = 4;
            }
          }
         // check if collideable is a plant 
@@ -93,7 +96,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
             plots[plotR][plotC] = false;
             thingsToDisplay.remove((Collideable)p);
             System.out.println(thingsToDisplay.size());
-            speed = 1;
+            speed = 4;
             }
         }
   

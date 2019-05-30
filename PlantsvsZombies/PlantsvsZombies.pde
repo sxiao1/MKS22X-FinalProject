@@ -1,5 +1,7 @@
 import java.util.*;
 
+boolean runGame; 
+
 ArrayList<Moveable> thingsToMove = new ArrayList<Moveable>();
 ArrayList<Displayable> thingsToDisplay = new ArrayList<Displayable>();
 ArrayList<Collideable> thingsToCollide = new ArrayList<Collideable>();
@@ -7,20 +9,16 @@ ArrayList<Collideable> thingsToCollide = new ArrayList<Collideable>();
 ArrayList<Sun> listOfSuns = new ArrayList<Sun>();
 ArrayList<Pea> listOfPeas = new ArrayList<Pea>();
 
-
-PImage background,peashooter,zombie,sunflower,sun,walnut;
+PImage background,peashooter,zombie,sunflower,sun,walnut, lawnmower;
 PImage ps_seed, sf_seed, wn_seed;
 
 boolean[][] plots = new boolean[5][9];
-
-PImage background,peashooter,zombie,sunflower,sun,lawnmower;
-PImage ps_seed;
-PImage sf_seed;
 
 int time;
 SunCount sunc;
 
 void setup(){
+  runGame = true;
   // load background, plants, zombies, and suns
   size(1024,600);
   background = loadImage("background.jpg");
@@ -99,35 +97,46 @@ void setup(){
     }
   }
  
-  draw();
-  mouseDragged();
-  mouseReleased();
-  
+    draw();
+    mouseDragged();
+    mouseReleased();
+ 
 }
 
 
 void draw(){
 
-  // draw background, display displayables, and move moveables
-  image(background,0,0);
-  
-  for (int m = 0; m < thingsToMove.size(); m++){
-    thingsToMove.get(m).move();
-  }
+      // draw background, display displayables, and move moveables
+     image(background,0,0);
 
-  for (int d = 0; d < thingsToDisplay.size(); d++){
-    thingsToDisplay.get(d).display();
+    for (int d = 0; d < thingsToDisplay.size(); d++){
+      thingsToDisplay.get(d).display();
+    }
+    
+  if (runGame){
+    for (int m = 0; m < thingsToMove.size(); m++){
+      thingsToMove.get(m).move();
+    }
   }
- // seeds
-   image(ps_seed, 200,10,75,100);
-   image(sf_seed, 300,10,75,100);
-   image(wn_seed, 400,10,75,100);
- 
+  
+  else{
+    // GameString(String string, float xcor, float ycor, boolean disp){
+    String gameOver = "GAME OVER";
+    GameString g = new GameString(gameOver, width/2, height/2, 150, true);
+    thingsToDisplay.add(g);
+  }
+       // seeds
+     image(ps_seed, 200,10,75,100);
+     image(sf_seed, 300,10,75,100);
+     image(wn_seed, 400,10,75,100);
+     
 }
+/*
  void tintPic(PImage img, int xcor){
    tint(255, 126);
    image(img, xcor, 10,75,100);
  }
+*/
 
 int drag = 0; // check if mouse is being dragged
 int plant = 0; // check which plant to use
@@ -192,7 +201,7 @@ void mouseReleased(){
   if (drag == 1 && count < 100 || drag == 2 && count < 50 || drag == 3 && count < 50){
     
     String str = "NEED MORE SUNS";
-    GameString needSun = new GameString(str, width/2, height/2, true); 
+    GameString needSun = new GameString(str, width/2, height/2, 70, true); 
     thingsToDisplay.add(needSun); 
   }
   // only add plant if there are enough suns and plot is not currently occupied 

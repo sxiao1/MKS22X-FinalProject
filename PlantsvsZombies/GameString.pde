@@ -1,21 +1,22 @@
 // to display a string during the game
 class GameString implements Displayable{
   String str;
-  float x,y;
+  float x,y, fontSize;
   boolean display; // whether to display string or not
   
-  GameString(String string, float xcor, float ycor, boolean disp){
+  GameString(String string, float xcor, float ycor, float size, boolean disp){
     str = string;
     x = xcor;
     y = ycor; 
+    fontSize = size;
     display = disp;
   }
   
   public void display(){
     if (display){
       PFont f;
-      f = createFont("Arial",70,true);
-      textFont(f,25);
+      f = createFont("Arial", fontSize,true);
+      textFont(f,fontSize);
       textAlign(CENTER,BOTTOM);
       fill(255,0,0);
       text(str, x, y);
