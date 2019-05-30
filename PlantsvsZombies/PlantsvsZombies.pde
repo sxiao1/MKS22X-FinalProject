@@ -17,7 +17,11 @@ boolean[][] plots = new boolean[5][9];
 int time;
 SunCount sunc;
 
+Menu menu;
+
 void setup(){
+  menu = new Menu(0);
+  
   runGame = true;
   // load background, plants, zombies, and suns
   size(1024,600);
@@ -31,7 +35,6 @@ void setup(){
 
   ps_seed = loadImage("peashooter-seed.jpg");
   sf_seed = loadImage("sunflower-seed.jpg");
-
   wn_seed = loadImage("wallnut.png");
 
 
@@ -44,28 +47,19 @@ void setup(){
   SeedPacket seed_walnut = new SeedPacket(400,10,75,100);
   thingsToDisplay.add(seed_walnut);
   
-  fill(255);
-  rect(70,80,70,70); //size 70x70
-  rect(70,80+100,70,70);//space between plots is 20
-  
- peashooter = loadImage("peashooter.png");
-  image(peashooter,70,80, 80,80);
-  /*Peashooter(float xcor, float ycor, float wid, float len, float dam, float startHP, float rate, PImage peashooter){
-  Peashooter peashoot = new Peashooter(70.0,280.0, 80, 80, 25.0,1000,5.0, peashooter);
-  thingsToDisplay.add(peashoot);
-  thingsToCollide.add(peashoot);
-  peashoot.display();*/
-  
+  peashooter = loadImage("peashooter.png");
   walnut = loadImage("walnut.png");
-  image(walnut, 70,80,80,80);
+  sunflower = loadImage("sunflower.png");
+  
+  zombie = loadImage("zombie.png");
+  
+    
+  lawnmower = loadImage("lawnmower.png"); 
   
   Walnut wallie = new Walnut(70.0,80.0,80.0,100.0,25.0,1000.0,walnut);
   thingsToDisplay.add(wallie);
   thingsToCollide.add(wallie);
   
-  peashooter = loadImage("peashooter.png");
-
-  zombie = loadImage("zombie.png");
 
   int[] zombiex = {800,900,1000,1100,1200};
   int[] zombiey = {40,140,240,340,440};
@@ -77,17 +71,12 @@ void setup(){
     thingsToDisplay.add(zomb1);
     thingsToCollide.add(zomb1);
   }
-  
-  lawnmower = loadImage("lawnmower.png"); 
 
   for (int i = 0; i < 1; i++){
-  LawnMower lawnm = new LawnMower(10.0, 190.0 + 100*i, 100.0, 70.0, 1.0, 100.0, lawnmower); 
-  thingsToDisplay.add(lawnm);
-  thingsToCollide.add(lawnm); 
+    LawnMower lawnm = new LawnMower(10.0, 190.0 + 100*i, 100.0, 70.0, 1.0, 100.0, lawnmower); 
+    thingsToDisplay.add(lawnm);
+    thingsToCollide.add(lawnm); 
   }
-  
-  sunflower = loadImage("sunflower.png");
-  image(sunflower,70,170,85,100);
 
   thingsToDisplay.add(sunc);
   
@@ -172,6 +161,7 @@ void mouseDragged(){
 int duration = 5000;
 int track = 0;
 int start = 0;
+
 void mouseReleased(){
   int count = sunc.getCount(); // number of suns collected
 
@@ -228,4 +218,13 @@ void mouseReleased(){
     }
   }
   drag = 0;
+}
+
+void keyPressed(){
+  if (key == '1'){
+    menu.setMode(1);
+  }
+  else if (key == '2'){
+    menu.setMode(2);
+  }
 }

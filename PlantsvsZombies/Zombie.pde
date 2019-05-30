@@ -2,12 +2,14 @@
 abstract class Zombie extends Character implements Damageable, Displayable, Collideable, Moveable{
   float speed;
   float currentSpeed;
+  boolean moving;
   
   // takes in x- and y-coordinates, width, length, speed, damage points, starting HP, and zombie image
   Zombie(float xcor, float ycor, float wid, float len, float speedNum, float dam, float startHP, PImage zombieImage){
     super(xcor, ycor, wid, len, dam, startHP, zombieImage);
     speed = speedNum;
     currentSpeed = speedNum;
+    moving = true;
   }
 
   float getSpeed(){
@@ -38,7 +40,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
      // System.out.println("end game");
     }
     // while still on screen 
-    else if (x > 10){
+    else if (x > 10 && moving){
       // loop through list of collideables
 
       for (int c = thingsToCollide.size() - 1; c >= 0; c--){
@@ -46,7 +48,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
          Collideable thing = thingsToCollide.get(c);
          if (thing instanceof LawnMower){
            LawnMower lawnm = (LawnMower)thing;
-           if ( this.getX() <= 200 && this.getY() + this.getL() == lawnm.getY() + lawnm.getL() && lawnm.getActive() && this.getHP() > 0){
+           if ( this.getX() <= 200 && this.getY() + this.getL() == lawnm.getY() + lawnm.getL() && lawnm.getActive()){
              
              if (!lawnm.getMoving()){
                System.out.println("add lawn mower to move");  
@@ -57,12 +59,12 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
              if (lawnm.isTouching(this)){
                System.out.println("Lawn attack zombie");
                lawnm.attack(this);
-              thingsToDisplay.remove(this);
-              thingsToMove.remove(this);
+               currentSpeed = 0;
              }
            }
            
          }
+         
          else if (thing instanceof Pea){
            Pea pea = (Pea)thing;
            
