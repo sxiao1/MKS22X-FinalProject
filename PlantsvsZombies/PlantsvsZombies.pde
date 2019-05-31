@@ -129,8 +129,8 @@ void draw(){
     }
     System.out.println("rowMAx: "+rowMax);
     
-    if (probability > 70){
-      BasicZombie zomb1 = new BasicZombie(zombiex[randNum2], rowMax, 80.0, 120.0, 2.0, 1, 100, zombie);
+    if (probability < 70){
+      BasicZombie zomb1 = new BasicZombie(zombiex[randNum2], zombiey[rowMax], 80.0, 120.0, 2.0, 1, 100, zombie);
       thingsToMove.add(zomb1);
       thingsToDisplay.add(zomb1);
       thingsToCollide.add(zomb1);

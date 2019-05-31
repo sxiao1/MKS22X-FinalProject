@@ -104,7 +104,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
            // }
             System.out.println("number of plants in row" + plotR+": "+numPlants[plotR]);
             thingsToDisplay.remove((Displayable)p);
-            thingsToCollide.remove((Collideable)p);
+            //thingsToCollide.remove((Collideable)p);
             System.out.println(thingsToDisplay.size());
             currentSpeed = speed;
             }
