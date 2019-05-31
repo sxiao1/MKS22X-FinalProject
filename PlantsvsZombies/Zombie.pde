@@ -42,7 +42,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
     // while still on screen 
     else if (x > 10 && moving){
       // loop through list of collideables
-
+      int subbed = 0; // number of times plant has been subtracted
       for (int c = thingsToCollide.size() - 1; c >= 0; c--){
         
          Collideable thing = thingsToCollide.get(c);
@@ -97,7 +97,13 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
             int plotR = (int)((p.getY() - 80) / 100);
             int plotC = (int)(p.getX() / 78);
             plots[plotR][plotC] = false;
-            thingsToDisplay.remove((Collideable)p);
+          //  if (subbed == 0){
+              numPlants[plotR] -= 1;
+           //   subbed = 1;
+           // }
+            System.out.println("number of plants in row" + plotR+": "+numPlants[plotR]);
+            thingsToDisplay.remove((Displayable)p);
+            thingsToCollide.remove((Collideable)p);
             System.out.println(thingsToDisplay.size());
             currentSpeed = speed;
             }
