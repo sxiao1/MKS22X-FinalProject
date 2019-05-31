@@ -99,6 +99,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
             plots[plotR][plotC] = false;
           //  if (subbed == 0){
               numPlants[plotR] -= 1;
+              lanes.get(plotR).setNum( numPlants[plotR] ); 
            //   subbed = 1;
            // }
             System.out.println("number of plants in row" + plotR+": "+numPlants[plotR]);
