@@ -109,12 +109,15 @@ void setup(){
 
 int numZombies = 0;
 boolean addZomb = true;
+boolean finalWave = true;
 int i = 0;
+int[] zombiex = {800,900,1000,1100,1200};
+int[] zombiey = {40,140,240,340,440};
+int n = 0;
+int times = 1;
 void draw(){
   
-     if (frameCount % 180 == 60){
-       int[] zombiex = {800,900,1000,1100,1200};
-  int[] zombiey = {40,140,240,340,440};
+     if (frameCount % 240 == 60){
   if(addZomb){
     int randNum = (int)(Math.random()*5);
     int randNum2 = (int)(Math.random()*5);
@@ -147,9 +150,36 @@ void draw(){
     }
    if(i >= 10){
      addZomb = false;
-     System.out.println("more than 10 zombs");
+     System.out.println("more than " + i + " zombs");
    }
   }
+  else{
+      if(times == 1){
+        String gameOver = "FINAL WAVE";
+        GameString g = new GameString(gameOver, width/2, height/2, 80, true);
+        thingsToDisplay.add(g);
+        times = 0;
+      }
+      //if(finalWave) {
+      while(n <= 8){
+      System.out.println("final wave");
+      int randNum = (int)(Math.random()*5);
+      int randNum2 = (int)(Math.random()*5);
+      BasicZombie zomb1 = new BasicZombie(zombiex[randNum2], zombiey[randNum], 80.0, 120.0, 2.0, 1, 100, zombie);
+      thingsToMove.add(zomb1);
+      thingsToDisplay.add(zomb1);
+      thingsToCollide.add(zomb1);
+      System.out.println("final wave zombies : " + n);
+      n++;
+      }
+      /*if(n >= 10){
+      finalWave = false;
+      System.out.println("final wave end");
+      }
+    }*/
+    
+  }
+  
 
      }
       // draw background, display displayables, and move moveables
