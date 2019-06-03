@@ -28,7 +28,8 @@ class SunCount implements Displayable{
     textAlign(CENTER,BOTTOM);
     fill(0);
     for(int i = 0; i < listOfSuns.size(); i++){
-      if(listOfSuns.get(i).collected()){
+      Sun sunny = listOfSuns.get(i);
+      if(sunny.collected()){
         count+=25;
         listOfSuns.remove(i);
       }

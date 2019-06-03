@@ -32,7 +32,7 @@ void setup(){
   time = millis();
   
   sun = loadImage("sun.png");
-  image(sun,90,170,50,50); 
+ // image(sun,90,170,50,50); 
   sunc = new SunCount(100, 10, 75,100, 300,sun);
 
   ps_seed = loadImage("peashooter-seed.jpg");
