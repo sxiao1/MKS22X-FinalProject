@@ -4,11 +4,18 @@ class Sun implements Moveable, Displayable{
   int sunCount;
   PImage sun;
   float angle;
+  float distX, distY, endX, endY;
+  float step = 0.01;
+  float percent = 0.0;
   
   // takes in x- and y-coordinates and speed of movement 
   Sun(float xcor, float ycor, float ybound, float sunSpeed, PImage sunImage){
     x = xcor;
     y = ycor;
+    endX = 90;
+    endY = 170;
+    distX = endX - x;
+    distY = endY - y;
     angle = 0;
     this.ybound = ybound;
     speed = sunSpeed;
@@ -33,15 +40,25 @@ class Sun implements Moveable, Displayable{
   }
   
   void move(){
-    if (y < ybound){
+    if (!collected() && y < ybound){
       y += speed;
     }
     
-    if (collected() ){
-      sunCount++;
-      System.out.println("sun has been clicked");
+    else if (collected() ){
+      percent += step; 
+      if (percent < 1.0){
+        x = percent * distX;
+        y = percent * distY;
+      }
+      if (x == endX && y == endY){
+        sunCount++;
       thingsToDisplay.remove(this);
       thingsToMove.remove(this);
+      }
+      // suncount sun is at 90, 170
+      
+      System.out.println("sun has been clicked");
+      
     }
   }
   

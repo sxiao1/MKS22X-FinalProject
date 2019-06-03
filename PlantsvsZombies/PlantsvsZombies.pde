@@ -111,7 +111,7 @@ int n = 0;
 int times = 1;
 void draw(){
   
-     if (frameCount % 240 == 60){
+if (frameCount % 240 == 60){
   if(addZomb){
     int randNum = (int)(Math.random()*5);
     int randNum2 = (int)(Math.random()*5);
@@ -148,7 +148,7 @@ void draw(){
    }
   }
   else{
-      if(times == 1){
+      if (times == 1){
         String gameOver = "FINAL WAVE";
         GameString g = new GameString(gameOver, width/2, height/2, 80, true);
         thingsToDisplay.add(g);
@@ -199,14 +199,16 @@ void draw(){
      image(ps_seed, 200,10,75,100);
      image(sf_seed, 300,10,75,100);
      image(wn_seed, 400,10,75,100);
-     
+     // random sun from sky every few seconds
+  if (frameCount % 1000 == 5){
+    Sun sunny = new Sun((float)Math.random()*(width - 500) + 100, 0.0, height - 200, 1.0, sun);
+    System.out.println("add sun");
+    thingsToDisplay.add(sunny);
+    thingsToMove.add(sunny);
+    listOfSuns.add(sunny);
+  }
 }
-/*
- void tintPic(PImage img, int xcor){
-   tint(255, 126);
-   image(img, xcor, 10,75,100);
- }
-*/
+
 
 int drag = 0; // check if mouse is being dragged
 int plant = 0; // check which plant to use

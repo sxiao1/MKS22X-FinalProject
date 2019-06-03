@@ -56,7 +56,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
      // System.out.println("end game");
     }
     // while still on screen 
-    else if (x > endX){
+    else if (millis() > 10000 && x > endX){
       // loop through list of collideables
       int subbed = 0; // number of times plant has been subtracted
       for (int c = thingsToCollide.size() - 1; c >= 0; c--){
