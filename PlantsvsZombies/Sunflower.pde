@@ -25,7 +25,7 @@ class Sunflower extends Plant{
   
   // instantiate a new sun from the sunflower's coordinates
   void produce(){
-    Sun sun = new Sun(this.getX(), this.getY(), this.getL(), 1.0, sunImage);
+    Sun sun = new Sun(this.getX() + this.getW() / 2, this.getY() + this.getL() / 8, this.getY() + this.getL() / 2, 1.0, sunImage);
     System.out.println("add sun");
     thingsToDisplay.add(sun);
     thingsToMove.add(sun);

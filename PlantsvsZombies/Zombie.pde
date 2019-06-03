@@ -68,13 +68,13 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
              System.out.println("zombies are touching");
              rect(x,y, 50, 50);
              currentSpeed = 0.1;
-             zomb.currentSpeed = 5;
+             zomb.currentSpeed = 2;
            }
            
          }
          else if (thing instanceof LawnMower){
            LawnMower lawnm = (LawnMower)thing;
-           if ( this.getX() <= 200 && this.getY() + this.getL() == lawnm.getY() + lawnm.getL() && lawnm.getActive()){
+           if ( lawnm.getMoving() || this.getX() <= 200 && this.getY() + this.getL() == lawnm.getY() + lawnm.getL() && lawnm.getActive()){
              
              if (!lawnm.getMoving()){
                System.out.println("add lawn mower to move");  
@@ -102,7 +102,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
             pea.setActive(false);
             thingsToDisplay.remove(pea);
             thingsToMove.remove(pea);
-            currentSpeed = 4;
+            currentSpeed = speed;
            }
          }
         // check if collideable is a plant 

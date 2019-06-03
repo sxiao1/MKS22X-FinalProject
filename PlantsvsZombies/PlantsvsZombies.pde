@@ -39,7 +39,6 @@ void setup(){
   sf_seed = loadImage("sunflower-seed.jpg");
   wn_seed = loadImage("wallnut.png");
 
-
   SeedPacket seed_pea = new SeedPacket(200, 10, 75, 100);
   thingsToDisplay.add(seed_pea);
   
@@ -52,15 +51,8 @@ void setup(){
   peashooter = loadImage("peashooter.png");
   walnut = loadImage("walnut.png");
   sunflower = loadImage("sunflower.png");
-  
   zombie = loadImage("zombie.png");
-  
-    
   lawnmower = loadImage("lawnmower.png"); 
-  
-  Walnut wallie = new Walnut(70.0,80.0,80.0,100.0,25.0,1000.0,walnut);
-  thingsToDisplay.add(wallie);
-  thingsToCollide.add(wallie);
   
 
   int[] zombiex = {800,1000,1200};
@@ -72,10 +64,11 @@ void setup(){
     
    for (int i = 0; i < 5; i++){
     randNum = (int)(Math.random()*5);
-    randNum2 = (int)(Math.random()*5);
+    randNum2 = (int)(Math.random()*3);
     randNum3 = (float)(Math.random()*1) + 0.1;
     // Zombie(float xcor, float ycor, float wid, float len, float speedNum, float dam, float startHP, PImage zombieImage)
       BasicZombie zomb1 = new BasicZombie(zombiex[randNum2],zombiey[randNum], 80.0, 120.0, randNum3, 1, 6, zombie);
+      System.out.println("zombie speed:" + randNum3);
       thingsToMove.add(zomb1);
       thingsToDisplay.add(zomb1);
       thingsToCollide.add(zomb1);
@@ -84,7 +77,7 @@ void setup(){
    }
 
   for (int i = 0; i < 5; i++){
-    LawnMower lawnm = new LawnMower(10.0, 90.0 + 100*i, 100.0, 70.0, 1.0, 100.0, lawnmower); 
+    LawnMower lawnm = new LawnMower(0.0, 90.0 + 100*i, 100.0, 70.0, 1.0, 100.0, lawnmower); 
     thingsToDisplay.add(lawnm);
     thingsToCollide.add(lawnm); 
   }

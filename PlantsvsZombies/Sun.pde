@@ -3,24 +3,39 @@ class Sun implements Moveable, Displayable{
   float x,y,ybound,speed;
   int sunCount;
   PImage sun;
+  float angle;
   
   // takes in x- and y-coordinates and speed of movement 
   Sun(float xcor, float ycor, float ybound, float sunSpeed, PImage sunImage){
     x = xcor;
     y = ycor;
+    angle = 0;
     this.ybound = ybound;
     speed = sunSpeed;
     sun = sunImage;
   }
   
   void display(){
-    image(sun,x,y,50,50);
+    
+    pushMatrix();//backup the original coordinate system
+    //Change the coordinates for 
+    //all objects then draw everything.
+    //Draw all the things you want to draw
+    //change the coordinates for JUST this one object
+     translate(x,y);
+     rotate(radians(angle));
+     rect(-25,-25,50,50);
+    image(sun,-25,-25,50,50);
+    angle += 1;
+    
+     System.out.println("rotate angle: "+angle);
+    popMatrix(); //restore the original coordinate system
   }
   
   void move(){
-   // if (y < ybound){
+    if (y < ybound){
       y += speed;
-   // }
+    }
     
     if (collected() ){
       sunCount++;
