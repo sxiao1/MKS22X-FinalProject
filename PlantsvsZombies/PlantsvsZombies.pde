@@ -1,4 +1,7 @@
 import java.util.*;
+import processing.sound.*;
+SoundFile file;
+SoundFile zomieDead;
 
 boolean runGame; 
 
@@ -22,7 +25,11 @@ SunCount sunc;
 Menu menu;
 //boolean addZomb;
 void setup(){
+  
   menu = new Menu(0);
+  file = new SoundFile(this, "theme.mp3");
+  file.play();
+  zomieDead = new SoundFile(this, "Zombie Moan.mp3");
   
   runGame = true;
   // load background, plants, zombies, and suns
@@ -149,6 +156,9 @@ if (frameCount % 240 == 60){
   }
   else{
       if (times == 1){
+        String gameWave = "A huge wave of zombies is approaching!";
+        GameString ga = new GameString(gameWave, width/2, height/2, 40, true);
+        thingsToDisplay.add(ga);
         String gameOver = "FINAL WAVE";
         GameString g = new GameString(gameOver, width/2, height/2, 80, true);
         thingsToDisplay.add(g);
