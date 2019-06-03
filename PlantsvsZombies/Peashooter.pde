@@ -27,7 +27,7 @@ class Peashooter extends Plant{
     super.display();
     
     // shoot pea every few seconds
-    if (millis() > 1000 && frameCount % 180 == 0){
+    if (millis() > 1000 && frameCount % 60 == 0){
       System.out.println(frameCount);
       System.out.println("shoot pea");
       produce();

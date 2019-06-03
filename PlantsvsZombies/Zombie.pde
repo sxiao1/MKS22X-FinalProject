@@ -65,8 +65,8 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
          if (thing instanceof Zombie){
            Zombie zomb = (Zombie)thing;
            if (this != zomb && this.isTouching(zomb)){
-             System.out.println("zombies are touching");
-             rect(x,y, 50, 50);
+           //  System.out.println("zombies are touching");
+          //   rect(x,y, 50, 50);
              currentSpeed = 0.1;
              zomb.currentSpeed = 2;
            }

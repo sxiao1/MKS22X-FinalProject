@@ -55,7 +55,7 @@ void setup(){
   lawnmower = loadImage("lawnmower.png"); 
   
 
-  int[] zombiex = {800,1000,1200};
+  int[] zombiex = {1200, 1400, 1600, 1800, 2000};
   int[] zombiey = {40,140,240,340,440};
  
    int randNum = 0;
@@ -64,7 +64,7 @@ void setup(){
     
    for (int i = 0; i < 5; i++){
     randNum = (int)(Math.random()*5);
-    randNum2 = (int)(Math.random()*3);
+    randNum2 = (int)(Math.random()*5);
     randNum3 = (float)(Math.random()*1) + 0.1;
     // Zombie(float xcor, float ycor, float wid, float len, float speedNum, float dam, float startHP, PImage zombieImage)
       BasicZombie zomb1 = new BasicZombie(zombiex[randNum2],zombiey[randNum], 80.0, 120.0, randNum3, 1, 6, zombie);
@@ -166,11 +166,6 @@ if (frameCount % 240 == 60){
       System.out.println("final wave zombies : " + n);
       n++;
       }
-      /*if(n >= 10){
-      finalWave = false;
-      System.out.println("final wave end");
-      }
-    }*/
     
   }
   
@@ -199,9 +194,10 @@ if (frameCount % 240 == 60){
      image(ps_seed, 200,10,75,100);
      image(sf_seed, 300,10,75,100);
      image(wn_seed, 400,10,75,100);
+     
      // random sun from sky every few seconds
   if (frameCount % 1000 == 5){
-    Sun sunny = new Sun((float)Math.random()*(width - 500) + 100, 0.0, height - 200, 1.0, sun);
+    Sun sunny = new Sun((float)Math.random()*(width - 500) + 100, 0.0, height - 100, 1.0, sun);
     System.out.println("add sun");
     thingsToDisplay.add(sunny);
     thingsToMove.add(sunny);
@@ -285,7 +281,8 @@ void mouseReleased(){
       System.out.println("number of plants in row" + plotR+": "+numPlants[plotR]);
       
       sunc.setCount( sunc.getCount() - 100);
-      Peashooter peashoot = new Peashooter(xcor, ycor, 80, 80, 25.0,100, 5,peashooter);
+      //Plant(float xcor, float ycor, float wid, float len, float dam, float startHP, PImage plantImage)
+      Peashooter peashoot = new Peashooter(xcor, ycor, 80, 80, 25.0,1000, 5,peashooter);
       thingsToDisplay.add(peashoot);
       thingsToCollide.add(peashoot);
     }
@@ -295,7 +292,8 @@ void mouseReleased(){
         lanes.get(plotR).setNum( numPlants[plotR] ); 
        System.out.println("number of plants in row" + plotR+": "+numPlants[plotR]);
       sunc.setCount( sunc.getCount() - 50);
-      Sunflower sun = new Sunflower(xcor-5,ycor - 25,85,105,10,25,5,sunflower);
+      //  Sunflower(float xcor, float ycor, float wid, float len, float dam, float startHP, float rate, PImage sunflower){
+      Sunflower sun = new Sunflower(xcor-5,ycor - 25,85,105,0,1000,5,sunflower);
       thingsToDisplay.add(sun);
       thingsToCollide.add(sun);
     }
@@ -304,7 +302,8 @@ void mouseReleased(){
       numPlants[plotR] += 1;
       System.out.println("number of plants in row" + plotR+": "+numPlants[plotR]);
       sunc.setCount( sunc.getCount() - 50);
-      Walnut wallie = new Walnut(xcor-5,ycor-25, 85, 105,10,100,walnut);
+      //  Walnut(float xcor, float ycor, float wid, float len, float dam, float startHP, PImage walnut){
+      Walnut wallie = new Walnut(xcor-5,ycor-25, 85, 105,10,1000,walnut);
       thingsToDisplay.add(wallie);
       thingsToCollide.add(wallie);
     }
