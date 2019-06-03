@@ -20,4 +20,28 @@ abstract class Plant extends Character{
     this.HP -= dam;
   }
  
+   void display(){
+    PImage character = getImage(); 
+    float angle = PI/256.0;
+    float frame = second() % 4;
+    pushMatrix();//backup the original coordinate system
+    //Change the coordinates for 
+    //all objects then draw everything.
+    //Draw all the things you want to draw
+    //change the coordinates for JUST this one object
+     translate(x,y);
+     if (frame == 0){
+     rotate(angle);
+     image(character,0,0, w,l);
+     }
+     else if (frame == 1 || frame == 3){
+     rotate(0);
+     image(character,0,0, w,l);
+     }
+     else if (frame == 2){
+     rotate(-angle);
+     image(character,0,0, w,l);
+     }
+    popMatrix(); //restore the original coordinate system
+   }
 }

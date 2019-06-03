@@ -63,7 +63,7 @@ void setup(){
   thingsToCollide.add(wallie);
   
 
-  int[] zombiex = {800,900,1000,1100,1200};
+  int[] zombiex = {800,1000,1200};
   int[] zombiey = {40,140,240,340,440};
  
    int randNum = 0;
@@ -72,10 +72,10 @@ void setup(){
     
    for (int i = 0; i < 5; i++){
     randNum = (int)(Math.random()*5);
-    randNum2 = (int)(Math.random()*400);
-    randNum3 = (float)(Math.random()*2) + 0.1;
+    randNum2 = (int)(Math.random()*5);
+    randNum3 = (float)(Math.random()*1) + 0.1;
     // Zombie(float xcor, float ycor, float wid, float len, float speedNum, float dam, float startHP, PImage zombieImage)
-      BasicZombie zomb1 = new BasicZombie(800 + randNum2,zombiey[randNum], 80.0, 120.0, randNum3, 1, 100, zombie);
+      BasicZombie zomb1 = new BasicZombie(zombiex[randNum2],zombiey[randNum], 80.0, 120.0, randNum3, 1, 6, zombie);
       thingsToMove.add(zomb1);
       thingsToDisplay.add(zomb1);
       thingsToCollide.add(zomb1);
@@ -83,8 +83,8 @@ void setup(){
       System.out.println("number of zombies: " + i);
    }
 
-  for (int x = 0; x < 5; x++){
-    LawnMower lawnm = new LawnMower(10.0, 190.0 + 100*i, 100.0, 70.0, 1.0, 100.0, lawnmower); 
+  for (int i = 0; i < 5; i++){
+    LawnMower lawnm = new LawnMower(10.0, 90.0 + 100*i, 100.0, 70.0, 1.0, 100.0, lawnmower); 
     thingsToDisplay.add(lawnm);
     thingsToCollide.add(lawnm); 
   }

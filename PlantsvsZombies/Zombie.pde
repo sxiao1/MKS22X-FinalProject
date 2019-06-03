@@ -137,26 +137,36 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
         }
        // x -= currentSpeed;
       }
-       
+                    
         // remove this zombie from list of displayables and moveables if it is dead
             if (this.getHP() == 0){
               System.out.println("remove zombie!");
-              thingsToDisplay.remove(this);
-              thingsToMove.remove(this);
-            }          
+              moving = false;
+            } 
+            
       x -= currentSpeed;
     }
   }
   
   void display(){
+
     angle = PI/48.0;
     float frame = second() % 4;
+    PImage character = getImage();
     pushMatrix();//backup the original coordinate system
     //Change the coordinates for 
     //all objects then draw everything.
     //Draw all the things you want to draw
     //change the coordinates for JUST this one object
      translate(x,y);
+     if (!moving){
+       rotate(-90); 
+       image(character,0,70, w,l);
+       if (frameCount % 5 == 4){
+       thingsToDisplay.remove(this);
+       thingsToMove.remove(this);
+       }
+     }
      if (frame == 0){
      rotate(angle);
      image(character,0,0, w,l);
@@ -170,7 +180,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
      image(character,0,0, w,l);
      }
     popMatrix(); //restore the original coordinate system
-    
+
   }
   
 }
