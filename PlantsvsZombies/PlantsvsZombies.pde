@@ -68,14 +68,14 @@ void setup(){
  
    int randNum = 0;
    int randNum2 = 0;
-   int randNum3 = 0;
+   float randNum3 = 0;
     
    for (int i = 0; i < 5; i++){
     randNum = (int)(Math.random()*5);
-    randNum2 = (int)(Math.random()*5);
-    randNum3 = (int)(Math.random()*4);
+    randNum2 = (int)(Math.random()*400);
+    randNum3 = (float)(Math.random()*2) + 0.1;
     // Zombie(float xcor, float ycor, float wid, float len, float speedNum, float dam, float startHP, PImage zombieImage)
-      BasicZombie zomb1 = new BasicZombie(zombiex[randNum2],zombiey[randNum], 80.0, 120.0, randNum3, 1, 100, zombie);
+      BasicZombie zomb1 = new BasicZombie(800 + randNum2,zombiey[randNum], 80.0, 120.0, randNum3, 1, 100, zombie);
       thingsToMove.add(zomb1);
       thingsToDisplay.add(zomb1);
       thingsToCollide.add(zomb1);

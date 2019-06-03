@@ -4,6 +4,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
   float currentSpeed;
   boolean moving;
   float angle;
+  float endX;
   
   // takes in x- and y-coordinates, width, length, speed, damage points, starting HP, and zombie image
   Zombie(float xcor, float ycor, float wid, float len, float speedNum, float dam, float startHP, PImage zombieImage){
@@ -13,6 +14,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
     currentSpeed = speedNum;
     moving = true;
     angle = 0; 
+    endX = 10 + (int)(Math.random() * 75); 
   }
 
   float getSpeed(){
@@ -28,6 +30,17 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
     return false;
   }
   
+  boolean isTouching(Zombie other){
+    if (other.getY() == getY() &&
+        other.getX() >= getX() && other.getX() <= getX() + getW()
+         ){
+           System.out.println("this zombie's coordinates: "+this.getX() +", "+this.getY());
+           System.out.println("other zombie's coordinates: "+other.getX() +", "+other.getY());
+        
+    return true; 
+     }
+     return false;
+  }
   boolean isTouching(Pea other){
     if (other.x >= getX() && other.x <= getX() + w
      && other.y >= getY() && other.y <= getY() + l){
@@ -43,13 +56,23 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
      // System.out.println("end game");
     }
     // while still on screen 
-    else if (x > 10 && moving){
+    else if (x > endX){
       // loop through list of collideables
       int subbed = 0; // number of times plant has been subtracted
       for (int c = thingsToCollide.size() - 1; c >= 0; c--){
         
          Collideable thing = thingsToCollide.get(c);
-         if (thing instanceof LawnMower){
+         if (thing instanceof Zombie){
+           Zombie zomb = (Zombie)thing;
+           if (this != zomb && this.isTouching(zomb)){
+             System.out.println("zombies are touching");
+             rect(x,y, 50, 50);
+             currentSpeed = 0.1;
+             zomb.currentSpeed = 5;
+           }
+           
+         }
+         else if (thing instanceof LawnMower){
            LawnMower lawnm = (LawnMower)thing;
            if ( this.getX() <= 200 && this.getY() + this.getL() == lawnm.getY() + lawnm.getL() && lawnm.getActive()){
              
@@ -112,7 +135,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
             currentSpeed = speed;
             }
         }
-  
+       // x -= currentSpeed;
       }
        
         // remove this zombie from list of displayables and moveables if it is dead
