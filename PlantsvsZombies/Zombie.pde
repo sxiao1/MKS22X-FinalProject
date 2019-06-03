@@ -3,6 +3,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
   float speed;
   float currentSpeed;
   boolean moving;
+  float angle;
   
   // takes in x- and y-coordinates, width, length, speed, damage points, starting HP, and zombie image
   Zombie(float xcor, float ycor, float wid, float len, float speedNum, float dam, float startHP, PImage zombieImage){
@@ -10,6 +11,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
     speed = speedNum;
     currentSpeed = speedNum;
     moving = true;
+    angle = 0; 
   }
 
   float getSpeed(){
@@ -121,4 +123,24 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
       x -= currentSpeed;
     }
   }
+  
+  void display(){
+    angle = PI/6.0;
+    //image(character,x,y, w,l);
+    pushMatrix();//backup the original coordinate system
+    //Change the coordinates for 
+    //all objects then draw everything.
+    //Draw all the things you want to draw
+    //change the coordinates for JUST this one object
+     translate(x,y);
+     rotate(angle);
+     image(character,x,y, w,l);
+     rotate(0);
+     image(character,x,y, w,l);
+     rotate(-angle);
+     image(character,x,y, w,l);
+    popMatrix(); //restore the original coordinate system
+    
+  }
+  
 }
