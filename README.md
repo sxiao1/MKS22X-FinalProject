@@ -1,14 +1,19 @@
 # MKS22X-FinalProject
 
 ## Description
+Plants vs. Zombies is tower defense game takes place in the player’s front lawn, where the player must defend their home against waves of zombies. The player uses seed packets to plant a variety of plants that either attack or defend them from zombies. The player can purchase plants from an inventory bar at the top of the screen according to how many suns they collect throughout the game. Sun is grown by the sunflower plant, but it is also generated randomly throughout the game. Zombies walk slowly towards the house and must be shot down before they reach the plants, or else they will destroy the plants and eventually break into the player’s home. The game ends when zombies enter the house and eat the player's brains.
+
+## Instructions
+<ul>
+   <li> At the start of the game, you are given 300 suns. Use them to plant a Peashooter, Sunflower, or Walnut by clicking the appropriate seed packet and dropping the plant nto a plot of land. NOTE: You may only purchase a plant if you have enough Suns for it. </li>
+   <li> Collect Suns that drop from the sky or Sunflower plants by clicking on them. Keep track of the number of Suns by looking at the sun counter on the top left corner of the screen. </li>
+   <li> Defend your lawn by using your plants strategically against the zombies. Peashooter can shoot a pea every second, Sunflower produces a Sun every few seconds, and Wallnut blocks zombies from moving forward until it is eaten. </li>
+   <li> The lawn mowers are a final line of defense that automatically trigger after zombies have reached the end of the lawn. Plan wisely – they can only be used once! </li>
+   <li> Every time a wave is announced, more zombies will appear within a short period of time. Prepare your attack and defense accordingly, especially for the final wave in the level. </li>
+   <li> If you defeat all the zombies in a given level, you may move on to the next level. If the zombies break into your home and eat your brains, the game is over. </li>
+</ul>
 
 ## Development Log
-<ul>
-   <li> </li>
-   <li>  </li>
-   <li> </li>
-   <li>  </li>
-</ul>
 
 #### 2019-06-02
 
@@ -166,7 +171,7 @@
    <li> Started writing code to move the pea towards the zombies and attack, but encountered issues with collision recognition. </li>
 </ul>
 
-### Jamie
+#### Jamie
 <ul>
    <li> Created Displayable, Moveable, and Collideable Pea class in order to treat each pea as a recognized collideable object for zombies. </li>
    <li> Added hitting and coordinate resetting to Pea, so peashooter can attack again after a target has been hit. </li>
