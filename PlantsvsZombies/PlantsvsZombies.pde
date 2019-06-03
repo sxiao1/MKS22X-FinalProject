@@ -156,14 +156,11 @@ if (frameCount % 240 == 60){
   }
   else{
       if (times == 1){
-        String gameWave = "A huge wave of zombies is approaching!";
-        GameString ga = new GameString(gameWave, width/2, height/2, 40, true);
-        thingsToDisplay.add(ga);
-        String gameOver = "FINAL WAVE";
-        GameString g = new GameString(gameOver, width/2, height/2, 80, true);
-        thingsToDisplay.add(g);
-        times = 0;
-      }
+          String gameOver = "FINAL WAVE";
+          GameString g = new GameString(gameOver, width/2, height/2, 80, true);
+          thingsToDisplay.add(g);
+          times = 0;
+        }
       //if(finalWave) {
       while(n <= 8){
       System.out.println("final wave");
