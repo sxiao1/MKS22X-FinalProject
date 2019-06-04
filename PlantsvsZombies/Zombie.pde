@@ -142,7 +142,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
             if (this.getHP() == 0){
               System.out.println("remove zombie!");
               moving = false;
-              zomieDead.play();
+              zombieDead.play();
             } 
             
       x -= currentSpeed;

@@ -1,9 +1,10 @@
 import java.util.*;
 import processing.sound.*;
 SoundFile file;
-SoundFile zomieDead;
+SoundFile zombieDead;
 
 boolean runGame; 
+int menuMode; 
 
 ArrayList<Moveable> thingsToMove = new ArrayList<Moveable>();
 ArrayList<Displayable> thingsToDisplay = new ArrayList<Displayable>();
@@ -12,7 +13,7 @@ ArrayList<Collideable> thingsToCollide = new ArrayList<Collideable>();
 ArrayList<Sun> listOfSuns = new ArrayList<Sun>();
 ArrayList<Pea> listOfPeas = new ArrayList<Pea>();
 
-PImage background,peashooter,zombie,sunflower,sun,walnut, lawnmower;
+PImage startscreen, background,peashooter,zombie,sunflower,sun,walnut, lawnmower;
 PImage ps_seed, sf_seed, wn_seed;
 
 boolean[][] plots = new boolean[5][9];
@@ -23,36 +24,44 @@ int time;
 SunCount sunc;
 
 Menu menu;
+
 //boolean addZomb;
 void setup(){
   
-  menu = new Menu(0);
+  startscreen = loadImage("startscreen.jpg");
+  
+  menu = new Menu(0, startscreen);
+  menuMode = 0; 
+  
+  // play theme song
   file = new SoundFile(this, "theme.mp3");
   file.play();
-  zomieDead = new SoundFile(this, "Zombie Moan.mp3");
   
-  runGame = true;
-  // load background, plants, zombies, and suns
+  // zombie death sound effect
+  zombieDead = new SoundFile(this, "Zombie Moan.mp3");
+  
+  // run game?
+  runGame = false;
+  
+  // load images
   size(1024,600);
   background = loadImage("background.jpg");
   
-  time = millis();
-  
   sun = loadImage("sun.png");
- // image(sun,90,170,50,50); 
   sunc = new SunCount(100, 10, 75,100, 300,sun);
-
+  thingsToDisplay.add(sunc);
+  
   ps_seed = loadImage("peashooter-seed.jpg");
   sf_seed = loadImage("sunflower-seed.jpg");
   wn_seed = loadImage("wallnut.png");
 
-  SeedPacket seed_pea = new SeedPacket(200, 10, 75, 100);
+  SeedPacket seed_pea = new SeedPacket(200, 10, 75, 100, ps_seed);
   thingsToDisplay.add(seed_pea);
   
-  SeedPacket seed_sunflower = new SeedPacket(300,10,75,100);
+  SeedPacket seed_sunflower = new SeedPacket(300,10,75,100, sf_seed);
   thingsToDisplay.add(seed_sunflower);
   
-  SeedPacket seed_walnut = new SeedPacket(400,10,75,100);
+  SeedPacket seed_walnut = new SeedPacket(400,10,75,100, wn_seed);
   thingsToDisplay.add(seed_walnut);
   
   peashooter = loadImage("peashooter.png");
@@ -61,7 +70,6 @@ void setup(){
   zombie = loadImage("zombie.png");
   lawnmower = loadImage("lawnmower.png"); 
   
-
   int[] zombiex = {1200, 1400, 1600, 1800, 2000};
   int[] zombiey = {40,140,240,340,440};
  
@@ -80,7 +88,6 @@ void setup(){
       thingsToDisplay.add(zomb1);
       thingsToCollide.add(zomb1);
       i++;
-      System.out.println("number of zombies: " + i);
    }
 
   for (int i = 0; i < 5; i++){
@@ -89,9 +96,7 @@ void setup(){
     thingsToCollide.add(lawnm); 
   }
 
-  thingsToDisplay.add(sunc);
-  
-  for(int r = 0; r< plots.length; r++){
+  for(int r = 0; r < plots.length; r++){
     for(int c = 0; c < plots[0].length; c++){
       plots[r][c] = false;
     }
@@ -101,7 +106,7 @@ void setup(){
        numPlants[r] = 0;
        lanes.add(new Position(r, numPlants[r]));
    }
-   
+    
     draw();
     mouseDragged();
     mouseReleased();
@@ -111,11 +116,13 @@ void setup(){
 int numZombies = 0;
 boolean addZomb = true;
 boolean finalWave = true;
+
 int i = 0;
 int[] zombiex = {800,900,1000,1100,1200};
 int[] zombiey = {40,140,240,340,440};
 int n = 0;
 int times = 1;
+
 void draw(){
   
 if (frameCount % 240 == 60){
@@ -124,14 +131,14 @@ if (frameCount % 240 == 60){
     int randNum2 = (int)(Math.random()*5);
     
     int rowMax = 0; 
-    int probability = (int)(Math.random() * 70);
+    int probability = (int)(Math.random() * 100);
     
     for (int l = 1; l < numPlants.length; l++){
       if (numPlants[l] > numPlants[rowMax]){
         rowMax = l;
       }
     }
-    System.out.println("rowMAx: "+rowMax);
+    System.out.println("rowMax: " + rowMax);
     
     if (probability < 40){
       BasicZombie zomb1 = new BasicZombie(zombiex[randNum2], zombiey[rowMax], 80.0, 120.0, 2.0, 1, 100, zombie);
@@ -161,7 +168,7 @@ if (frameCount % 240 == 60){
           thingsToDisplay.add(g);
           times = 0;
         }
-      //if(finalWave) {
+
       while(n <= 8){
       System.out.println("final wave");
       int randNum = (int)(Math.random()*5);
@@ -178,14 +185,29 @@ if (frameCount % 240 == 60){
   
 
      }
-      // draw background, display displayables, and move moveables
+// display the menu     
+  menu.display();
+  image(startscreen, 0,0);
+  startscreen.resize(1024, 600);
+  image(startscreen, 0,0);
+  
+  if (runGame){
+          // draw background, display displayables, and move moveables
      image(background,0,0);
 
     for (int d = 0; d < thingsToDisplay.size(); d++){
       thingsToDisplay.get(d).display();
     }
     
-  if (runGame){
+       // random sun from sky every few seconds
+  if (frameCount % 3000 == 5){
+    Sun sunny = new Sun((float)Math.random()*(width - 500) + 100, 0.0, height - 100, 1.0, sun);
+    System.out.println("add sun");
+    thingsToDisplay.add(sunny);
+    thingsToMove.add(sunny);
+    listOfSuns.add(sunny);
+  }
+  
     for (int m = 0; m < thingsToMove.size(); m++){
       thingsToMove.get(m).move();
     }
@@ -197,19 +219,7 @@ if (frameCount % 240 == 60){
     GameString g = new GameString(gameOver, width/2, height/2, 150, true);
     thingsToDisplay.add(g);
   }
-       // seeds
-     image(ps_seed, 200,10,75,100);
-     image(sf_seed, 300,10,75,100);
-     image(wn_seed, 400,10,75,100);
      
-     // random sun from sky every few seconds
-  if (frameCount % 1000 == 5){
-    Sun sunny = new Sun((float)Math.random()*(width - 500) + 100, 0.0, height - 100, 1.0, sun);
-    System.out.println("add sun");
-    thingsToDisplay.add(sunny);
-    thingsToMove.add(sunny);
-    listOfSuns.add(sunny);
-  }
 }
 
 
@@ -218,8 +228,6 @@ int plant = 0; // check which plant to use
 void mouseDragged(){
 
   // if in seed packet 
-  System.out.println("update plant");
-  //PImage plant = sunflower;
   if (mouseX >= 200 && mouseX <= 200 + 75 && mouseY >= 10 && mouseY <= 10 + 100){
       drag = 1;
       plant = 0;
