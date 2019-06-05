@@ -287,7 +287,7 @@ void mouseReleased(){
 
   // check if there are enough suns and if the plot is already occupied
   
-  if (drag == 1 && count < 100 || drag == 2 && count < 50 || drag == 3 && count < 50){
+  if (drag == 1 && count < 100 || drag == 2 && count < 50 || drag == 3 && count < 50 || drag == 4 && count < 150){
     
     String str = "NEED MORE SUNS";
     GameString needSun = new GameString(str, width/2, height/2, 70, true); 
@@ -332,7 +332,7 @@ void mouseReleased(){
       numPlants[plotR] += 1;
       System.out.println("number of plants in row" + plotR+": "+numPlants[plotR]);
       sunc.setCount( sunc.getCount() - 150);
-      Cherry cherryb = new Cherry(xcor-5,ycor-25, 85, 105,1000,100,cherry);
+      Cherry cherryb = new Cherry(xcor,ycor, 85, 90,1000,100,cherry);
       thingsToDisplay.add(cherryb);
       thingsToCollide.add(cherryb);
     }
