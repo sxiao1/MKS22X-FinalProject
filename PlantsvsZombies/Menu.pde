@@ -1,13 +1,16 @@
 class Menu{
 
   int mode, x, y; 
-  PImage screen;
+  PImage screen, startbg;
+  String title;
   
-  public Menu(int mode, PImage startscreen){
+  public Menu(int mode, PImage startscreen, PImage startbg){
     this.mode = mode;
     x = width/2;
     y = height / 2;
     screen = startscreen;
+    this.startbg = startbg;
+    title = "MENU";
   }
   
   public void display(){
@@ -26,11 +29,18 @@ class Menu{
     rect(315, 530, 400, 45); 
     }
     
-    if (mousePressed && mouseX >= 315 && mouseX <= 715 && mouseY >= 530 && mouseY <= 575){
-      mode = 1;
+    if ( (mode == 0 || mode == 2) && mousePressed && mouseX >= 315 && mouseX <= 715 && mouseY >= 530 && mouseY <= 575){
+      if (mode == 0) {
+        mode = 1;
+      }
       System.out.println("CLICK HERE TO START IS PRESSED");
-      fill(255);
-      rect(0,0,width, height);
+      
+      //fill(255);
+     // rect(0,0,width, height);
+      image(startbg, 0,0);
+      startbg.resize(1024, 600);
+      image(startbg, 0,0);
+      
       rectMode(CENTER);
       // magenta
       fill(155,0,155);
@@ -39,22 +49,24 @@ class Menu{
       fill(255);
       textSize(85); 
       textAlign(CENTER,CENTER);
-      text("MAIN MENU", width/2, 100);
+      title = "MENU";
+      text(title, width/2, 100);
      
       options();    
      }
      
-    if (mousePressed){
+    if (mode == 1 && mousePressed){
+      
         float xCorner = x - ((width/2 - 100)/2);
         float xWidth = width/2 - 100;
         float yCorner = (height/3) - (75/2); 
         float yLength = 75; 
-        //System.out.println("MOUSE PRESSED");
+        
         if (mouseX >= xCorner && mouseX <= xCorner + xWidth){
-         // System.out.println("In width range");
          // START GAME
           if (mouseY >= yCorner && mouseY <= yCorner + yLength){
              System.out.println("START");
+             mode = 2;
              runGame = true;
           }
           else if (mouseY > yCorner + 110 && mouseY <= yCorner + yLength + 110){
@@ -69,6 +81,11 @@ class Menu{
         }
       }
       
+      if (mode == 2){
+        inGameMenu();
+        options();
+      }
+      
     }
   
   public void setMode(int newMode){
@@ -76,10 +93,12 @@ class Menu{
   }
   
   public void options(){
+    
     fill(0,0,255);
     noStroke();
     rectMode(CENTER);
     
+   if (mode == 1){ 
     //  START GAME
     rect(x,height/3, width/2 - 100, 75);
       fill(255);
@@ -88,7 +107,7 @@ class Menu{
       text("START GAME", x, height/3);
     
     // INSTRUCTIONS
-     fill(0,0,255);
+    fill(0,0,255);
     noStroke();
     rectMode(CENTER);
      rect(x,height/3 + 110, width/2 - 100, 75); 
@@ -106,11 +125,42 @@ class Menu{
       textSize(25); 
       textAlign(CENTER,CENTER);
       text("QUIT", x, height/3 + 220);
+   }
+   
+   else if (mode == 2){
+     //  RESUME GAME
+    rect(x,height/3, width/2 - 100, 75);
+      fill(255);
+      textSize(25); 
+      textAlign(CENTER,CENTER);
+      text("RESUME GAME", x, height/3);
+    
+    // INSTRUCTIONS
+    fill(0,0,255);
+    noStroke();
+    rectMode(CENTER);
+     rect(x,height/3 + 110, width/2 - 100, 75); 
+     fill(255);
+      textSize(25); 
+      textAlign(CENTER,CENTER);
+      text("INSTRUCTIONS", x, height/3 + 110);
+    
+    // QUIT
+    fill(0,0,255);
+    noStroke();
+    rectMode(CENTER);
+     rect(x,height/3 + 220, width/2 - 100, 75); 
+     fill(255);
+      textSize(25); 
+      textAlign(CENTER,CENTER);
+      text("QUIT", x, height/3 + 220);
+   }
   }
   
+  // display description and instructions 
   public void instructions(){
     fill(255);
-      rect(0,0,width, height);
+      
       rectMode(CENTER);
       // magenta
       fill(155,0,155);
@@ -124,6 +174,22 @@ class Menu{
     text(description, width/2, height/2, width/2, height - 100);
     textAlign(LEFT,BOTTOM);
     text(instruct, width/2, height/2, width/2, height - 100);
+  }
+  
+  public void inGameMenu(){
+    fill(155,0,155);
+    noStroke();
+    rectMode(CORNER);
+    rect(800, 10, 200, 50);
+    fill(255);
+    textSize(20);
+    textAlign(CENTER, CENTER);
+    text("MENU", 800, 10, 200, 50);
+    
+    if (mousePressed && mouseX >= 800 && mouseX <= 1000 && mouseY >= 10 && mouseY <= 60){
+      System.out.println("in game menu pressed");
+      runGame = false; 
+    }
   }
   
 }

@@ -14,7 +14,7 @@ ArrayList<Collideable> thingsToCollide = new ArrayList<Collideable>();
 ArrayList<Sun> listOfSuns = new ArrayList<Sun>();
 ArrayList<Pea> listOfPeas = new ArrayList<Pea>();
 
-PImage startscreen, background,peashooter,zombie,sunflower,sun,walnut, lawnmower;
+PImage startscreen, startbg, background,peashooter,zombie,sunflower,sun,walnut, lawnmower;
 PImage ps_seed, sf_seed, wn_seed;
 
 boolean[][] plots = new boolean[5][9];
@@ -30,8 +30,9 @@ Menu menu;
 void setup(){
   
   startscreen = loadImage("startscreen.jpg");
+  startbg = loadImage("mainmenubackground.jpg");
   
-  menu = new Menu(0, startscreen);
+  menu = new Menu(0, startscreen, startbg);
   menuMode = 0; 
   
   // play theme song
@@ -187,26 +188,29 @@ if (runGame && frameCount % 240 == 60){
   
 
      }
+     
 // display the menu     
   menu.display();
   
   if (runGame){
-          // draw background, display displayables, and move moveables
+     // draw background, display displayables, and move moveables
      image(background,0,0);
 
     for (int d = 0; d < thingsToDisplay.size(); d++){
       thingsToDisplay.get(d).display();
     }
     
+    menu.inGameMenu(); 
+    
        // random sun from sky every few seconds
-  if (frameCount % 3000 == 5){
+  if (frameCount % 1000 == 5){
     Sun sunny = new Sun((float)Math.random()*(width - 500) + 100, 0.0, height - 100, 1.0, sun);
     System.out.println("add sun");
     thingsToDisplay.add(sunny);
     thingsToMove.add(sunny);
     listOfSuns.add(sunny);
   }
-  
+   
     for (int m = 0; m < thingsToMove.size(); m++){
       thingsToMove.get(m).move();
     }
