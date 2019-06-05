@@ -2,8 +2,6 @@
 class Sun implements Moveable, Displayable{
   
   float  x,y,ybound,speed;
-  
-  int sunCount;
   PImage sun;
   
   float angle; // of rotation
@@ -78,11 +76,6 @@ class Sun implements Moveable, Displayable{
       return true;
     }
     return false;
-  }
-
-  // return amount of suns
-  int getSun(){
-    return sunCount;
   }
   
 }

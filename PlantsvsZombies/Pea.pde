@@ -1,14 +1,11 @@
 // pea class, shot by the peashooter
 class Pea implements Displayable, Moveable, Collideable{
-  float origX, origY; 
   float x,y,w,l,speed,damage;
   boolean active; // check if pea is still active (has not hit target) 
   
 public Pea(float xcor, float ycor, float wid, float len, float speedNum, float dam, boolean active){
     x = xcor;
-    origX = xcor;
     y = ycor;
-    origY = ycor;
     w = wid;
     l = len;
     speed = speedNum;
@@ -28,13 +25,9 @@ public Pea(float xcor, float ycor, float wid, float len, float speedNum, float d
   
   // attack zombie
   public void attack(Zombie z){
+    if (x < width){
     z.takeHit(damage);
-  }
-  
-  // move pea coordinates back to the peashooter
-  public void reset(){
-    x = origX; 
-    y = origY;
+    }
   }
   
   // check if pea and zombie are touching 

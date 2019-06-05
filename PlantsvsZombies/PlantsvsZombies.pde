@@ -22,7 +22,6 @@ PImage ps_seed, sf_seed, wn_seed,cb_seed;
 
 boolean[][] plots = new boolean[5][9]; // KEEP TRACK OF WHICH PLOTS HAVE ACTIVE PLANTS 
 int[] numPlants = new int[5]; // NUMBER OF PLANTS IN EACH ROW 
-ArrayList<Position> lanes = new ArrayList<Position>(); // POSITIONS OF ROWS WITH ROW NUMBER, NUMBER OF PLANTS 
 
 SeedPacket seed_pea, seed_sunflower, seed_walnut; 
 
@@ -90,11 +89,11 @@ void setup(){
    float randNum3 = 0;
     
    for (int i = 0; i < 5; i++){
-    randNum = (int)(Math.random()*5);
-    randNum2 = (int)(Math.random()*5);
-    randNum3 = (float)(Math.random()*1) + 0.1;
-    // Zombie(float xcor, float ycor, float wid, float len, float speedNum, float dam, float startHP, PImage zombieImage)
-      BasicZombie zomb1 = new BasicZombie(zombiex[randNum2],zombiey[randNum], 80.0, 120.0, randNum3, 1, 6, zombie);
+      numZombies++; 
+      randNum = (int)(Math.random()*5);
+      randNum2 = (int)(Math.random()*5);
+      randNum3 = (float)(Math.random()*1) + 0.1;
+      BasicZombie zomb1 = new BasicZombie(zombiex[randNum2],zombiey[randNum], 80.0, 120.0, randNum3, 1, 100, zombie);
       thingsToMove.add(zomb1);
       thingsToDisplay.add(zomb1);
       thingsToCollide.add(zomb1);
@@ -119,7 +118,7 @@ void setup(){
     draw();
     mouseDragged();
     mouseReleased();
-    
+    keyPressed();
 }
 
 int numZombies = 0;
@@ -150,17 +149,19 @@ if (runGame && frameCount % 240 == 60){
     }
 
     if (probability < 40){
-      BasicZombie zomb1 = new BasicZombie(zombiex[randNum2], zombiey[rowMax], 80.0, 120.0, 2.0, 1, 100, zombie);
+      BasicZombie zomb1 = new BasicZombie(zombiex[randNum2], zombiey[rowMax], 80.0, 120.0, 2.0, 1, 300, zombie);
       thingsToMove.add(zomb1);
       thingsToDisplay.add(zomb1);
       thingsToCollide.add(zomb1);
+      numZombies++;
       i++;
     }
     else{ 
-      BasicZombie zomb1 = new BasicZombie(zombiex[randNum2], zombiey[randNum], 80.0, 120.0, 2.0, 1, 100, zombie);
+      BasicZombie zomb1 = new BasicZombie(zombiex[randNum2], zombiey[randNum], 80.0, 120.0, 2.0, 1, 300, zombie);
       thingsToMove.add(zomb1);
       thingsToDisplay.add(zomb1);
       thingsToCollide.add(zomb1);
+      numZombies++;
       i++;
     }
    if(i >= 10){
@@ -173,16 +174,16 @@ if (runGame && frameCount % 240 == 60){
           GameString g = new GameString(gameOver, width/2, height/2, 80, true);
           thingsToDisplay.add(g);
           times = 0;
-        }
-
+      }
       while(n <= 8){
-      int randNum = (int)(Math.random()*5);
-      int randNum2 = (int)(Math.random()*5);
-      BasicZombie zomb1 = new BasicZombie(zombiex[randNum2], zombiey[randNum], 80.0, 120.0, 2.0, 1, 100, zombie);
-      thingsToMove.add(zomb1);
-      thingsToDisplay.add(zomb1);
-      thingsToCollide.add(zomb1);
-      n++;
+        int randNum = (int)(Math.random()*5);
+        int randNum2 = (int)(Math.random()*5);
+        BasicZombie zomb1 = new BasicZombie(zombiex[randNum2], zombiey[randNum], 80.0, 120.0, 2.0, 1, 300, zombie);
+        thingsToMove.add(zomb1);
+        thingsToDisplay.add(zomb1);
+        thingsToCollide.add(zomb1);
+        numZombies++;
+        n++;
       }
     
   }
@@ -209,13 +210,22 @@ if (runGame && frameCount % 240 == 60){
     }
 
 // random sun from sky every few seconds
-  if (frameCount % 1000 == 5){
+  if (frameCount % 500 == 5){
     Sun sunny = new Sun((float)Math.random()*(width - 500) + 100, 0.0, height - 100, 1.0, sun);
     thingsToDisplay.add(sunny);
     thingsToMove.add(sunny);
     listOfSuns.add(sunny);
   }
-   
+  
+   //   DISPLAY GAME SCREEN IF ALL ZOMBIES HAVE BEEN CLEARED
+   if (!addZomb && numZombies <= 0){
+     String pass = "LEVEL CLEARED";
+     GameString g = new GameString(pass, width/2, height/2, 10, true); 
+      g.display(); 
+      if (frameCount % 1000 == 50){
+        exit();
+      }
+   }
  }
 
     // IF GAME IS OVER, PRINT STRING
@@ -225,7 +235,7 @@ if (runGame && frameCount % 240 == 60){
       g.display(); 
       if (frameCount % 1000 == 50){
         exit();
-    }
+      }
   }
         
 }
@@ -269,11 +279,6 @@ if (runGame){
   }
 }
 }
-
-int duration = 5000;
-int track = 0;
-int start = 0;
-
 void mouseReleased(){
   
   int count = sunc.getCount(); // number of suns collected
@@ -358,4 +363,10 @@ void mouseReleased(){
 
 void mouseClicked(){
    menu.act();
+}
+
+void keyPressed(){
+  if (key == 'x'){
+    sunc.setCount(sunc.getCount() + 1000);
+  }
 }

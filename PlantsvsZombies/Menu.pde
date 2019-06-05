@@ -3,7 +3,6 @@ class Menu{
   int option, x, y, page; 
   float mode, prevMode;
   PImage screen, startbg;
-  String title;
   
   public Menu(float mode, PImage startscreen, PImage startbg){
     this.mode = mode; // starting mode of the menu
@@ -13,8 +12,6 @@ class Menu{
     y = height / 2;
     screen = startscreen;
     this.startbg = startbg;
-    // name of the menu
-    title = "MENU";
     // default button option and page number of the instructions pages
     option = 0;
     page = 0;
@@ -46,8 +43,7 @@ class Menu{
       fill(255);
       textSize(85); 
       textAlign(CENTER,CENTER);
-      title = "MAIN MENU";
-      text(title, width/2, 100); 
+      text("MAIN MENU", width/2, 100); 
       options(); 
 
     }
@@ -109,8 +105,7 @@ class Menu{
       fill(255);
       textSize(70); 
       textAlign(CENTER,CENTER);
-      title = "MENU";
-      text(title, width/2, 25);
+      text("MENU", width/2, 25);
       
     // MENU BUTTONS
     rectMode(CENTER);
