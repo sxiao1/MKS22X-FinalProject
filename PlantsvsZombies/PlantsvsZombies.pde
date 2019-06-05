@@ -20,18 +20,18 @@ ArrayList<Pea> listOfPeas = new ArrayList<Pea>();
 PImage startscreen, startbg, background,peashooter,zombie,sunflower,sun,walnut, lawnmower;
 PImage ps_seed, sf_seed, wn_seed;
 
-boolean[][] plots = new boolean[5][9];
-int[] numPlants = new int[5];
-ArrayList<Position> lanes = new ArrayList<Position>();
+boolean[][] plots = new boolean[5][9]; // KEEP TRACK OF WHICH PLOTS HAVE ACTIVE PLANTS 
+int[] numPlants = new int[5]; // NUMBER OF PLANTS IN EACH ROW 
+ArrayList<Position> lanes = new ArrayList<Position>(); // POSITIONS OF ROWS WITH ROW NUMBER, NUMBER OF PLANTS 
 
 SeedPacket seed_pea, seed_sunflower, seed_walnut; 
 
 int time;
 SunCount sunc;
 
-//boolean addZomb;
+
 void setup(){
-  
+  // LOAD IMAGES 
   startscreen = loadImage("startscreen.jpg");
   startbg = loadImage("mainmenubackground.jpg");
   
@@ -50,10 +50,10 @@ void setup(){
   reset = false; 
   lose = false;
   
-  // load images
   size(1024,600);
   background = loadImage("background.jpg");
   
+  // ADD SUNCOUNT, SEED PACKETS, ZOMBIES TO DISPLAY, COLLIDE, AND/OR MOVE LISTS
   sun = loadImage("sun.png");
   sunc = new SunCount(100, 10, 75,100, 300,sun);
   thingsToDisplay.add(sunc);
@@ -109,11 +109,7 @@ void setup(){
       plots[r][c] = false;
     }
   }
- 
-   for (int r = 0; r < numPlants.length; r++){
-       numPlants[r] = 0;
-       lanes.add(new Position(r, numPlants[r]));
-   }
+
     mouseClicked(); 
     draw();
     mouseDragged();
@@ -133,6 +129,7 @@ int times = 1;
 
 void draw(){
 
+// ADD ZOMBIES AT INTERVALS WHILE GAME IS RUNNING, CAPPED AT 10 ZOMBIES
 if (runGame && frameCount % 240 == 60){
   if(addZomb){
     int randNum = (int)(Math.random()*5);
@@ -174,7 +171,6 @@ if (runGame && frameCount % 240 == 60){
         }
 
       while(n <= 8){
-      System.out.println("final wave");
       int randNum = (int)(Math.random()*5);
       int randNum2 = (int)(Math.random()*5);
       BasicZombie zomb1 = new BasicZombie(zombiex[randNum2], zombiey[randNum], 80.0, 120.0, 2.0, 1, 100, zombie);
@@ -194,7 +190,11 @@ if (runGame && frameCount % 240 == 60){
   if (runGame){
      // draw background, display displayables, and move moveables
      image(background,0,0);
+     
+     // DISPLAY IN GAME MENU
      menu.displayInGameMenu(); 
+     
+     // DISPLAY 
     for (int d = 0; d < thingsToDisplay.size(); d++){
       thingsToDisplay.get(d).display();
     }
@@ -207,14 +207,15 @@ if (runGame && frameCount % 240 == 60){
     listOfSuns.add(sunny);
   }
    
+   // MOVE
     for (int m = 0; m < thingsToMove.size(); m++){
       thingsToMove.get(m).move();
     }
   }
   
   else{
+    // IF GAME IS OVER, PRINT STRING
     if (lose){
-    // GameString(String string, float xcor, float ycor, boolean disp){
     String gameOver = "GAME OVER";
     GameString g = new GameString(gameOver, width/2, height/2, 150, true);
     thingsToDisplay.add(g);
@@ -225,9 +226,10 @@ if (runGame && frameCount % 240 == 60){
 
 int drag = 0; // check if mouse is being dragged
 int plant = 0; // check which plant to use
+
 void mouseDragged(){
 if (runGame){
-  // if in seed packet 
+  // if in seed packet, check if user has selected peashooter, sunflower, or walnut
   if (mouseX >= 200 && mouseX <= 200 + 75 && mouseY >= 10 && mouseY <= 10 + 100){
       drag = 1;
       plant = 0;
@@ -241,6 +243,7 @@ if (runGame){
     drag = 3;
     plant = 2;
   }
+  // display images to move with computer mouse 
   if (drag == 1 && plant == 0){
     image(peashooter,mouseX,mouseY,80,80);
   }
@@ -285,40 +288,44 @@ void mouseReleased(){
   
   if (drag == 1 && count < 100 || drag == 2 && count < 50 || drag == 3 && count < 50){
     
-    String str = "NEED MORE SUNS";
+    String str = "NEED MORE SUNS!";
     GameString needSun = new GameString(str, width/2, height/2, 70, true); 
     thingsToDisplay.add(needSun); 
   }
+  
   // only add plant if there are enough suns and plot is not currently occupied 
+  
+  // PEASHOOTER
    else if(drag == 1 && count >= 100 && plots[plotR][plotC] == false){
       plots[plotR][plotC] = true;
       numPlants[plotR] += 1;
       lanes.get(plotR).setNum( numPlants[plotR] ); 
-      System.out.println("number of plants in row" + plotR+": "+numPlants[plotR]);
-      
+
       sunc.setCount( sunc.getCount() - 100);
-      //Plant(float xcor, float ycor, float wid, float len, float dam, float startHP, PImage plantImage)
       Peashooter peashoot = new Peashooter(xcor, ycor, 80, 80, 25.0,1000, 5,peashooter);
       thingsToDisplay.add(peashoot);
       thingsToCollide.add(peashoot);
     }
+    
+    // SUNFLOWER
     else if(drag == 2 && count >= 50  && plots[plotR][plotC] == false){
       plots[plotR][plotC] = true;
        numPlants[plotR] += 1;
-        lanes.get(plotR).setNum( numPlants[plotR] ); 
-       System.out.println("number of plants in row" + plotR+": "+numPlants[plotR]);
-      sunc.setCount( sunc.getCount() - 50);
-      //  Sunflower(float xcor, float ycor, float wid, float len, float dam, float startHP, float rate, PImage sunflower){
+       lanes.get(plotR).setNum( numPlants[plotR] ); 
+       sunc.setCount( sunc.getCount() - 50);
+      
       Sunflower sun = new Sunflower(xcor-5,ycor - 25,85,105,0,1000,5,sunflower);
       thingsToDisplay.add(sun);
       thingsToCollide.add(sun);
     }
+    
+    // WALNUT
     else if (drag == 3 && count >= 50  && plots[plotR][plotC] == false){
       plots[plotR][plotC] = true;
       numPlants[plotR] += 1;
-      System.out.println("number of plants in row" + plotR+": "+numPlants[plotR]);
+
       sunc.setCount( sunc.getCount() - 50);
-      //  Walnut(float xcor, float ycor, float wid, float len, float dam, float startHP, PImage walnut){
+
       Walnut wallie = new Walnut(xcor-5,ycor-25, 85, 105,10,1000,walnut);
       thingsToDisplay.add(wallie);
       thingsToCollide.add(wallie);
