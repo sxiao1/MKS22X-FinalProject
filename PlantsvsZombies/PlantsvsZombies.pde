@@ -4,6 +4,7 @@ SoundFile file;
 SoundFile zombieDead;
 
 boolean runGame; 
+boolean lose = false;
 int menuMode; 
 
 ArrayList<Moveable> thingsToMove = new ArrayList<Moveable>();
@@ -35,7 +36,7 @@ void setup(){
   
   // play theme song
   file = new SoundFile(this, "theme.mp3");
-  file.play();
+  file.loop();
   
   // zombie death sound effect
   zombieDead = new SoundFile(this, "Zombie Moan.mp3");
@@ -108,6 +109,7 @@ void setup(){
    }
     
     draw();
+    mouseClicked();
     mouseDragged();
     mouseReleased();
  
@@ -125,7 +127,7 @@ int times = 1;
 
 void draw(){
   
-if (frameCount % 240 == 60){
+if (runGame && frameCount % 240 == 60){
   if(addZomb){
     int randNum = (int)(Math.random()*5);
     int randNum2 = (int)(Math.random()*5);
@@ -187,9 +189,6 @@ if (frameCount % 240 == 60){
      }
 // display the menu     
   menu.display();
-  image(startscreen, 0,0);
-  startscreen.resize(1024, 600);
-  image(startscreen, 0,0);
   
   if (runGame){
           // draw background, display displayables, and move moveables
@@ -214,14 +213,35 @@ if (frameCount % 240 == 60){
   }
   
   else{
+    if (lose){
     // GameString(String string, float xcor, float ycor, boolean disp){
     String gameOver = "GAME OVER";
     GameString g = new GameString(gameOver, width/2, height/2, 150, true);
     thingsToDisplay.add(g);
+    }
   }
      
 }
 
+void MouseClicked(){
+  if (mouseX >= 315 && mouseX <= 715 && mouseY >= 530 && mouseY <= 575){
+/*
+      System.out.println("CLICK HERE TO START IS PRESSED");
+      fill(255);
+      rect(0,0,width, height);
+      rectMode(CENTER);
+      // magenta
+      fill(155,0,155);
+      noStroke();
+      rect(width/2, height/2, width/2, height - 100);
+      fill(255);
+      textSize(100); 
+      textAlign(CENTER,CENTER);
+      text("MAIN MENU", width/2, 100);
+     */
+    
+     }
+}
 
 int drag = 0; // check if mouse is being dragged
 int plant = 0; // check which plant to use

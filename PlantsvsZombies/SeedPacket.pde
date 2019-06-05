@@ -12,6 +12,7 @@ class SeedPacket implements Displayable{
   }
   
   void display(){
+    rectMode(CORNER);
     fill(121,83,45);
     rect(x,y,w,l);
     image(image, x,y,w,l);
