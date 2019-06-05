@@ -239,6 +239,10 @@ void mouseDragged(){
     drag = 3;
     plant = 2;
   }
+  else if(mouseX >= 500 && mouseX <= 4500 + 75 && mouseY >= 10 && mouseY <= 10 + 100){
+    drag = 4;
+    plant = 3;
+  }
   if (drag == 1 && plant == 0){
     image(peashooter,mouseX,mouseY,80,80);
   }
@@ -247,7 +251,10 @@ void mouseDragged(){
   }
   else if (drag == 3 && plant == 2){
     image(walnut,mouseX,mouseY,80,100);
-}
+  }
+  else if(drag == 4 && plant == 3){
+    image(cherry,mouseX,mouseY, 80,100);
+  }
 }
 
 int duration = 5000;
@@ -319,6 +326,8 @@ void mouseReleased(){
       Walnut wallie = new Walnut(xcor-5,ycor-25, 85, 105,10,1000,walnut);
       thingsToDisplay.add(wallie);
       thingsToCollide.add(wallie);
+    }
+    else if(drag == 4 && count >= 150 && plots[plotR][plotC] == false){
     }
   }
   drag = 0;
