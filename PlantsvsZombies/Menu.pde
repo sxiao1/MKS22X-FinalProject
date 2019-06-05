@@ -1,6 +1,6 @@
 class Menu{
 
-  int option, x, y; 
+  int option, x, y, page; 
   float mode, prevMode;
   PImage screen, startbg;
   String title;
@@ -14,6 +14,7 @@ class Menu{
     this.startbg = startbg;
     title = "MENU";
     option = 0;
+    page = 0;
   }
   
  
@@ -75,7 +76,7 @@ class Menu{
           }
           else if (option == 2){
             System.out.println("INSTRUCTIONS");
-            instructions();
+            instructions(0);
             mode = 1.5;
             prevMode = 1;
             
@@ -89,13 +90,26 @@ class Menu{
     }
         // CHECK IF BACK IS PRESSED
         if (mode == 1.5){
-            if (mousePressed && mouseX >= width/2 && mouseX <= 3*width/4 && mouseY >= 550 && mouseY <= 600){
+            if (mousePressed && mouseY >= 550 && mouseY <= 600){
+             
+              if (mouseX >= width/4 && mouseX < width/2){
+                System.out.println("PAGE FLIP PRESSED");
+                option = 0; 
+                if (page == 0){
+                  instructions(1);
+                }
+                else if (page == 1){
+                  instructions(0);
+                }         
+              }
+              else if (mouseX >= width/2 && mouseX <= 3*width/4){
               System.out.println("BACK PRESSED");
               option = 0; 
               System.out.println("PREVIOUS MODE: "+prevMode);
               mode = prevMode;
               prevMode = 1.5;
-        }
+              }
+            }
        }
       
       if (mode == 2){
@@ -122,7 +136,7 @@ class Menu{
           else if (option == 2){
           }
           else if (option == 3){
-            instructions();
+            instructions(0);
             mode = 1.5;
             prevMode = 2;
           }
@@ -237,30 +251,44 @@ class Menu{
   }
   
   // display description and instructions 
-  public void instructions(){
+  public void instructions(int pageNum){
+    page = pageNum;
+    
     fill(255);
       
-      rectMode(CENTER);
-      // magenta
-      fill(155,0,155);
-      noStroke();
-      rect(x,y, width/2, height - 100);
+    rectMode(CENTER);
+    // magenta
+    fill(155,0,155);
+    noStroke();
+    rect(x,y, width/2, height);
     String description = "Plants vs. Zombies is tower defense game takes place in your front lawn, where you must defend your home against waves of zombies. You will use seed packets to plant a variety of plants that either attack or defend your house from zombies. You can purchase plants from an inventory bar at the top of the screen according to how many suns you collect throughout the game. Sun is grown by the sunflower plant, but it is also generated randomly throughout the game. Zombies walk slowly towards the house and must be shot down before they reach the plants, or else they will destroy the plants and eventually break into your home. The game ends when zombies enter the house and eat your brains.";
     String instruct = "At the start of the game, you are given 300 suns. Use them to plant a Peashooter, Sunflower, or Walnut by clicking the appropriate seed packet and dropping the plant onto a plot of land. NOTE: You may only purchase a plant if you have enough Suns for it.\n\nCollect Suns that drop from the sky or Sunflower plants by clicking on them. Keep track of the number of Suns by looking at the sun counter on the top left corner of the screen.\n\nDefend your lawn by using your plants strategically against the zombies. Peashooter can shoot a pea every second, Sunflower produces a Sun every few seconds, and Wallnut blocks zombies from moving forward until it is eaten.\n\nThe lawn mowers are a final line of defense that automatically trigger after zombies have reached the end of the lawn. Plan wisely – they can only be used once!\n\nEvery time a wave is announced, more zombies will appear within a short period of time. Prepare your attack and defense accordingly, especially for the final wave in the level.\n\nIf you defeat all the zombies in a given level, you may move on to the next level. If the zombies break into your home and eat your brains, the game is over.\n\n";
+    String pageStr = "INSTRUCTIONS";
     fill(255);
-    textSize(10); 
-    textAlign(LEFT,TOP);
-    text(description, width/2, height/2, width/2, height - 100);
-    textAlign(LEFT,BOTTOM);
-    text(instruct, width/2, height/2, width/2, height - 100);
+    textSize(15); 
+    textAlign(LEFT,CENTER);
+    if (page == 0){
+    pageStr = "INSTRUCTIONS >>";
+    text(description, width/2 + 15, height/2, width/2 - 60, height - 100);
+    }
+    else if (page == 1){
+    pageStr = "<< DESCRIPTION";
+    textSize(12); 
+    text(instruct, width/2 + 15, height/2, width/2 - 60, height - 100);
+    }
     
     rectMode(CORNER);
     fill(0,0,255);
     noStroke();
+    
+    // OTHER PAGE 
+    rect(width/4, 550, width/4, 50);
     rect(width/2, 550, width/4, 50);
+    
     fill(255);
-    textSize(15);
+    textSize(15); 
     textAlign(CENTER, CENTER);
+    text(pageStr, width/4, 550, width/4, 50); 
     text("BACK", width/2, 550, width/4, 50);
    
   }
