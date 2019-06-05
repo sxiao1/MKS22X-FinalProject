@@ -331,7 +331,7 @@ void mouseReleased(){
       plots[plotR][plotC] = true;
       numPlants[plotR] += 1;
       System.out.println("number of plants in row" + plotR+": "+numPlants[plotR]);
-      sunc.setCount( sunc.getCount() - 50);
+      sunc.setCount( sunc.getCount() - 150);
       Cherry cherryb = new Cherry(xcor-5,ycor-25, 85, 105,1000,100,cherry);
       thingsToDisplay.add(cherryb);
       thingsToCollide.add(cherryb);

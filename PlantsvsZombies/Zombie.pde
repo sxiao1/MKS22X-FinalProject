@@ -121,6 +121,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
           if (this.isTouching(ch) && this.getHP() > 0 && ch.getHP() > 0){
             thingsToDisplay.remove(this);
             thingsToCollide.remove(this);
+            thingsToDisplay.remove(ch);
           }
         }
         
