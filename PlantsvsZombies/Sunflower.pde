@@ -18,7 +18,6 @@ class Sunflower extends Plant{
     super.display();
     // produce a new sun every few seconds
     if (millis() > 1000 && frameCount % 300 == 0){
-      System.out.println("5 seconds have passed");
       produce();
     }
   }
@@ -26,7 +25,6 @@ class Sunflower extends Plant{
   // instantiate a new sun from the sunflower's coordinates
   void produce(){
     Sun sun = new Sun(this.getX() + this.getW() / 2, this.getY() + this.getL() / 8, this.getY() + this.getL() / 2, 1.0, sunImage);
-    System.out.println("add sun");
     thingsToDisplay.add(sun);
     thingsToMove.add(sun);
     listOfSuns.add(sun);

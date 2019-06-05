@@ -16,10 +16,6 @@ class SeedPacket implements Displayable{
     fill(121,83,45);
     rect(x,y,w,l);
     image(image, x,y,w,l);
-
-    if (isClicked() ){
-      System.out.println("seed clicked");
-    }
   }
  
  // check if seed packet has been clicked. 

@@ -39,8 +39,6 @@ class Sun implements Moveable, Displayable{
      rotate(radians(angle));
      image(sun,-25,-25,50,50);
      angle += 1;
-    
-     System.out.println("rotate angle: "+angle);
      popMatrix(); //restore the original coordinate system
     }
     // if sun has been clicked, don't rotate the sun

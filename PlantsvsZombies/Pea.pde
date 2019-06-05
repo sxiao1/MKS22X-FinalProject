@@ -41,7 +41,6 @@ public Pea(float xcor, float ycor, float wid, float len, float speedNum, float d
   public boolean isTouching(Character other){
     if (x >= other.getX() && x <= other.getX() + other.getW()
      && y >= other.getY() && y <= other.getY() + other.getL()){
-       System.out.println("pea is touching zombie");
     return true;
     }
     return false;

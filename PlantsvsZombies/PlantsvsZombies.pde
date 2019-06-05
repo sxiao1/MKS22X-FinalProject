@@ -24,6 +24,8 @@ boolean[][] plots = new boolean[5][9];
 int[] numPlants = new int[5];
 ArrayList<Position> lanes = new ArrayList<Position>();
 
+SeedPacket seed_pea, seed_sunflower, seed_walnut; 
+
 int time;
 SunCount sunc;
 
@@ -60,13 +62,13 @@ void setup(){
   sf_seed = loadImage("sunflower-seed.jpg");
   wn_seed = loadImage("wallnut.png");
 
-  SeedPacket seed_pea = new SeedPacket(200, 10, 75, 100, ps_seed);
+  seed_pea = new SeedPacket(200, 10, 75, 100, ps_seed);
   thingsToDisplay.add(seed_pea);
   
-  SeedPacket seed_sunflower = new SeedPacket(300,10,75,100, sf_seed);
+  seed_sunflower = new SeedPacket(300,10,75,100, sf_seed);
   thingsToDisplay.add(seed_sunflower);
   
-  SeedPacket seed_walnut = new SeedPacket(400,10,75,100, wn_seed);
+  seed_walnut = new SeedPacket(400,10,75,100, wn_seed);
   thingsToDisplay.add(seed_walnut);
   
   peashooter = loadImage("peashooter.png");
@@ -88,12 +90,10 @@ void setup(){
     randNum3 = (float)(Math.random()*1) + 0.1;
     // Zombie(float xcor, float ycor, float wid, float len, float speedNum, float dam, float startHP, PImage zombieImage)
       BasicZombie zomb1 = new BasicZombie(zombiex[randNum2],zombiey[randNum], 80.0, 120.0, randNum3, 1, 6, zombie);
-      System.out.println("zombie speed:" + randNum3);
       thingsToMove.add(zomb1);
       thingsToDisplay.add(zomb1);
       thingsToCollide.add(zomb1);
       i++;
-      System.out.println("number of zombies: " + i);
    }
 
   for (int i = 0; i < 5; i++){
@@ -101,7 +101,7 @@ void setup(){
     thingsToDisplay.add(lawnm);
     thingsToCollide.add(lawnm); 
   }
-
+  sunc.setCount(300); 
   thingsToDisplay.add(sunc);
   
   for(int r = 0; r< plots.length; r++){
@@ -114,76 +114,11 @@ void setup(){
        numPlants[r] = 0;
        lanes.add(new Position(r, numPlants[r]));
    }
-  
+    mouseClicked(); 
     draw();
     mouseDragged();
     mouseReleased();
-    mouseClicked(); 
-}
-
-void reset(){
-
-  image(background,0,0);
-   System.out.println("RESET GAME");    
-  // run game?
-  runGame = false;
-  reset = false; 
-  lose = false;
-
-  for (int i = thingsToDisplay.size() - 1; i >= 0; i--){
-    thingsToDisplay.remove(i);
-  }
-  for (int i = thingsToMove.size() - 1; i >= 0; i--){
-    thingsToMove.remove(i);
-  }
-  for (int i = thingsToCollide.size() - 1; i >= 0; i--){
-    thingsToCollide.remove(i);
-  }
-  
-  // waves of zombies 
-   numZombies = 0; 
-   addZomb = true; 
-   finalWave = false; 
-   i = 0;
-   n = 0;
-   times = 1;
-   
-  int[] zombiex = {800,900,1000,1100,1200};
-  int[] zombiey = {40,140,240,340,440};
- 
-   int randNum = 0;
-   int randNum2 = 0;
-   float randNum3 = 0;
     
-   for (int i = 0; i < 5; i++){
-    randNum = (int)(Math.random()*5);
-    randNum2 = (int)(Math.random()*5);
-    randNum3 = (float)(Math.random()*1) + 0.1;
-   
-      BasicZombie zomb1 = new BasicZombie(zombiex[randNum2],zombiey[randNum], 80.0, 120.0, randNum3, 1, 6, zombie);
-      System.out.println("zombie speed:" + randNum3);
-      thingsToMove.add(zomb1);
-      thingsToDisplay.add(zomb1);
-      thingsToCollide.add(zomb1);
-      i++;
-   }
-
-  for (int i = 0; i < 5; i++){
-    LawnMower lawnm = new LawnMower(0.0, 90.0 + 100*i, 100.0, 70.0, 1.0, 100.0, lawnmower); 
-    thingsToDisplay.add(lawnm);
-    thingsToCollide.add(lawnm); 
-  }
-
-  for(int r = 0; r < plots.length; r++){
-    for(int c = 0; c < plots[0].length; c++){
-      plots[r][c] = false;
-    }
-  }
- 
-   for (int r = 0; r < numPlants.length; r++){
-       numPlants[r] = 0;
-       lanes.add(new Position(r, numPlants[r]));
-   }
 }
 
 int numZombies = 0;
@@ -197,10 +132,7 @@ int n = 0;
 int times = 1;
 
 void draw(){
-       
-// display the menu     
-  menu.display();
-  
+
 if (runGame && frameCount % 240 == 60){
   if(addZomb){
     int randNum = (int)(Math.random()*5);
@@ -214,15 +146,13 @@ if (runGame && frameCount % 240 == 60){
         rowMax = l;
       }
     }
-    System.out.println("rowMax: " + rowMax);
-    
+
     if (probability < 40){
       BasicZombie zomb1 = new BasicZombie(zombiex[randNum2], zombiey[rowMax], 80.0, 120.0, 2.0, 1, 100, zombie);
       thingsToMove.add(zomb1);
       thingsToDisplay.add(zomb1);
       thingsToCollide.add(zomb1);
       i++;
-      System.out.println("num of zombs :" + i);
     }
     else{ 
       BasicZombie zomb1 = new BasicZombie(zombiex[randNum2], zombiey[randNum], 80.0, 120.0, 2.0, 1, 100, zombie);
@@ -230,11 +160,9 @@ if (runGame && frameCount % 240 == 60){
       thingsToDisplay.add(zomb1);
       thingsToCollide.add(zomb1);
       i++;
-      System.out.println("num of zombs :" + i);
     }
    if(i >= 10){
      addZomb = false;
-     System.out.println("more than " + i + " zombs");
    }
   }
   else{
@@ -253,18 +181,20 @@ if (runGame && frameCount % 240 == 60){
       thingsToMove.add(zomb1);
       thingsToDisplay.add(zomb1);
       thingsToCollide.add(zomb1);
-      System.out.println("final wave zombies : " + n);
       n++;
       }
     
   }
   
 }
-
+         
+// display the menu     
+  menu.display();
+  
   if (runGame){
      // draw background, display displayables, and move moveables
      image(background,0,0);
-
+     menu.displayInGameMenu(); 
     for (int d = 0; d < thingsToDisplay.size(); d++){
       thingsToDisplay.get(d).display();
     }
@@ -272,7 +202,6 @@ if (runGame && frameCount % 240 == 60){
    // random sun from sky every few seconds
   if (frameCount % 1000 == 5){
     Sun sunny = new Sun((float)Math.random()*(width - 500) + 100, 0.0, height - 100, 1.0, sun);
-    System.out.println("add sun");
     thingsToDisplay.add(sunny);
     thingsToMove.add(sunny);
     listOfSuns.add(sunny);
@@ -291,7 +220,7 @@ if (runGame && frameCount % 240 == 60){
     thingsToDisplay.add(g);
     }
   }
-  menu.inGameMenu();    
+         
 }
 
 int drag = 0; // check if mouse is being dragged
@@ -345,11 +274,9 @@ void mouseReleased(){
    // find the proper x, y coordinates to "snap" to
    if (mouseX >= 78){
      xcor = 78*( (int)(mouseX / 78));
-     System.out.println("change plot column");
      plotC = (int)(mouseX / 78) - 1;
    }
     if (mouseY >= 80){
-      System.out.println(mouseY);
       ycor = 80 + 100*( (mouseY - 80 )/100);
       plotR = ((int)mouseY - 80 )/100;
     }
@@ -402,6 +329,5 @@ void mouseReleased(){
 }
 
 void mouseClicked(){
-  System.out.println("mouse clicked");
    menu.act();
 }

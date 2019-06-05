@@ -20,7 +20,6 @@ class Peashooter extends Plant{
   // make zombie take hit by damage points
   void attack(Character zombie){
       zombie.takeHit(super.damage);
-      System.out.println(zombie.getHP());
   }
   
   void display(){
@@ -28,8 +27,6 @@ class Peashooter extends Plant{
     
     // shoot pea every few seconds
     if (millis() > 1000 && frameCount % 60 == 0){
-      System.out.println(frameCount);
-      System.out.println("shoot pea");
       produce();
     }
   }
