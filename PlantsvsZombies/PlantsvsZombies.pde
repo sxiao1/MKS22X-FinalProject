@@ -72,7 +72,7 @@ void setup(){
   seed_walnut = new SeedPacket(400,10,75,100, wn_seed);
   thingsToDisplay.add(seed_walnut);
   
-  SeedPacket seed_cherry = new SeedPacket (500, 10, 75, 100);
+  SeedPacket seed_cherry = new SeedPacket (500, 10, 75, 100, cb_seed);
   thingsToDisplay.add(seed_cherry);
   
   peashooter = loadImage("peashooter.png");
@@ -203,28 +203,12 @@ if (runGame && frameCount % 240 == 60){
     for (int d = 0; d < thingsToDisplay.size(); d++){
       thingsToDisplay.get(d).display();
     }
-    
-<<<<<<< HEAD
-  if (runGame){
+
     for (int m = 0; m < thingsToMove.size(); m++){
       thingsToMove.get(m).move();
     }
-  }
-  
-  else{
-    // GameString(String string, float xcor, float ycor, boolean disp){
-    String gameOver = "GAME OVER";
-    GameString g = new GameString(gameOver, width/2, height/2, 150, true);
-    thingsToDisplay.add(g);
-  }
-       // seeds
-     image(ps_seed, 200,10,75,100);
-     image(sf_seed, 300,10,75,100);
-     image(wn_seed, 400,10,75,100);
-     image(cb_seed, 500, 10,75,100);
-     
-     // random sun from sky every few seconds
 
+// random sun from sky every few seconds
   if (frameCount % 1000 == 5){
     Sun sunny = new Sun((float)Math.random()*(width - 500) + 100, 0.0, height - 100, 1.0, sun);
     thingsToDisplay.add(sunny);
@@ -232,11 +216,7 @@ if (runGame && frameCount % 240 == 60){
     listOfSuns.add(sunny);
   }
    
-   // MOVE
-    for (int m = 0; m < thingsToMove.size(); m++){
-      thingsToMove.get(m).move();
-    }
-  }
+ }
 
     // IF GAME IS OVER, PRINT STRING
     if (lose){
@@ -287,6 +267,7 @@ if (runGame){
   else if(drag == 4 && plant == 3){
     image(cherry,mouseX,mouseY, 80,100);
   }
+}
 }
 
 int duration = 5000;
@@ -364,7 +345,7 @@ void mouseReleased(){
     else if(drag == 4 && count >= 150 && plots[plotR][plotC] == false){
       plots[plotR][plotC] = true;
       numPlants[plotR] += 1;
-      System.out.println("number of plants in row" + plotR+": "+numPlants[plotR]);
+ 
       sunc.setCount( sunc.getCount() - 150);
       Cherry cherryb = new Cherry(xcor,ycor, 85, 90,1000,100,cherry);
       thingsToDisplay.add(cherryb);

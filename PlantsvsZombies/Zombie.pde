@@ -52,7 +52,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
   boolean isTouching(Cherry cherryb){
     if (cherryb.x >= getX() && cherryb.x <= getX() + w
      && cherryb.y >= getY() && cherryb.y <= getY() + l){
-       //System.out.println("zombie is touching cherry");
+
     return true;
     }
     return false;
@@ -63,7 +63,6 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
     // end game if zombies get into the house 
     if (x <= endX){
      lose = true; 
-     System.out.println("end game");
     }
     // while still on screen 
     else if (millis() > 10000 && x > endX){
@@ -122,18 +121,12 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
             thingsToDisplay.remove(ch);
             thingsToCollide.remove(ch);
             if(ch.getHP()==0){
-            System.out.println("remove cherry!");
-   
+              
             int plotR = (int)((ch.getY() - 80) / 100);
             int plotC = (int)(ch.getX() / 78);
             plots[plotR][plotC] = false;
-          //  if (subbed == 0){
-              numPlants[plotR] -= 1;
-              lanes.get(plotR).setNum( numPlants[plotR] ); 
-           //   subbed = 1;
-           // }
-            System.out.println("number of plants in row" + plotR+": "+numPlants[plotR]);
-            System.out.println(thingsToDisplay.size());
+            numPlants[plotR] -= 1;
+ 
             currentSpeed = speed;
             }
           }

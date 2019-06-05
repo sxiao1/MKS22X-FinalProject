@@ -5,9 +5,10 @@ Plants vs. Zombies is tower defense game takes place in the player’s front law
 
 ## Instructions
 <ul>
-   <li> At the start of the game, you are given 300 suns. Use them to plant a Peashooter, Sunflower, or Walnut by clicking the appropriate seed packet and dropping the plant nto a plot of land. NOTE: You may only purchase a plant if you have enough Suns for it. </li>
+   <li> Navigate through the Main Menu and in-game menu by clicking on the different options. You may refer to the description and instructions of the game through the menu or quit at any point in the game. </li>
+   <li> At the start of the game, you are given 300 suns. Use them to plant a Peashooter, Sunflower, Walnut, or Cherry Bomb by clicking the appropriate seed packet and dropping the plant onto a plot of land. NOTE: You may only purchase a plant if you have enough Suns for it. </li>
    <li> Collect Suns that drop from the sky or Sunflower plants by clicking on them. Keep track of the number of Suns by looking at the sun counter on the top left corner of the screen. </li>
-   <li> Defend your lawn by using your plants strategically against the zombies. Peashooter can shoot a pea every second, Sunflower produces a Sun every few seconds, and Wallnut blocks zombies from moving forward until it is eaten. </li>
+   <li> Defend your lawn by using your plants strategically against the zombies. Peashooter can shoot a pea every second, Sunflower produces a Sun every few seconds, Walnut blocks zombies from moving forward until it is eaten, and Cherry Bomb self-destructs, killing nearby zombies in its vicinity. </li>
    <li> The lawn mowers are a final line of defense that automatically trigger after zombies have reached the end of the lawn. Plan wisely – they can only be used once! </li>
    <li> Every time a wave is announced, more zombies will appear within a short period of time. Prepare your attack and defense accordingly, especially for the final wave in the level. </li>
    <li> If you defeat all the zombies in a given level, you may move on to the next level. If the zombies break into your home and eat your brains, the game is over. </li>
@@ -15,7 +16,30 @@ Plants vs. Zombies is tower defense game takes place in the player’s front law
 
 ## Development Log
 
-#### 2019-06-02
+### 2019-06-04
+#### Sabrina
+<ul>
+  <li> Added cherry bomb plant and seed features for player use. </li>
+  <li> Coded zombie and cherry bomb collision into the Zombie class. </li>
+</ul>
+
+#### Jamie
+<ul>
+  <li> Added the main menu and in-game menu display and button options for player access. </li>
+  <li> Coded separate act() method to add functionality to the start game, resume game, instructions, main menu, menu, and quit buttons. </li>
+  <li> Added page flip option to the instructions display for easier player viewing. </li>
+  <li> Started reset game function for the in-game menu. </li>
+</ul>
+
+### 2019-06-03
+
+#### Sabrina
+<ul>
+  <li> Added theme song to play during the game. </li>
+  <li> Added sound effect for dying zombies. </li>
+</ul>
+
+### 2019-06-02
 
 #### Jamie
 <ul>
@@ -25,7 +49,7 @@ Plants vs. Zombies is tower defense game takes place in the player’s front law
    <li> Added zoom-in feature to GameStrings. </li>
 </ul>
 
-#### 2019-05-31
+### 2019-05-31
 
 #### Pair Work
 <ul>
@@ -39,7 +63,7 @@ Plants vs. Zombies is tower defense game takes place in the player’s front law
    <li> Fixed code for the final wave so the zombies now come together. </li>
 </ul>
 
-#### 2019-05-30
+### 2019-05-30
 
 #### Sabrina
 <ul>
@@ -54,7 +78,7 @@ Plants vs. Zombies is tower defense game takes place in the player’s front law
    <li> Started Menu class to switch between screens based on the number key pressed. </li>
 </ul>
 
-#### 2019-05-29
+### 2019-05-29
 
 #### Sabrina
 <ul>
@@ -68,7 +92,7 @@ Plants vs. Zombies is tower defense game takes place in the player’s front law
    <li> Updated plant and plant seed images and sizing for easier colliding and clicking recognition. </li>
 </ul>
 
-#### 2019-05-28
+### 2019-05-28
 
 #### Pair work
 <ul>
@@ -87,14 +111,14 @@ Plants vs. Zombies is tower defense game takes place in the player’s front law
    <li> Created LawnMower class, which triggers when zombies reach a certain distance from the house. </li>
 </ul>
 
-#### 2019-05-26
+### 2019-05-26
 
 #### Sabrina
 <ul>
   <li> Continued code to get rid of the "Need more suns" message based on time or frame count. </li>
 </ul>
 
-#### 2019-05-24
+### 2019-05-24
 
 #### Sabrina
 <ul>
