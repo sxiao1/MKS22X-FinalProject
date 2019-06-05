@@ -35,6 +35,9 @@ abstract class Character implements Damageable, Displayable, Collideable{
   PImage getImage(){
     return character;
   }
+  void setHP(int newHP){
+    HP = newHP;
+  }
   
   // when attacked by another character
   void takeHit(float dam){

@@ -3,7 +3,7 @@ class Cherry extends Plant{
   super(xcor, ycor, wid, len, dam, startHP, cherry);
   }
   void attack(Character zombie){
-    zombie.takeHit(100);
+    zombie.takeHit(zombie.getHP());
   }
   void display(){
     super.display();

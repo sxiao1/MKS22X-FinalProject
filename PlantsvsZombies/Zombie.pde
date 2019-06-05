@@ -58,6 +58,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
     }
     return false;
   }
+  int die = 0;
   
   void move(){
     if (x <= 10){
@@ -119,9 +120,24 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
          else if (thing instanceof Cherry){
           Cherry ch = (Cherry)thing;
           if (this.isTouching(ch) && this.getHP() > 0 && ch.getHP() > 0){
-            thingsToDisplay.remove(this);
-            thingsToCollide.remove(this);
+            ch.attack(this);
             thingsToDisplay.remove(ch);
+            thingsToCollide.remove(ch);
+            if(ch.getHP()==0){
+            System.out.println("remove cherry!");
+   
+            int plotR = (int)((ch.getY() - 80) / 100);
+            int plotC = (int)(ch.getX() / 78);
+            plots[plotR][plotC] = false;
+          //  if (subbed == 0){
+              numPlants[plotR] -= 1;
+              lanes.get(plotR).setNum( numPlants[plotR] ); 
+           //   subbed = 1;
+           // }
+            System.out.println("number of plants in row" + plotR+": "+numPlants[plotR]);
+            System.out.println(thingsToDisplay.size());
+            currentSpeed = speed;
+            }
           }
         }
         
