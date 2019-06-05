@@ -328,6 +328,13 @@ void mouseReleased(){
       thingsToCollide.add(wallie);
     }
     else if(drag == 4 && count >= 150 && plots[plotR][plotC] == false){
+      plots[plotR][plotC] = true;
+      numPlants[plotR] += 1;
+      System.out.println("number of plants in row" + plotR+": "+numPlants[plotR]);
+      sunc.setCount( sunc.getCount() - 50);
+      Cherry cherryb = new Cherry(xcor-5,ycor-25, 85, 105,1000,100,cherry);
+      thingsToDisplay.add(cherryb);
+      thingsToCollide.add(cherryb);
     }
   }
   drag = 0;

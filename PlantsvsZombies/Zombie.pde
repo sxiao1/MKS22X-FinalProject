@@ -50,6 +50,15 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
     return false;
   }
   
+  boolean isTouching(Cherry cherryb){
+    if (cherryb.x >= getX() && cherryb.x <= getX() + w
+     && cherryb.y >= getY() && cherryb.y <= getY() + l){
+       //System.out.println("zombie is touching cherry");
+    return true;
+    }
+    return false;
+  }
+  
   void move(){
     if (x <= 10){
      // runGame = false;
@@ -105,6 +114,16 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
             currentSpeed = speed;
            }
          }
+         
+         //checking if collideable is a cherry
+         else if (thing instanceof Cherry){
+          Cherry ch = (Cherry)thing;
+          if (this.isTouching(ch) && this.getHP() > 0 && ch.getHP() > 0){
+            thingsToDisplay.remove(this);
+            thingsToCollide.remove(this);
+          }
+        }
+        
         // check if collideable is a plant 
          else if (thing instanceof Plant){
     
@@ -135,7 +154,6 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
             currentSpeed = speed;
             }
         }
-       // x -= currentSpeed;
       }
                     
         // remove this zombie from list of displayables and moveables if it is dead
