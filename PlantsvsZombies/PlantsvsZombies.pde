@@ -13,7 +13,7 @@ ArrayList<Sun> listOfSuns = new ArrayList<Sun>();
 ArrayList<Pea> listOfPeas = new ArrayList<Pea>();
 
 PImage background,peashooter,zombie,sunflower,sun,walnut, lawnmower;
-PImage ps_seed, sf_seed, wn_seed;
+PImage ps_seed, sf_seed, wn_seed,cb_seed;
 
 boolean[][] plots = new boolean[5][9];
 int[] numPlants = new int[5];
@@ -45,6 +45,7 @@ void setup(){
   ps_seed = loadImage("peashooter-seed.jpg");
   sf_seed = loadImage("sunflower-seed.jpg");
   wn_seed = loadImage("wallnut.png");
+  cb_seed = loadImage("cherryBomb.png");
 
   SeedPacket seed_pea = new SeedPacket(200, 10, 75, 100);
   thingsToDisplay.add(seed_pea);
