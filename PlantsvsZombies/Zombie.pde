@@ -14,7 +14,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
     currentSpeed = speedNum;
     moving = true;
     angle = 0; 
-    endX = 10 + (int)(Math.random() * 75); 
+    endX = -80; 
   }
 
   float getSpeed(){
@@ -34,17 +34,16 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
     if (other.getY() == getY() &&
         other.getX() >= getX() && other.getX() <= getX() + getW()
          ){
-           System.out.println("this zombie's coordinates: "+this.getX() +", "+this.getY());
-           System.out.println("other zombie's coordinates: "+other.getX() +", "+other.getY());
         
     return true; 
      }
      return false;
   }
+  
+  // check if zombie is touching a pea
   boolean isTouching(Pea other){
     if (other.x >= getX() && other.x <= getX() + w
      && other.y >= getY() && other.y <= getY() + l){
-       //System.out.println("zombie is touching pea");
     return true;
     }
     return false;
@@ -61,22 +60,21 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
   int die = 0;
   
   void move(){
-    if (x <= 10){
-     // runGame = false;
-     // System.out.println("end game");
+    // end game if zombies get into the house 
+    if (x <= endX){
+     lose = true; 
+     System.out.println("end game");
     }
     // while still on screen 
     else if (millis() > 10000 && x > endX){
       // loop through list of collideables
-      int subbed = 0; // number of times plant has been subtracted
       for (int c = thingsToCollide.size() - 1; c >= 0; c--){
         
          Collideable thing = thingsToCollide.get(c);
          if (thing instanceof Zombie){
            Zombie zomb = (Zombie)thing;
-           if (this != zomb && this.isTouching(zomb)){
-           //  System.out.println("zombies are touching");
-          //   rect(x,y, 50, 50);
+           // change zombie speeds if two are alive and are touching each other 
+           if (this != zomb && this.isTouching(zomb) && zomb.getHP() > 0){
              currentSpeed = 0.1;
              zomb.currentSpeed = 2;
            }
@@ -84,16 +82,17 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
          }
          else if (thing instanceof LawnMower){
            LawnMower lawnm = (LawnMower)thing;
-           if ( lawnm.getMoving() || this.getX() <= 200 && this.getY() + this.getL() == lawnm.getY() + lawnm.getL() && lawnm.getActive()){
+           
+           // zombies trigger lawn mowers when they reach too close to the house 
+           if ( lawnm.getMoving() || this.getX() <= 50 && this.getY() + this.getL() == lawnm.getY() + lawnm.getL() && lawnm.getActive()){
              
              if (!lawnm.getMoving()){
-               System.out.println("add lawn mower to move");  
+
                thingsToMove.add(lawnm);
                lawnm.setMoving(true);
              }
                    
              if (lawnm.isTouching(this)){
-               System.out.println("Lawn attack zombie");
                lawnm.attack(this);
                currentSpeed = 0;
              }
@@ -106,8 +105,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
            
            if (this.isTouching(pea) && pea.isActive() && this.getHP() > 0){
             currentSpeed = 0; 
-            System.out.println("zombie speed:"+speed);
-            // pea attacks and "new" pea is created
+            // pea attacks and is removed
             pea.attack(this);
             pea.setActive(false);
             thingsToDisplay.remove(pea);
@@ -145,7 +143,6 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
          else if (thing instanceof Plant){
     
           Plant p = (Plant)thing;
-          //System.out.println("Zombie is touching plant");
           // if zombie is touching plant and both zombie and plant are alive
           if (this.isTouching(p) && p.getHP() > 0 && this.getHP() > 0){
             currentSpeed = 0; 
@@ -154,20 +151,13 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
             // remove plant from list of displayables if it is dead
            }
             if(p.getHP()==0){
-            System.out.println("remove peashooter!");
    
             int plotR = (int)((p.getY() - 80) / 100);
             int plotC = (int)(p.getX() / 78);
             plots[plotR][plotC] = false;
-          //  if (subbed == 0){
-              numPlants[plotR] -= 1;
-              lanes.get(plotR).setNum( numPlants[plotR] ); 
-           //   subbed = 1;
-           // }
-            System.out.println("number of plants in row" + plotR+": "+numPlants[plotR]);
+
             thingsToDisplay.remove((Displayable)p);
             thingsToCollide.remove((Collideable)p);
-            System.out.println(thingsToDisplay.size());
             currentSpeed = speed;
             }
         }
@@ -175,9 +165,8 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
                     
         // remove this zombie from list of displayables and moveables if it is dead
             if (this.getHP() == 0){
-              System.out.println("remove zombie!");
               moving = false;
-              zomieDead.play();
+              zombieDead.play();
             } 
             
       x -= currentSpeed;
@@ -189,12 +178,11 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
     angle = PI/48.0;
     float frame = second() % 4;
     PImage character = getImage();
-    pushMatrix();//backup the original coordinate system
-    //Change the coordinates for 
-    //all objects then draw everything.
-    //Draw all the things you want to draw
-    //change the coordinates for JUST this one object
+    // move the zombie image back and forth (animate)
+    pushMatrix();
      translate(x,y);
+     
+     // death rotation
      if (!moving){
        rotate(-90); 
        image(character,0,70, w,l);
@@ -203,6 +191,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
        thingsToMove.remove(this);
        }
      }
+     
      if (frame == 0){
      rotate(angle);
      image(character,0,0, w,l);
@@ -215,7 +204,7 @@ abstract class Zombie extends Character implements Damageable, Displayable, Coll
      rotate(-angle);
      image(character,0,0, w,l);
      }
-    popMatrix(); //restore the original coordinate system
+    popMatrix(); 
 
   }
   

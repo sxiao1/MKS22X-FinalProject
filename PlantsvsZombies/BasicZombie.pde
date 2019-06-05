@@ -10,7 +10,6 @@ class BasicZombie extends Zombie{
   // attack plant if touching 
   void attack(Character p){
     p.takeHit(damage);
-   System.out.println(p.getHP());
   }
 
 }

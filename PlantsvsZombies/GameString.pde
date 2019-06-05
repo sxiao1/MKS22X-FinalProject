@@ -17,7 +17,12 @@ class GameString implements Displayable{
     if (display){
       PFont f;
       f = createFont("Arial", fontSize,true);
+      if (sec >= 0.15){
       textFont(f,fontSize * sec);
+      }
+      else{
+        sec = 0.15;
+      }
       textAlign(CENTER,BOTTOM);
       fill(255,0,0);
       text(str, x, y);

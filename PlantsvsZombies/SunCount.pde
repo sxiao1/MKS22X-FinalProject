@@ -17,6 +17,7 @@ class SunCount implements Displayable{
   
   // update the number of suns collected
   void display(){
+    rectMode(CORNER);
     noStroke();
     fill(121,83,45);
     rect(x,y,w,l);
@@ -27,6 +28,7 @@ class SunCount implements Displayable{
     textFont(f,25);
     textAlign(CENTER,BOTTOM);
     fill(0);
+    // update clicked suns and remove them from the list 
     for(int i = 0; i < listOfSuns.size(); i++){
       Sun sunny = listOfSuns.get(i);
       if(sunny.collected()){
