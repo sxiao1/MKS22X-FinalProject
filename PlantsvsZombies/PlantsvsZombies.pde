@@ -212,16 +212,17 @@ if (runGame && frameCount % 240 == 60){
       thingsToMove.get(m).move();
     }
   }
-  
-  else{
+
     // IF GAME IS OVER, PRINT STRING
     if (lose){
     String gameOver = "GAME OVER";
-    GameString g = new GameString(gameOver, width/2, height/2, 150, true);
-    thingsToDisplay.add(g);
+    GameString g = new GameString(gameOver, width/2, height/2, 10, true); 
+      g.display(); 
+      if (frameCount % 1000 == 50){
+        exit();
     }
   }
-         
+        
 }
 
 int drag = 0; // check if mouse is being dragged
@@ -299,8 +300,7 @@ void mouseReleased(){
    else if(drag == 1 && count >= 100 && plots[plotR][plotC] == false){
       plots[plotR][plotC] = true;
       numPlants[plotR] += 1;
-      lanes.get(plotR).setNum( numPlants[plotR] ); 
-
+      
       sunc.setCount( sunc.getCount() - 100);
       Peashooter peashoot = new Peashooter(xcor, ycor, 80, 80, 25.0,1000, 5,peashooter);
       thingsToDisplay.add(peashoot);
@@ -311,7 +311,6 @@ void mouseReleased(){
     else if(drag == 2 && count >= 50  && plots[plotR][plotC] == false){
       plots[plotR][plotC] = true;
        numPlants[plotR] += 1;
-       lanes.get(plotR).setNum( numPlants[plotR] ); 
        sunc.setCount( sunc.getCount() - 50);
       
       Sunflower sun = new Sunflower(xcor-5,ycor - 25,85,105,0,1000,5,sunflower);

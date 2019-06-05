@@ -28,6 +28,7 @@ class SunCount implements Displayable{
     textFont(f,25);
     textAlign(CENTER,BOTTOM);
     fill(0);
+    // update clicked suns and remove them from the list 
     for(int i = 0; i < listOfSuns.size(); i++){
       Sun sunny = listOfSuns.get(i);
       if(sunny.collected()){

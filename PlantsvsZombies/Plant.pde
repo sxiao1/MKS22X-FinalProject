@@ -24,11 +24,8 @@ abstract class Plant extends Character{
     PImage character = getImage(); 
     float angle = PI/256.0;
     float frame = second() % 4;
-    pushMatrix();//backup the original coordinate system
-    //Change the coordinates for 
-    //all objects then draw everything.
-    //Draw all the things you want to draw
-    //change the coordinates for JUST this one object
+    // move the plants back and forth slightly (swaying)
+    pushMatrix();
      translate(x,y);
      if (frame == 0){
      rotate(angle);

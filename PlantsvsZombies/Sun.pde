@@ -39,7 +39,7 @@ class Sun implements Moveable, Displayable{
      rotate(radians(angle));
      image(sun,-25,-25,50,50);
      angle += 1;
-     popMatrix(); //restore the original coordinate system
+     popMatrix(); 
     }
     // if sun has been clicked, don't rotate the sun
     else{
