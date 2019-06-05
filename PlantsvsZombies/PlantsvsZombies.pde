@@ -74,31 +74,81 @@ void setup(){
   sunflower = loadImage("sunflower.png");
   zombie = loadImage("zombie.png");
   lawnmower = loadImage("lawnmower.png"); 
+  
+  int[] zombiex = {1200, 1400, 1600, 1800, 2000};
+  int[] zombiey = {40,140,240,340,440};
+ 
+   int randNum = 0;
+   int randNum2 = 0;
+   float randNum3 = 0;
     
+   for (int i = 0; i < 5; i++){
+    randNum = (int)(Math.random()*5);
+    randNum2 = (int)(Math.random()*5);
+    randNum3 = (float)(Math.random()*1) + 0.1;
+    // Zombie(float xcor, float ycor, float wid, float len, float speedNum, float dam, float startHP, PImage zombieImage)
+      BasicZombie zomb1 = new BasicZombie(zombiex[randNum2],zombiey[randNum], 80.0, 120.0, randNum3, 1, 6, zombie);
+      System.out.println("zombie speed:" + randNum3);
+      thingsToMove.add(zomb1);
+      thingsToDisplay.add(zomb1);
+      thingsToCollide.add(zomb1);
+      i++;
+      System.out.println("number of zombies: " + i);
+   }
+
+  for (int i = 0; i < 5; i++){
+    LawnMower lawnm = new LawnMower(0.0, 90.0 + 100*i, 100.0, 70.0, 1.0, 100.0, lawnmower); 
+    thingsToDisplay.add(lawnm);
+    thingsToCollide.add(lawnm); 
+  }
+
+  thingsToDisplay.add(sunc);
+  
+  for(int r = 0; r< plots.length; r++){
+    for(int c = 0; c < plots[0].length; c++){
+      plots[r][c] = false;
+    }
+  }
+ 
+   for (int r = 0; r < numPlants.length; r++){
+       numPlants[r] = 0;
+       lanes.add(new Position(r, numPlants[r]));
+   }
+  
     draw();
     mouseDragged();
     mouseReleased();
- 
+    mouseClicked(); 
 }
 
 void reset(){
-  
+
   image(background,0,0);
-       
+   System.out.println("RESET GAME");    
   // run game?
-  runGame = true;
+  runGame = false;
   reset = false; 
   lose = false;
+
+  for (int i = thingsToDisplay.size() - 1; i >= 0; i--){
+    thingsToDisplay.remove(i);
+  }
+  for (int i = thingsToMove.size() - 1; i >= 0; i--){
+    thingsToMove.remove(i);
+  }
+  for (int i = thingsToCollide.size() - 1; i >= 0; i--){
+    thingsToCollide.remove(i);
+  }
   
   // waves of zombies 
    numZombies = 0; 
    addZomb = true; 
-   finalWave = true; 
+   finalWave = false; 
    i = 0;
    n = 0;
    times = 1;
    
-  int[] zombiex = {1200, 1400, 1600, 1800, 2000};
+  int[] zombiex = {800,900,1000,1100,1200};
   int[] zombiey = {40,140,240,340,440};
  
    int randNum = 0;
@@ -150,7 +200,7 @@ void draw(){
        
 // display the menu     
   menu.display();
-
+  
 if (runGame && frameCount % 240 == 60){
   if(addZomb){
     int randNum = (int)(Math.random()*5);
@@ -210,7 +260,7 @@ if (runGame && frameCount % 240 == 60){
   }
   
 }
-  
+
   if (runGame){
      // draw background, display displayables, and move moveables
      image(background,0,0);
@@ -218,8 +268,6 @@ if (runGame && frameCount % 240 == 60){
     for (int d = 0; d < thingsToDisplay.size(); d++){
       thingsToDisplay.get(d).display();
     }
-    
-    menu.inGameMenu(); 
     
    // random sun from sky every few seconds
   if (frameCount % 1000 == 5){
@@ -243,7 +291,7 @@ if (runGame && frameCount % 240 == 60){
     thingsToDisplay.add(g);
     }
   }
-     
+  menu.inGameMenu();    
 }
 
 int drag = 0; // check if mouse is being dragged
@@ -351,4 +399,9 @@ void mouseReleased(){
   }
   drag = 0;
   }
+}
+
+void mouseClicked(){
+  System.out.println("mouse clicked");
+   menu.act();
 }

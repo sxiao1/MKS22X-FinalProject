@@ -29,10 +29,6 @@ class Menu{
     fill(155,0,155);
     rect(315, 530, 400, 45); 
 
-      if (mousePressed && mouseX >= 315 && mouseX <= 715 && mouseY >= 530 && mouseY <= 575){
-      System.out.println("CLICK HERE TO START IS PRESSED");
-      mode = 1; 
-      }
     }
     
     // MAIN MENU
@@ -51,106 +47,20 @@ class Menu{
       textSize(85); 
       textAlign(CENTER,CENTER);
       title = "MAIN MENU";
-      text(title, width/2, 100);
-      
+      text(title, width/2, 100); 
       options(); 
-    
-    if (mousePressed){
-      
-        float buttonCornerX = x - ((width/2 - 100)/2);
-        float buttonWidth = width/2 - 100;
-        float buttonCornerY = (height/3) - (75/2); 
-        float buttonLength = 75; 
-        
-        
-        if (mouseX >= buttonCornerX && mouseX <= buttonCornerX + buttonWidth){
-          if (mouseY >= buttonCornerY && mouseY <= buttonCornerY + buttonLength + 110*2){
-            option = (int)((mouseY - buttonCornerY) / 110) + 1;
-            System.out.println("OPTION: "+option);
-          }
-         // START GAME
-          if (option == 1){
-             System.out.println("START");
-             mode = 2;
-             runGame = true;
-          }
-          else if (option == 2){
-            System.out.println("INSTRUCTIONS");
-            instructions(0);
-            mode = 1.5;
-            prevMode = 1;
-            
-          }
-          else if (option == 3){
-            runGame = false;
-            exit();
-          }
-        }
-      }
+
     }
         // CHECK IF BACK IS PRESSED
-        if (mode == 1.5){
-            if (mousePressed && mouseY >= 550 && mouseY <= 600){
-             
-              if (mouseX >= width/4 && mouseX < width/2){
-                System.out.println("PAGE FLIP PRESSED");
-                option = 0; 
-                if (page == 0){
-                  instructions(1);
-                }
-                else if (page == 1){
-                  instructions(0);
-                }         
-              }
-              else if (mouseX >= width/2 && mouseX <= 3*width/4){
-              System.out.println("BACK PRESSED");
-              option = 0; 
-              System.out.println("PREVIOUS MODE: "+prevMode);
-              mode = prevMode;
-              prevMode = 1.5;
-              }
-            }
+    if (mode == 1.5){
+       
        }
       
       if (mode == 2){
+
         inGameMenu();
         options();
 
-        float buttonCornerX = x - ((width/2 - 100)/2);
-        float buttonWidth = width/2 - 100;
-        float buttonCornerY = (height/6) - (75/2); 
-        float buttonLength = 75; 
-        
-        if (mousePressed){
-          if (mouseX >= buttonCornerX && mouseX <= buttonCornerX + buttonWidth){
-            if (mouseY >= buttonCornerY && mouseY <= buttonCornerY + buttonLength + 110*4){
-            option = (int)((mouseY - (buttonCornerY)) / 110) + 1;
-            System.out.println("OPTION SELECTED: "+option);
-            }
-          }
-          
-          if (option == 1){
-            option = 0; 
-            runGame = true; 
-          }
-          // RESTART LEVEL
-          else if (option == 2){
-            reset(); 
-            runGame = true;
-          }
-          else if (option == 3){
-            instructions(0);
-            mode = 1.5;
-            prevMode = 2;
-          }
-          else if (option == 4){
-            option = 0;
-            mode = 1;
-          }
-          else if (option == 5){
-            exit();
-          }
-        }
       }
       
     
@@ -298,6 +208,7 @@ class Menu{
   
   public void inGameMenu(){
     
+    if (runGame){
     fill(155,0,155);
     noStroke();
     rectMode(CORNER);
@@ -306,6 +217,7 @@ class Menu{
     textSize(20);
     textAlign(CENTER, CENTER);
     text("MENU", 800, 10, 200, 50);
+    }
     
     if (mousePressed && mouseX >= 800 && mouseX <= 1000 && mouseY >= 10 && mouseY <= 60){
       System.out.println("in game menu pressed");
@@ -313,5 +225,103 @@ class Menu{
     }
   }
   
+  public void act(){
+    if (mode == 0){
+      if (mouseX >= 315 && mouseX <= 715 && mouseY >= 530 && mouseY <= 575){
+      System.out.println("CLICK HERE TO START IS PRESSED");
+      mode = 1;   
+      }
+    }
+    else if (mode == 1){
+        float buttonCornerX = x - ((width/2 - 100)/2);
+        float buttonWidth = width/2 - 100;
+        float buttonCornerY = (height/3) - (75/2); 
+        float buttonLength = 75; 
+     
+        if (mouseX >= buttonCornerX && mouseX <= buttonCornerX + buttonWidth){
+          if (mouseY >= buttonCornerY && mouseY <= buttonCornerY + buttonLength + 110*2){
+            option = (int)((mouseY - buttonCornerY) / 110) + 1;
+            System.out.println("OPTION: "+option);
+          }
+         // START GAME
+          if (option == 1){
+             System.out.println("START");
+             mode = 2;
+             runGame = true;
+          }
+          else if (option == 2){
+            System.out.println("INSTRUCTIONS");
+            instructions(0);
+            mode = 1.5;
+            prevMode = 1;
+            
+          }
+          else if (option == 3){
+            runGame = false;
+            exit();
+          }
+        }
+      
+    }
+    else if (mode == 1.5){
+      if (mousePressed && mouseY >= 550 && mouseY <= 600){
+             
+              if (mouseX >= width/4 && mouseX < width/2){
+                System.out.println("PAGE FLIP PRESSED");
+                option = 0; 
+                if (page == 0){
+                  instructions(1);
+                }
+                else if (page == 1){
+                  instructions(0);
+                }         
+              }
+              else if (mouseX >= width/2 && mouseX <= 3*width/4){
+              System.out.println("BACK PRESSED");
+              option = 0; 
+              System.out.println("PREVIOUS MODE: "+prevMode);
+              mode = prevMode;
+              prevMode = 1.5;
+              }
+         }
+    }
+    else if (mode == 2){
+      
+       float buttonCornerX = x - ((width/2 - 100)/2);
+        float buttonWidth = width/2 - 100;
+        float buttonCornerY = (height/6) - (75/2); 
+        float buttonLength = 75; 
+
+          if (mouseX >= buttonCornerX && mouseX <= buttonCornerX + buttonWidth){
+            if (mouseY >= buttonCornerY && mouseY <= buttonCornerY + buttonLength + 110*4){
+            option = (int)((mouseY - (buttonCornerY)) / 110) + 1;
+            System.out.println("OPTION SELECTED: "+option);
+            }
+          }
+          
+          if (option == 1){
+            option = 0; 
+            runGame = true; 
+          }
+          // RESTART LEVEL
+          else if (option == 2){
+            reset(); 
+            runGame = true;
+          }
+          else if (option == 3){
+            instructions(0);
+            mode = 1.5;
+            prevMode = 2;
+          }
+          else if (option == 4){
+            option = 0;
+            mode = 1;
+          }
+          else if (option == 5){
+            exit();
+          }
+        
+    }
+  }
 }
   
