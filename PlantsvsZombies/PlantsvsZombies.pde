@@ -12,7 +12,7 @@ ArrayList<Collideable> thingsToCollide = new ArrayList<Collideable>();
 ArrayList<Sun> listOfSuns = new ArrayList<Sun>();
 ArrayList<Pea> listOfPeas = new ArrayList<Pea>();
 
-PImage background,peashooter,zombie,sunflower,sun,walnut, lawnmower;
+PImage background,peashooter,zombie,sunflower,sun,walnut, lawnmower,cherry;
 PImage ps_seed, sf_seed, wn_seed,cb_seed;
 
 boolean[][] plots = new boolean[5][9];
@@ -56,7 +56,11 @@ void setup(){
   SeedPacket seed_walnut = new SeedPacket(400,10,75,100);
   thingsToDisplay.add(seed_walnut);
   
+  SeedPacket seed_cherry = new SeedPacket (500, 10, 75, 100);
+  thingsToDisplay.add(seed_cherry);
+  
   peashooter = loadImage("peashooter.png");
+  cherry = loadImage("cherry.png");
   walnut = loadImage("walnut.png");
   sunflower = loadImage("sunflower.png");
   zombie = loadImage("zombie.png");
@@ -202,6 +206,7 @@ if (frameCount % 240 == 60){
      image(ps_seed, 200,10,75,100);
      image(sf_seed, 300,10,75,100);
      image(wn_seed, 400,10,75,100);
+     image(cb_seed, 500, 10,75,100);
      
      // random sun from sky every few seconds
   if (frameCount % 1000 == 5){
