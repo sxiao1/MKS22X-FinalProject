@@ -17,6 +17,7 @@ class SunCount implements Displayable{
   
   // update the number of suns collected
   void display(){
+    rectMode(CORNER);
     noStroke();
     fill(121,83,45);
     rect(x,y,w,l);
